@@ -1,0 +1,49 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<!DOCTYPE>
+<html>
+	<head>
+		<title>TEST</title>
+	</head>
+	<body>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" id="table-data">
+    <tr>
+        <td>Name</td>
+        <td>Location</td>
+        <td>Add</td>
+    </tr>
+    <tr class="tr_clone">
+        <td><input type="text" autofocus placeholder="who" name="who1" ></td>
+        <td><input type="text" autofocus placeholder="location" name="location" ></td>
+        <td><input type="button" name="add" value="Add" class="tr_clone_add"></td>
+    </tr>
+    <tr class="tr_clone">
+        <td><input type="text" autofocus placeholder="11who" name="who1" ></td>
+        <td><input type="text" autofocus placeholder="11location" name="location" ></td>
+        <td><input type="button" name="add" value="Add" class="tr_clone_add"></td>
+    </tr>
+    <tr class="tr_clone">
+        <td><input type="text" autofocus placeholder="22who" name="who1" ></td>
+        <td><input type="text" autofocus placeholder="22location" name="location" ></td>
+        <td><input type="button" name="add" value="Add" class="tr_clone_add"></td>
+    </tr>
+     
+</table><!-- /table#table-data -->
+	</body>
+</html>
+
+<script>
+          $(document).ready(function(){
+          	
+          	$("input.tr_clone_add").on('click', function() {
+			    var $tr    = $(this).closest('.tr_clone');
+			    var $clone = $tr.clone(true,true);
+			    $clone.find(':text').val('');
+			    $tr.after($clone);
+          		alert("1");
+			});
+          });
+            
+</script>
+
+

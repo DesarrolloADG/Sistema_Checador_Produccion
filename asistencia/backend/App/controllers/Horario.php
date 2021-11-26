@@ -396,7 +396,7 @@ html;
           array_push($array, array('seccion' => 1, 'id' => $id['id'] ));
         }
       }
-      $this->alertas("Eliminacion de Empresas", $array, "/Empresa/");
+      $this->alertas("Eliminacion de Empresas", $array, "/Competencias/");
     }
 
     public function horarioAdd(){

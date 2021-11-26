@@ -131,8 +131,8 @@ $agregar = ($empresaAdd==1) ? "":"style=\"display:none;\"";
 $menu.=<<<html
                     <li {$mostrar}><a>Empresas<span class="fa fa-chevron-down"></span></a>
                       <ul class="nav child_menu">
-                        <li><a href="/Empresa/">Mostrar</a></li>
-                        <li {$agregar}><a href="/Empresa/add">Agregar</a></li>
+                        <li><a href="/Competencias/">Mostrar</a></li>
+                        <li {$agregar}><a href="/Competencias/add">Agregar</a></li>
                       </ul>
                     </li>
 html;

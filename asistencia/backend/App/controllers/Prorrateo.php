@@ -69,13 +69,13 @@ html;
 
 
             $("#export_pdf").click(function(){
-              $('#all').attr('action', '/Empresa/generarPDF/');
+              $('#all').attr('action', '/Competencias/generarPDF/');
               $('#all').attr('target', '_blank');
               $("#all").submit();
             });
 
             $("#export_excel").click(function(){
-              $('#all').attr('action', '/Empresa/generarExcel/');
+              $('#all').attr('action', '/Competencias/generarExcel/');
               $('#all').attr('target', '_blank');
               $("#all").submit();
             });
@@ -504,7 +504,7 @@ html;
 
       exit;
       //$ids = MasterDom::getDataAll('borrar');
-      //echo shell_exec('php -f /home/granja/backend/public/librerias/mpdf_apis/Api.php Empresa '.json_encode(MasterDom::getDataAll('borrar')));
+      //echo shell_exec('php -f /home/granja/backend/public/librerias/mpdf_apis/Api.php Competencias '.json_encode(MasterDom::getDataAll('borrar')));
     }
 
     public function generarExcel(){
@@ -555,7 +555,7 @@ html;
       $fila = 9;
       $adaptarTexto = true;
 
-      $controlador = "Empresa";
+      $controlador = "Competencias";
       $columna = array('A','B','C','D');
       $nombreColumna = array('Id','Nombre','Descripción','Status');
       $nombreCampo = array('catalogo_empresa_id','nombre','descripcion','status');
@@ -620,7 +620,7 @@ html;
     }
 
     public function alerta($id, $parametro){
-      $regreso = "/Empresa/";
+      $regreso = "/Competencias/";
 
       if($parametro == 'add'){
         $mensaje = "Se ha agregado correctamente";

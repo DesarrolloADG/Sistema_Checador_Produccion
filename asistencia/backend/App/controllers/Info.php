@@ -492,7 +492,7 @@ html;
 
       exit;
       //$ids = MasterDom::getDataAll('borrar');
-      //echo shell_exec('php -f /home/granja/backend/public/librerias/mpdf_apis/Api.php Empresa '.json_encode(MasterDom::getDataAll('borrar')));
+      //echo shell_exec('php -f /home/granja/backend/public/librerias/mpdf_apis/Api.php Competencias '.json_encode(MasterDom::getDataAll('borrar')));
     }
 
     public function generarExcel(){

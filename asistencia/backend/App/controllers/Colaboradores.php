@@ -3081,7 +3081,7 @@ html;
               </tr>
               <tr>
                 <td colspan="1" style="background-color:#E4E4E4;"><strong>Opción: </strong> {$colaborador['opcion']}</td>
-                <td colspan="2" style="background-color:#E4E4E4;"><strong>Empresa: </strong> {$colaborador['catalogo_empresa_id']}</td>
+                <td colspan="2" style="background-color:#E4E4E4;"><strong>Competencias: </strong> {$colaborador['catalogo_empresa_id']}</td>
               </tr>
               <tr>
                 <td colspan="1" style="background-color:#E4E4E4;"><strong>Puesto: </strong> {$colaborador['catalogo_puesto_id']}</td>
@@ -3167,7 +3167,7 @@ html;
             </tr>
             <tr>
               <td colspan="1" style="background-color:#E4E4E4;"><strong>Opción: </strong> {$colaborador['opcion']}</td>
-              <td colspan="2" style="background-color:#E4E4E4;"><strong>Empresa: </strong> {$colaborador['catalogo_empresa_id']}</td>
+              <td colspan="2" style="background-color:#E4E4E4;"><strong>Competencias: </strong> {$colaborador['catalogo_empresa_id']}</td>
             </tr>
             <tr>
               <td colspan="1" style="background-color:#E4E4E4;"><strong>Puesto: </strong> {$colaborador['catalogo_puesto_id']}</td>
@@ -3279,7 +3279,7 @@ html;
       $adaptarTexto = true;
       $controlador = "Colaboradores";
       $columna = array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T');
-      $nombreColumna = array('Id','Nombre','Apellido Paterno','Apellido Materno','Status','Motivo','Sexo','Numero Identificador','RFC','Empresa','Ubicación','Departamento','Puesto','Horario','Fecha Alta','Fecha Baja','Pago','Incentivo','Opción','Número Empleado');
+      $nombreColumna = array('Id','Nombre','Apellido Paterno','Apellido Materno','Status','Motivo','Sexo','Numero Identificador','RFC','Competencias','Ubicación','Departamento','Puesto','Horario','Fecha Alta','Fecha Baja','Pago','Incentivo','Opción','Número Empleado');
       $nombreCampo = array('catalogo_colaboradores_id','nombre','apellido_paterno','apellido_materno','status','motivo','sexo','numero_identificador','rfc','catalogo_empresa_id','catalogo_ubicacion_id','catalogo_departamento_id','catalogo_puesto_id','catalogo_horario_id','fecha_alta','fecha_baja','pago','catalogo_incentivo','opcion','numero_empleado');
 
       $objPHPExcel->getActiveSheet()->SetCellValue('A'.$fila, 'Reporte de Colaboradores');

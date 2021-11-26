@@ -6,7 +6,7 @@ use \Core\View;
 use \Core\MasterDom;
 use \App\controllers\Contenedor;
 use \Core\Controller;
-use \App\models\Empresa AS EmpresaDao;
+use \App\models\Competencias AS EmpresaDao;
 
 class Empresa extends Controller{
 
@@ -63,13 +63,13 @@ class Empresa extends Controller{
 
 
             $("#export_pdf").click(function(){
-              $('#all').attr('action', '/Empresa/generarPDF/');
+              $('#all').attr('action', '/Competencias/generarPDF/');
               $('#all').attr('target', '_blank');
               $("#all").submit();
             });
 
             $("#export_excel").click(function(){
-              $('#all').attr('action', '/Empresa/generarExcel/');
+              $('#all').attr('action', '/Competencias/generarExcel/');
               $('#all').attr('target', '_blank');
               $("#all").submit();
             });
@@ -80,7 +80,7 @@ class Empresa extends Controller{
                 alertify.confirm('¿Segúro que desea eliminar lo seleccionado?', function(response){
                   if(response){
                     $('#all').attr('target', '');
-                    $('#all').attr('action', '/Empresa/delete');
+                    $('#all').attr('action', '/Competencias/delete');
                     $("#all").submit();
                     alertify.success("Se ha eliminado correctamente");
                   }
@@ -106,8 +106,8 @@ html;
                 <td>{$value['descripcion']}</td>
                 <td>{$value['status']}</td>
                 <td class="center" >
-                    <a href="/Empresa/edit/{$value['catalogo_empresa_id']}" {$editarHidden} type="submit" name="id" class="btn btn-primary"><span class="fa fa-pencil-square-o" style="color:white"></span> </a>
-                    <a href="/Empresa/show/{$value['catalogo_empresa_id']}" type="submit" name="id_empresa" class="btn btn-success"><span class="glyphicon glyphicon-eye-open" style="color:white"></span> </a>
+                    <a href="/Competencias/edit/{$value['catalogo_empresa_id']}" {$editarHidden} type="submit" name="id" class="btn btn-primary"><span class="fa fa-pencil-square-o" style="color:white"></span> </a>
+                    <a href="/Competencias/show/{$value['catalogo_empresa_id']}" type="submit" name="id_empresa" class="btn btn-success"><span class="glyphicon glyphicon-eye-open" style="color:white"></span> </a>
                 </td>
                 </tr>
 html;
@@ -137,7 +137,7 @@ html;
               $.ajax({
                 type:"POST",
                 async: false,
-                url: "/Empresa/validarNombreEmpresa", // script to validate in server side
+                url: "/Competencias/validarNombreEmpresa", // script to validate in server side
                 data: {
                     nombre: function() {
                       return $("#nombre").val();
@@ -188,7 +188,7 @@ html;
           });//fin del jquery validate
 
           $("#btnCancel").click(function(){
-            window.location.href = "/Empresa/";
+            window.location.href = "/Competencias/";
           });//fin del btnAdd
 
         });//fin del document.ready
@@ -216,7 +216,7 @@ html;
               $.ajax({
                 type:"POST",
                 async: false,
-                url: "/Empresa/validarOtroNombre", // script to validate in server side
+                url: "/Competencias/validarOtroNombre", // script to validate in server side
                 data: {
                     nombre: function() {
                       return $("#nombre").val();
@@ -271,7 +271,7 @@ html;
           });//fin del jquery validate
 
           $("#btnCancel").click(function(){
-            window.location.href = "/Empresa/";
+            window.location.href = "/Competencias/";
           });//fin del btnAdd
 
         });//fin del document.ready
@@ -304,7 +304,7 @@ html;
               $.ajax({
                 type:"POST",
                 async: false,
-                url: "/Empresa/validarOtroNombre", // script to validate in server side
+                url: "/Competencias/validarOtroNombre", // script to validate in server side
                 data: {
                     nombre: function() {
                       return $("#nombre").val();
@@ -363,7 +363,7 @@ html;
           });//fin del jquery validate
 
           $("#btnCancel").click(function(){
-            window.location.href = "/Empresa/";
+            window.location.href = "/Competencias/";
           });//fin del btnAdd
 
         });//fin del document.ready
@@ -387,7 +387,7 @@ html;
           array_push($array, array('seccion' => 1, 'id' => $id['id'] ));
         }
       }
-      $this->alertas("Eliminacion de Empresas", $array, "/Empresa/");
+      $this->alertas("Eliminacion de Empresas", $array, "/Competencias/");
     }
 
     public function empresaAdd(){
@@ -430,7 +430,7 @@ html;
           else
             $this->alerta($id,'nothing');
         }else{
-          $this->alertas("Eliminacion de Empresas", $array, "/Empresa/");
+          $this->alertas("Eliminacion de Empresas", $array, "/Competencias/");
         }
       }
 
@@ -551,7 +551,7 @@ html;
 
       exit;
       //$ids = MasterDom::getDataAll('borrar');
-      //echo shell_exec('php -f /home/granja/backend/public/librerias/mpdf_apis/Api.php Empresa '.json_encode(MasterDom::getDataAll('borrar')));
+      //echo shell_exec('php -f /home/granja/backend/public/librerias/mpdf_apis/Api.php Competencias '.json_encode(MasterDom::getDataAll('borrar')));
     }
 
     public function generarExcel(){
@@ -602,7 +602,7 @@ html;
       $fila = 9;
       $adaptarTexto = true;
 
-      $controlador = "Empresa";
+      $controlador = "Competencias";
       $columna = array('A','B','C','D');
       $nombreColumna = array('Id','Nombre','Descripción','Status');
       $nombreCampo = array('catalogo_empresa_id','nombre','descripcion','status');
@@ -667,7 +667,7 @@ html;
     }
 
     public function alerta($id, $parametro){
-      $regreso = "/Empresa/";
+      $regreso = "/Competencias/";
 
       if($parametro == 'add'){
         $mensaje = "Se ha agregado correctamente";

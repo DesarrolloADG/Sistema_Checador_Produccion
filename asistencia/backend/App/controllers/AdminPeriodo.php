@@ -229,13 +229,13 @@ html;
 
 
             $("#export_pdf").click(function(){
-              $('#all').attr('action', '/Empresa/generarPDF/');
+              $('#all').attr('action', '/Competencias/generarPDF/');
               $('#all').attr('target', '_blank');
               $("#all").submit();
             });
 
             $("#export_excel").click(function(){
-              $('#all').attr('action', '/Empresa/generarExcel/');
+              $('#all').attr('action', '/Competencias/generarExcel/');
               $('#all').attr('target', '_blank');
               $("#all").submit();
             });
@@ -246,7 +246,7 @@ html;
                 alertify.confirm('¿Segúro que desea eliminar lo seleccionado?', function(response){
                   if(response){
                     $('#all').attr('target', '');
-                    $('#all').attr('action', '/Empresa/delete');
+                    $('#all').attr('action', '/Competencias/delete');
                     $("#all").submit();
                     alertify.success("Se ha eliminado correctamente");
                   }
@@ -389,7 +389,7 @@ html;
           array_push($array, array('seccion' => 1, 'id' => $id['id'] ));
         }
       }
-      $this->alertas("Eliminacion de Empresas", $array, "/Empresa/");
+      $this->alertas("Eliminacion de Empresas", $array, "/Competencias/");
     }
 
     public function periodoAdd(){
@@ -538,13 +538,13 @@ html;
 
 
             $("#export_pdf").click(function(){
-              $('#all').attr('action', '/Empresa/generarPDF/');
+              $('#all').attr('action', '/Competencias/generarPDF/');
               $('#all').attr('target', '_blank');
               $("#all").submit();
             });
 
             $("#export_excel").click(function(){
-              $('#all').attr('action', '/Empresa/generarExcel/');
+              $('#all').attr('action', '/Competencias/generarExcel/');
               $('#all').attr('target', '_blank');
               $("#all").submit();
             });
@@ -555,7 +555,7 @@ html;
                 alertify.confirm('¿Segúro que desea eliminar lo seleccionado?', function(response){
                   if(response){
                     $('#all').attr('target', '');
-                    $('#all').attr('action', '/Empresa/delete');
+                    $('#all').attr('action', '/Competencias/delete');
                     $("#all").submit();
                     alertify.success("Se ha eliminado correctamente");
                   }

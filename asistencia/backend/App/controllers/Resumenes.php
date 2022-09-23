@@ -28,7 +28,6 @@ class Resumenes extends Controller{
     return $faltas;
   }
 
-
   public function buscarHorario($horarios, $horario){
     foreach ($horarios as $key => $value) {
       if($value['catalogo_horario_id'] == $horario['catalogo_horario_id']){
@@ -44,16 +43,14 @@ class Resumenes extends Controller{
         return $value['catalogo_horario_id'];
       }
     }
-
     return 'NULL';
   }
 
-
   public function getFooterTable(){
     $extraFooter = <<<html
+        Hola
         <script>
         $(document).ready(function(){
-
           $("#btnBuscar").click(function(){
             //alert("Ubicacion: "+window.location);
             $("#all").attr("action", window.location);
@@ -61,210 +58,214 @@ class Resumenes extends Controller{
             $("#all").attr("method", "POST");
             $("#all").submit();
           });
+
           $("#muestra-colaboradores").tablesorter();
           var oTable = $('#muestra-colaboradores').DataTable({
-                      "columnDefs": [{
-                          "orderable": true,
-                          "targets": 0
-                      }],
-                       "order": false,
-                       dom: 'Bfrtip',
-                      buttons: [
-                          'excelHtml5',
-                          'csvHtml5',
-                          'pdfHtml5'
-                      ],
-                      "language": {
-                            "emptyTable": "No hay datos disponibles",
-                            "infoEmpty": "Mostrando 0 a 0 de 0 registros",
-                            "info": "Mostrar _START_ a _END_ de _TOTAL_ registros",
-                            "infoFiltered":   "(Filtrado de _MAX_ total de registros)",
-                            "lengthMenu": "Mostrar _MENU_ registros",
-                            "zeroRecords":  "No se encontraron resultados",
-                            "search": "Buscar:",
-                            "processing": "Procesando...",
-                            "paginate" : {
-                                "next": "Siguiente",
-                                "previous" : "Anterior"
-                            }
-                        }
-                  });
-                  /*tabla*/
-                  $(".dt-buttons").addClass('col-md-3 col-sm-3 col-xs-3 form-group');
-                  $(".dt-buttons").before('<button class="btn btn-warning" data-toggle="collapse" data-target="#div-table" type="button">Mostrar Tabla</button><div class="collapse col-md-12 col-sm-12 col-xs-12" align="center" id="div-table"> <br> <table class="table table-striped table-bordered table-hover" id="muestra-cupones"> <tbody> <tr> <td><label style="color: green;">A</label></td><td>Asistencia</td> <td><label style="color: green;">AA</label></td><td>Asistencia en Dia Festivo y Asistencia en dia de descanso</td></tr><tr> <td><label style="color: orange;">FR</label></td><td>Falta por retardo</td> <td><label style="color: red;">FF</label></td><td>Falta</td></tr><tr> <td><label style="color: gray;">D</label></td><td>Descanso</td> <td><label style="color: gray;">DF</label></td><td>Dia festivo</td></tr><tr> <td><label style="color: yellow;">R</label></td><td>Retardo</td> <td><label style="color: green;">FDF</label></td><td>Falta dia festivo</td></tr><tr> </tr> </tbody> </table> </div>');
+            "columnDefs": [{
+              "orderable": true,
+              "targets": 0
+            }],
+            "order": false,
+            dom: 'Bfrtip',
+            buttons: [
+              'excelHtml5',
+              'csvHtml5',
+              'pdfHtml5'
+            ],
+            "language": {
+              "emptyTable": "No hay datos disponibles",
+              "infoEmpty": "Mostrando 0 a 0 de 0 registros",
+              "info": "Mostrar _START_ a _END_ de _TOTAL_ registros",
+              "infoFiltered":   "(Filtrado de _MAX_ total de registros)",
+              "lengthMenu": "Mostrar _MENU_ registros",
+              "zeroRecords":  "No se encontraron resultados",
+              "search": "Buscar:",
+              "processing": "Procesando...",
+              "paginate" : {
+                "next": "Siguiente",
+                "previous" : "Anterior"
+              }
+            }
+          });
 
-                  $(".buttons-excel").addClass('btn btn-success btn-sm fa-file-excel-o');
-                  $(".buttons-csv").addClass('btn btn-success btn-sm fa fa-table');
-                  $(".buttons-pdf").addClass('btn btn-success btn-sm fa fa-file-pdf-o');
+          /*tabla*/
+          $(".dt-buttons").addClass('col-md-3 col-sm-3 col-xs-3 form-group');
+          $(".dt-buttons").before('<button class="btn btn-warning" data-toggle="collapse" data-target="#div-table" type="button">Mostrar Tabla</button><div class="collapse col-md-12 col-sm-12 col-xs-12" align="center" id="div-table"> <br> <table class="table table-striped table-bordered table-hover" id="muestra-cupones"> <tbody> <tr> <td><label style="color: green;">A</label></td><td>Asistencia</td> <td><label style="color: green;">AA</label></td><td>Asistencia en Dia Festivo y Asistencia en dia de descanso</td></tr><tr> <td><label style="color: orange;">FR</label></td><td>Falta por retardo</td> <td><label style="color: red;">FF</label></td><td>Falta</td></tr><tr> <td><label style="color: gray;">D</label></td><td>Descanso</td> <td><label style="color: gray;">DF</label></td><td>Dia festivo</td></tr><tr> <td><label style="color: yellow;">R</label></td><td>Retardo</td> <td><label style="color: green;">FDF</label></td><td>Falta dia festivo</td></tr><tr> </tr> </tbody> </table> </div>');
 
-                  $('#muestra-colaboradores input[type=search]').keyup( function () {
-                    var table = $('#example').DataTable();
-                    table.search(
-                      jQuery.fn.DataTable.ext.type.search.html(this.value)
-                    ).draw();
-                  });
+          $(".buttons-excel").addClass('btn btn-success btn-sm fa-file-excel-o');
+          $(".buttons-csv").addClass('btn btn-success btn-sm fa fa-table');
+          $(".buttons-pdf").addClass('btn btn-success btn-sm fa fa-file-pdf-o');
+
+          $('#muestra-colaboradores input[type=search]').keyup( function () {
+            var table = $('#example').DataTable();
+            table.search(
+              jQuery.fn.DataTable.ext.type.search.html(this.value)
+            ).draw();
+          });
 
           $("#btnAplicar").click(function(){
-              $.ajax({
-                url: '/Resumenes/getTabla',
-                type: 'POST',
-                data:{periodo_id: $("#periodo_id").val(), tipo_periodo: $("#tipo_periodo").val(), mensaje: $("#mensaje").val()},
-                success: function(response){
-                  var obj = $.parseJSON(response);
-                  var datos = eval (obj);
-                  $("#contenedor_tabla").html('<table class="table table-striped table-bordered table-hover" id="muestra-colaboradores" name="muestra-colaboradores"><thead><tr>'+datos['encabezado']+'</tr></thead><tbody>'+datos['tabla']+'</tbody></table>');
-
-                  var oTable = $('#muestra-colaboradores').DataTable({
-                      "columnDefs": [{
-                          "orderable": true,
-                          "targets": 0
-                      }],
-                       "order": false,
-                       dom: 'Bfrtip',
-                      buttons: [
-                          'excelHtml5',
-                          'csvHtml5',
-                          'pdfHtml5'
-                      ]
-                  });
-
-                  $(".dt-buttons").addClass('col-md-3 col-sm-3 col-xs-3 form-group');
-                  $(".dt-buttons").after('<div class="col-md-6 col-sm-6 col-xs-6" align="center"><div class="col-md-2 col-sm-2 col-xs-2"><span style="color:#169D5F" class="fa fa-circle"></span><label class="col-md-12 col-sm-12 col-xs-12">Asistencia</label></div><div class="col-md-2 col-sm-2 col-xs-2"><span style="color:#E9FC00" class="fa fa-circle"></span><label class="col-md-12 col-sm-12 col-xs-12">Retardo</label></div><div class="col-md-2 col-sm-2 col-xs-2"><span style="color:#FFA357" class="fa fa-circle"></span><label class="col-md-12 col-sm-12 col-xs-12">Falta Por Retardo</label></div><div class="col-md-2 col-sm-2 col-xs-2"><span style="color:#991D04" class="fa fa-circle"></span><label class="col-md-12 col-sm-12 col-xs-12">Falta</label></div><div class="col-md-2 col-sm-2 col-xs-2"><span style="color:#628881" class="fa fa-circle"></span><label class="col-md-12 col-sm-12 col-xs-12">Descanso</label></div></div>');
-
-                  $(".buttons-copy").addClass('btn btn-default');
-                  $(".buttons-excel").addClass('btn btn-success');
-                  $(".buttons-excel").addClass('fa-file-excel-o');
-                  $(".buttons-csv").addClass('btn btn-warning');
-                  $(".buttons-csv").addClass('fa fa-table');
-                  $(".buttons-pdf").addClass('btn btn-primary');
-                  $(".buttons-pdf").addClass('fa fa-file-pdf-o');
-                  $(".buttons-csv").addClass('fa fa-table');
-                  $(".buttons-pdf").addClass('btn btn-primary');
-                  $(".buttons-pdf").addClass('fa fa-file-pdf-o');
-                  verificarPeriodo();
-
-                }
-              });
-            });
-
-            $("#contenedorRelog").hide();
-
-            $("#btnGuardar").click(function(){
-              $("#btnGuardar").prop('disabled', true);
-
-              var i = 1;
-                $('#retroclockbox1').flipcountdown({
-                  tick:function(){
-                    return i++;
-                  }
+            $.ajax({
+              url: '/Resumenes/getTabla',
+              type: 'POST',
+              data:{periodo_id: $("#periodo_id").val(), tipo_periodo: $("#tipo_periodo").val(), mensaje: $("#mensaje").val()},
+              success: function(response){
+                var obj = $.parseJSON(response);
+                var datos = eval (obj);
+                $("#contenedor_tabla").html('<table class="table table-striped table-bordered table-hover" id="muestra-colaboradores" name="muestra-colaboradores"><thead><tr>'+datos['encabezado']+'</tr></thead><tbody>'+datos['tabla']+'</tbody></table>');
+                var oTable = $('#muestra-colaboradores').DataTable({
+                  "columnDefs": [{
+                    "orderable": true,
+                    "targets": 0
+                  }],
+                  "order": false,
+                  dom: 'Bfrtip',
+                  buttons: [
+                    'excelHtml5',
+                    'csvHtml5',
+                    'pdfHtml5'
+                  ]
                 });
-              
-              $("#contenedorRelog").show();
 
-              /***********************/
+                $(".dt-buttons").addClass('col-md-3 col-sm-3 col-xs-3 form-group');
+                $(".dt-buttons").after('<div class="col-md-6 col-sm-6 col-xs-6" align="center"><div class="col-md-2 col-sm-2 col-xs-2"><span style="color:#169D5F" class="fa fa-circle"></span><label class="col-md-12 col-sm-12 col-xs-12">Asistencia</label></div><div class="col-md-2 col-sm-2 col-xs-2"><span style="color:#E9FC00" class="fa fa-circle"></span><label class="col-md-12 col-sm-12 col-xs-12">Retardo</label></div><div class="col-md-2 col-sm-2 col-xs-2"><span style="color:#FFA357" class="fa fa-circle"></span><label class="col-md-12 col-sm-12 col-xs-12">Falta Por Retardo</label></div><div class="col-md-2 col-sm-2 col-xs-2"><span style="color:#991D04" class="fa fa-circle"></span><label class="col-md-12 col-sm-12 col-xs-12">Falta</label></div><div class="col-md-2 col-sm-2 col-xs-2"><span style="color:#628881" class="fa fa-circle"></span><label class="col-md-12 col-sm-12 col-xs-12">Descanso</label></div></div>');
 
-              
+                $(".buttons-copy").addClass('btn btn-default');
+                $(".buttons-excel").addClass('btn btn-success');
+                $(".buttons-excel").addClass('fa-file-excel-o');
+                $(".buttons-csv").addClass('btn btn-warning');
+                $(".buttons-csv").addClass('fa fa-table');
+                $(".buttons-pdf").addClass('btn btn-primary');
+                $(".buttons-pdf").addClass('fa fa-file-pdf-o');
+                $(".buttons-csv").addClass('fa fa-table');
+                $(".buttons-pdf").addClass('btn btn-primary');
+                $(".buttons-pdf").addClass('fa fa-file-pdf-o');
+                verificarPeriodo();
+              }
+            });
+          });
 
-              $.ajax({
-                url: '/ResumenSemanal/guardarPeriodoAsistenciaTest',
-                type: 'POST',
-                async: true,
-                data:{
-                  periodo_id: $("#periodo_id").val(), 
-                  tipo_periodo: $("#tipo_periodo").val(), 
-                  mensaje: $("#mensaje").val()
-                },
-                success: function(response){
-                  $("#all").attr("action", "/ResumenSemanal/guardarPeriodo");
-                  $("#all").attr("target", "");
-                  //$("#respuesta").html(response);
-                  $("#all").submit();
+          $("#contenedorRelog").hide();
 
+          $("#btnGuardar").click(function(){
+            $("#btnGuardar").prop('disabled', true);
+
+            var i = 1;
+              $('#retroclockbox1').flipcountdown({
+                tick:function(){
+                  return i++;
                 }
               });
 
+            $("#contenedorRelog").show();
+            /***********************/
 
-              /***********************
-              $("#all").attr("action", "/ResumenSemanal/guardarPeriodo");
-              $("#all").attr("target", "");
-              $("#all").submit();
-              /**********************************/
+            let periodo_id = $("#periodo_id").val(), nomnoi = $("#nomnoi").val();            
 
+            $.ajax({
+              url: '/ResumenSemanal/guardarPeriodoAsistenciaTest',
+              type: 'POST',
+              async: true,
+              data:{
+                periodo_id: $("#periodo_id").val(),
+                nomnoi: $("#nomnoi").val(),
+                tipo_periodo: $("#tipo_periodo").val(),
+                mensaje: $("#mensaje").val()
+              },
+              success: function(response){
+                $("#all").attr("action", "/ResumenSemanal/guardarPeriodo");
+                $("#all").attr("target", "");
+                //$("#respuesta").html(response);
+                $("#all").submit();
+              }
             });
 
-            function verificarPeriodo(){
-              $.ajax({
-                url: '/ResumenSemanal/verificarPeriodo',
-                type: 'POST',
-                data:{periodo_id: $("#periodo_id").val()},
-                success: function(response){
-                  //alert(response);
-                  //$("#respuesta").html(response);
-                  if(response == 0){
+
+            /***********************
+            $("#all").attr("action", "/ResumenSemanal/guardarPeriodo");
+            $("#all").attr("target", "");
+            $("#all").submit();
+            /**********************************/
+
+          });
+
+          function verificarPeriodo(){
+            $.ajax({
+              url: '/ResumenSemanal/verificarPeriodo',
+              type: 'POST',
+              data:{
+                periodo_id: $("#periodo_id").val()
+              },
+              success: function(response){
+                //alert(response);
+                //$("#respuesta").html(response);
+                if(response == 0){
+                  $("#btnGuardar").show();
+                  $("#btnRestaurarPeriodo").hide();
+                  $("#btnCancelarPeriodo").hide();
+                  $("#btnRespaldarPeriodo").hide();
+                  //$(".dt-buttons").addClass('hidden');
+
+                }
+                else{
+                  if(response == 1){
                     $("#btnGuardar").show();
-                    $("#btnRestaurarPeriodo").hide();
+                    $("#btnRestaurarPeriodo").show();
                     $("#btnCancelarPeriodo").hide();
                     $("#btnRespaldarPeriodo").hide();
                     //$(".dt-buttons").addClass('hidden');
-
-                  }else{
-                    if(response == 1){
-                      $("#btnGuardar").show();
-                      $("#btnRestaurarPeriodo").show();
-                      $("#btnCancelarPeriodo").hide();
-                      $("#btnRespaldarPeriodo").hide();
-                      //$(".dt-buttons").addClass('hidden');
-                    }else{
-                      if(response == -1){
+                  }
+                  else{
+                    if(response == -1){
+                      $("#btnGuardar").hide();
+                      $("#btnRestaurarPeriodo").hide();
+                      $("#btnCancelarPeriodo").show();
+                      $("#btnRespaldarPeriodo").show();
+                      //$(".dt-buttons").removeClass('hidden');
+                    }
+                    else{
+                      if(response == -2){
                         $("#btnGuardar").hide();
                         $("#btnRestaurarPeriodo").hide();
                         $("#btnCancelarPeriodo").show();
-                        $("#btnRespaldarPeriodo").show();
+                        $("#btnRespaldarPeriodo").hide();
                         //$(".dt-buttons").removeClass('hidden');
-                      }else{
-                        if(response == -2){
-                          $("#btnGuardar").hide();
-                          $("#btnRestaurarPeriodo").hide();
-                          $("#btnCancelarPeriodo").show();
-                          $("#btnRespaldarPeriodo").hide();
-                          //$(".dt-buttons").removeClass('hidden');
-                        }else{
-                          $("#btnGuardar").hide();
-                          $("#btnRestaurarPeriodo").hide();
-                          $("#btnCancelarPeriodo").hide();
-                          $("#btnRespaldarPeriodo").hide();
-                          //$(".dt-buttons").removeClass('hidden');
-                        }
-                      }//fin del tercer if
-                    }//fin del segundo if
-                  }//fin del primer if
-                }//funcion successsfull ajax
-              });//cierre del ajax
-            } //cierre del evento
-            
+                      }
+                      else{
+                        $("#btnGuardar").hide();
+                        $("#btnRestaurarPeriodo").hide();
+                        $("#btnCancelarPeriodo").hide();
+                        $("#btnRespaldarPeriodo").hide();
+                        //$(".dt-buttons").removeClass('hidden');
+                      }
+                    }//fin del tercer if
+                  }//fin del segundo if
+                }//fin del primer if
+              }//funcion successsfull ajax
+            });//cierre del ajax
+          } //cierre del evento
 
-            $("#btnCancelarPeriodo").click(function(){
-              $("#all").attr('action','/ResumenSemanal/cancelarPeriodo');
-              $("#all").submit();
-            });
+          $("#btnCancelarPeriodo").click(function(){
+            $("#all").attr('action','/ResumenSemanal/cancelarPeriodo');
+            $("#all").submit();
+          });
 
-            $("#btnRespaldarPeriodo").click(function(){
-              $("#all").attr('action','/ResumenSemanal/respaldarPeriodo');
-              $("#all").submit();
-            });
+          $("#btnRespaldarPeriodo").click(function(){
+            $("#all").attr('action','/ResumenSemanal/respaldarPeriodo');
+            $("#all").submit();
+          });
 
-            $("#btnRestaurarPeriodo").click(function(){
-              $("#all").attr('action','/ResumenSemanal/restaurarPeriodo');
-              $("#all").attr('target','');
-              $("#all").submit();
-            });
+          $("#btnRestaurarPeriodo").click(function(){
+            $("#all").attr('action','/ResumenSemanal/restaurarPeriodo');
+            $("#all").attr('target','');
+            $("#all").submit();
+          });
         });
       </script>
 html;
     return $extraFooter;
   }
 
-  
+
 
 
   public function getEmpresas($post){
@@ -314,7 +315,7 @@ html;
   public function getNominas($post){
     $nomina = "";
     foreach (ColaboradoresDao::getNominaIdentificador() as $key => $value) {
-      
+
       if(!empty($value['identificador_noi'])){
         $selected = ($post['status'] == $value['identificador_noi'])? ' selected ':'';
         $nomina .=<<<html
@@ -324,13 +325,47 @@ html;
         $nomina .=<<<html
         <option value="vacio">SIN NOMINA NOI</option>
 html;
-      } 
+      }
     }
     return $nomina;
   }
 
+  public function getNominasNoi($post){
+    //MRR
+    $pid = $this->getUltimoPeriodo("SEMANAL", 0);
+    //$nominas = ResumenSemanalDao::consultacierresnomnoi('277');
+    //print_r($nominas);
+    //$not = '';
+    foreach (ResumenSemanalDao::consultacierresnomnoi($pid) as $key => $noi){
+      $restSelect = $noi['identificador_noi'];
+
+      //var_dump($restSelect);
+
+      $not .= "'".$restSelect."',";
+      //echo $not;
+      //echo '<br/>';
+    }
+    //echo '<br/>';
+    $not.="''";
+    $nominanoi = '';
+    foreach (ColaboradoresDao::getNominaNoi($not) as $key => $value) {
+
+      if(!empty($value['identificador_noi'])){
+        $nominanoi .=<<<html
+        <option value="{$value['identificador_noi']}" $selected>NOMINA NOI {$value['identificador_noi']}</option>
+html;
+        }else{
+        $nominanoi .=<<<html
+        <option value="vacio">SIN NOMINA NOI</option>
+html;
+      }
+    }
+    return $nominanoi;
+  }
+
   public function getMenuBuscador($post){
     View::set('nomina',$this->getNominas($post));
+    View::set('nominanoi',$this->getNominasNoi($post));
     View::set('idPuesto',$this->getPuestos($post));
     View::set('idEmpresa',$this->getEmpresas($post));
     View::set('idUbicacion',$this->getUbicacion($post));
@@ -339,7 +374,7 @@ html;
   }
 
   public function setTabla($idPeriodo, $tipoPeriodo, $perfil_id, $catalogo_planta_id, $catalogo_departamento_id, $catalodo_planta_nombre, $accion, $post){
-    
+
     /*******************************CREACION DEL FILTRO PARA LOS COLABORADORES*********************************/
     $this->getMenuBuscador($post);
     $where = '';
@@ -367,7 +402,7 @@ html;
     $dias_traductor = array('Monday' => 'Lunes','Tuesday' => 'Martes','Wednesday' => 'Miercoles','Thursday' => 'Jueves','Friday' => 'Viernes','Saturday' => 'Sabado','Sunday' => 'Domingo');
     $meses_traductor = array(1 => 'ENE',2 => 'FEB',3 => 'MAR',4 => 'ABR',5 => 'MAY',6 => 'JUN',7 => 'JUL',8 => 'AGO',9 => 'SEP', 10 => 'OCT', 11 => 'NOV', 12 => 'DIC');
     $periodo = ResumenesDao::getPeriodoById($idPeriodo);
-    $hidden = ($periodo['status'] == 0)? '': ' hidden ';
+    $hidden = ($periodo['status'] == 0 || $periodo['status'] == 3)? '': ' hidden ';
     $fecha_fin = new \DateTime($periodo['fecha_fin']);
     $datos = new \stdClass();
     $datos->tipo = ucwords(strtolower($periodo['tipo']));
@@ -377,7 +412,21 @@ html;
         <th>Informacion</th>
 html;
     $j = 0;
-    $colaboradores = ResumenesDao::getAllColaboradores($perfil_id, $tipoPeriodo, $catalogo_planta_id, $catalogo_departamento_id, $catalodo_planta_nombre, $accion, $where);    
+    //MRR
+    $pid = $this->getUltimoPeriodo($tipoPeriodo, 0);
+    foreach (ResumenSemanalDao::consultacierresnomnoi($pid) as $key => $noi){
+      $restSelect = $noi['identificador_noi'];
+      $notin .= "'".$restSelect."',";
+    }
+
+    if(empty($restSelect)){
+      $notin .= "11";
+    }
+
+    $largo = strlen($notin);
+    $not = substr($notin,-$largo,$largo-1);
+
+    $colaboradores = ResumenesDao::getAllColaboradores($perfil_id, $tipoPeriodo, $catalogo_planta_id, $catalogo_departamento_id, $catalodo_planta_nombre, $accion, $where, $not);
     foreach($colaboradores as $key => $value){
 
 
@@ -385,9 +434,9 @@ html;
 if($value['catalogo_colaboradores_id'] != 186 ){
         continue;
 }
-     
+
 /******************************QUITAR PARA EL FUNCIONAMIENTO DE LA FUNCION**************************************/
-      
+
       $numEmpOnoi = ($value['clave_noi'] == 0) ? $value['numero_empleado'] : $value['clave_noi'];
 
       $nombre_planta = strtolower($value['identificador']);
@@ -395,7 +444,7 @@ if($value['catalogo_colaboradores_id'] != 186 ){
       $tabla .=<<<html
         <tr>
           <td>{$numEmpOnoi}</td>
-    <td>$nombreEmpleado</td>
+          <td>$nombreEmpleado</td>
           <td>
             <b>Departamento</b> {$value['nombre_departamento']} <br>
             <b>Identificador</b> {$value['nombre_planta']} <br>
@@ -419,19 +468,19 @@ database = checador
         $num_semana = 0;
 
         $existe = $this->buscarHorario($horarios, $ultimo_horario);
-          
+
         if((!$existe) && $catalogo_horario_id == 0){
           $datosBusqueda = new \stdClass();
           $datosBusqueda->catalogo_colaboradores_id = $value['catalogo_colaboradores_id'];
           $catalogo_horario_id = $this->obtenerHorarioByDay(IncidenciaDao::getHorarioLaboral($datosBusqueda), $nombre_dia_semana);
         }
 
-        while($fecha_inicio <= $fecha_fin){   
+        while($fecha_inicio <= $fecha_fin){
           $nombre_dia_semana = $dias_traductor[$fecha_inicio->format('l')];
           $dia_aux = '';
           $llegada = '';
           /******************************************************************************************************************************************************/
-          
+
           $valor1 = '';
           if($value['horario_tipo'] == 'semanal'){
             $nombre_dia_semana = $dias_traductor[$fecha_inicio->format('l')];
@@ -488,7 +537,7 @@ database = checador
                 $datos->_catalogo_colaboradores_id = $value['catalogo_colaboradores_id'];
                 $datos->_fecha = $fecha_inicio->format('Y-m-d');
                 $incidencia = ResumenesDao::getIncidencia($datos);
-                
+
                 if(count($incidencia)>0){
                   $llegada = $incidencia[0]['identificador_incidencia'];
                   $color = $incidencia[0]['color'];
@@ -501,24 +550,24 @@ database = checador
                 }else{
 
 
-		          //	echo "Nombre horario: $nombre_horario - ";
+              //  echo "Nombre horario: $nombre_horario - ";
                   if (preg_match("/nocturno/",$nombre_horario)){
-		          //	echo 'Es un horario noctturno<br><br>';
+              //  echo 'Es un horario noctturno<br><br>';
                     $nueva_fecha = new \DateTime($fecha_inicio->format('Y-m-d').' '.$valor1['hora_entrada']);
                     $nueva_fecha->modify('-4 hours');
                     //$fecha_inicio->modify('+0 minute');
                     //$fecha_inicio->modify('-0 second');
-                    //$datos->fecha_inicio = $nueva_fecha->format('Y-m-d').' '.$valor1['hora_entrada']; 
-		    
-	     	    $datos->fecha_inicio = $nueva_fecha->format('Y-m-d H:i:s');
+                    //$datos->fecha_inicio = $nueva_fecha->format('Y-m-d').' '.$valor1['hora_entrada'];
+
+            $datos->fecha_inicio = $nueva_fecha->format('Y-m-d H:i:s');
 
                     //echo '('.$fecha_inicio->format('Y-m-d').','.$datos->fecha_inicio.',';
-                    
+
                     $fecha_aux = new \DateTime($fecha_inicio->format('Y-m-d').' '.$valor1['hora_salida']);
                     $nueva_fecha= $fecha_aux->format('Y-m-d H:i:s');
                     $fecha_aux = new \DateTime($nueva_fecha);
                     $fecha_aux->add(new \DateInterval('P1DT2H'));
-			
+
                     $datos->fecha_fin = $fecha_aux->format('Y-m-d H:i:s');
                     //echo $datos->fecha_fin.')<br>';
 
@@ -527,10 +576,10 @@ database = checador
                   }else{
                     $datos->fecha_inicio = $fecha_inicio->format('Y-m-d').' 00:00:00';
                     $nueva_fecha = $fecha_inicio->format('Y-m-d').' '.$valor1['hora_entrada'];
-                    
-                    $fecha_aux = new \DateTime($nueva_fecha);      
+
+                    $fecha_aux = new \DateTime($nueva_fecha);
                     $minutos_tolerancia = intval($valor1['tolerancia_entrada'])*60;
-                    
+
                     $fecha_aux->add(new \DateInterval('PT0H'.$minutos_tolerancia.'S'));
                     $datos->fecha_fin = $fecha_aux->format('Y-m-d H:i:s');
                     $registro_entrada = ResumenesDao::getAsistencia($datos, $nombre_planta);
@@ -538,7 +587,7 @@ database = checador
 
                   //echo count($registro_entrada).'<br>';
 
-                  
+
 
                   if(count($registro_entrada) > 0){
                     $llegada = 'A'; // asistencia (0)
@@ -552,8 +601,8 @@ database = checador
                         $datos->fecha_inicio = $fecha_inicio->format('Y-m-d').' 12:00:00';
                         $nueva_fecha = $fecha_inicio->format('Y-m-d').' '.$valor1['hora_salida'];
                         //echo 'Fecha anterior: '.$nueva_fecha.'<br>';
-                        
-                        $fecha_aux = new \DateTime($nueva_fecha);      
+
+                        $fecha_aux = new \DateTime($nueva_fecha);
                         $minutos_tolerancia = intval($valor1['tolerancia_entrada'])*60;
                         //echo 'Minutos de tolerancia: '.$minutos_tolerancia.'<br>';
 
@@ -562,13 +611,13 @@ database = checador
 
 
 
-                        //$datos->fecha_fin = $fecha_inicio->format('Y-m-d').' 23:59:59';  
+                        //$datos->fecha_fin = $fecha_inicio->format('Y-m-d').' 23:59:59';
                     }else{
                         $datos->fecha_inicio = $fecha_inicio->format('Y-m-d').' 00:00:00';
                         $datos->fecha_fin = $fecha_inicio->format('Y-m-d').' 23:59:59';
                     }
 
-                    
+
                     $datos->catalogo_colaboradores_id = $value['catalogo_colaboradores_id'];
                     $registro_entrada = ResumenesDao::getAsistencia($datos, $nombre_planta);
                     //echo 'Numero de registros2 : '.count($registro_entrada).'<br>';
@@ -633,17 +682,17 @@ database = checador
                   $nueva_fecha->modify('-2 hours');
                   //$fecha_inicio->modify('+0 minute');
                   //$fecha_inicio->modify('-0 second');
-                  $datos->fecha_inicio = $nueva_fecha->format('Y-m-d H:i:s'); 
+                  $datos->fecha_inicio = $nueva_fecha->format('Y-m-d H:i:s');
                   $fecha_aux = new \DateTime($fecha_inicio->format('Y-m-d'));
                     $fecha_aux->add(new \DateInterval('P1D'));
                     $nueva_fecha= $fecha_aux->format('Y-m-d').' '.$value['hora_salida'];
-                    $fecha_aux = new \DateTime($nueva_fecha);      
+                    $fecha_aux = new \DateTime($nueva_fecha);
                     $fecha_aux->add(new \DateInterval('PT4H0S'));
 
                     $datos->fecha_fin = $fecha_aux->format('Y-m-d H:i:s');
                     $registro_entrada = ResumenesDao::getAsistencia($datos, $nombre_planta);
 
-                  //$datos->fecha_inicio = $fecha_inicio->format('Y-m-d').' 12:00:00';  
+                  //$datos->fecha_inicio = $fecha_inicio->format('Y-m-d').' 12:00:00';
               }else{
                   $datos->fecha_inicio = $fecha_inicio->format('Y-m-d').' 00:00:00';
                   $datos->fecha_fin = $fecha_inicio->format('Y-m-d').' 23:59:59';
@@ -662,7 +711,7 @@ database = checador
               }
 
               if($llegada == ''){
-                $llegada = 'D'; //descanso 
+                $llegada = 'D'; //descanso
               }
             }
           }else{
@@ -694,14 +743,14 @@ html;
           <td style="text-align: center; vertical-align: middle; font-size: 18px;" bgcolor="#f1f1f1"><span><label style="color: {$color};"> {$llegada}</label></span></td>
 html;
         }
-        
+
         if($j==0){
           $encabezado .=<<<html
             <td>{$fecha_inicio->format('d')}-{$meses_traductor[intval($fecha_inicio->format('m'))]} </td>
 html;
             }
             $fecha_inicio->add(new \DateInterval('P1D'));
-      
+
     }//fin del while del recorrido de fechas
         $cantidadIncentivosAsignados = $this->getValore($value['catalogo_colaboradores_id'], $idPeriodo);
         $cantidadNoHorasExtra = $this->getValoresNoHorasExtra($value['catalogo_colaboradores_id'], $idPeriodo);
@@ -734,10 +783,10 @@ html;
 html;
         if($tipoPeriodo == "Semanal"){
           $tabla .=<<<html
-     
+
             <a href="/Resumenes/checadorFechas/{$value['catalogo_colaboradores_id']}/{$periodo['prorrateo_periodo_id']}/" target="_blank" class="btn btn-info" data-toggle="tooltip" title="VER ENTRADAS">
               <span class="glyphicon glyphicon-calendar"> </span>
-            </a> 
+            </a>
             <a href="/Incentivo/getIncentivosColaborador/{$value['catalogo_colaboradores_id']}/{$periodo['prorrateo_periodo_id']}/semanales/" target="_blank" class="btn btn-primary" data-toggle="tooltip" title="VER INCENTIVOS">
               <span class="glyphicon glyphicon-tasks"></span>
             </a>
@@ -746,8 +795,8 @@ html;
             </a>
 html;
 
-	     if($value['catalogo_lector_secundario_id'] > 0){
-             	$tabla .=<<<html
+       if($value['catalogo_lector_secundario_id'] > 0){
+              $tabla .=<<<html
 
             <a href="/Resumenes/checadorFechas/{$value['catalogo_colaboradores_id']}/{$periodo['prorrateo_periodo_id']}/?secundario=true" target="_blank" class="btn btn-info" data-toggle="tooltip" title="VER ENTRADAS SECUNDARIO">
               <span class="glyphicon glyphicon-calendar"> </span>
@@ -795,7 +844,7 @@ html;
     $params = ResumenesDao::getIncentivosBotes($data);
     $val = array(0,0,0);
     if(!empty($params)){
-      $cantidadBotes = $params['asignado']; 
+      $cantidadBotes = $params['asignado'];
       if(!empty($cantidadBotes)){
         $explode = explode(',', $cantidadBotes);
         $arr = array();
@@ -895,13 +944,17 @@ html;
         <th>Informacion</th>
 html;
     $fechaTest = new \DateTime($periodo['fecha_inicio']);
-   
+
     while ($fechaTest <=$fecha_fin) {
-      $encabezado .= "<td>".$fechaTest->format('Y-m-d')."</td>";  
+      $encabezado .= "<td>".$fechaTest->format('Y-m-d')."</td>";
       $fechaTest->add(new \DateInterval('P1D'));
     }
+    //MRR
+    $not = "''";
+    // $largo = strlen($notin);
+    // $not = substr($notin,-$largo,$largo-1);
 
-    foreach(ResumenesDao::getAllColaboradores($perfil_id, $tipoPeriodo, $catalogo_planta_id, $catalogo_departamento_id, $catalodo_planta_nombre, $accion, $where) as $key => $value){  
+    foreach(ResumenesDao::getAllColaboradores($perfil_id, $tipoPeriodo, $catalogo_planta_id, $catalogo_departamento_id, $catalodo_planta_nombre, $accion, $where,$not) as $key => $value){
 /******************************QUITAR PARA EL FUNCIONAMIENTO DE LA FUNCION**************************************
       if($value['catalogo_colaboradores_id'] != 316){
         continue;
@@ -1020,10 +1073,10 @@ html;
     $incidencias_colaborador = IncidenciaDao::getProrrateoColaboradorIncidenciaById($colaborador['catalogo_colaboradores_id']);
     $datos = new \stdClass();
     $datos->numero_empleado = $colaborador['numero_identificador'];
-    $datos->catalogo_colaboradores_id = $colaborador['catalogo_colaboradores_id'];    
+    $datos->catalogo_colaboradores_id = $colaborador['catalogo_colaboradores_id'];
     $datos->catalogo_lector_id = $colaborador['catalogo_lector_id'];
     if(MasterDom::getData('secundario') == 'true')
-	  $datos->catalogo_lector_id = $colaborador['catalogo_lector_secundario_id'];
+    $datos->catalogo_lector_id = $colaborador['catalogo_lector_secundario_id'];
 
     $tabla =<<<html
       <table class="table table-striped table-bordered table-hover" id="muestra-colaboradores">
@@ -1035,6 +1088,7 @@ html;
             <th>Salida</th>
             <th>Entrada Registrada</th>
             <th>Salida Registrada</th>
+            <th>Tiempo Extra</th>
             <th>Comentario</th>
             <th>Incidencia</th>
           </tr>
@@ -1048,7 +1102,7 @@ html;
         $num_semana = 0;
 
       while($fecha_inicio <= $fecha_final){
-        
+
         $value = '';
 
         /******************************************************************************************************************************************************/
@@ -1060,7 +1114,7 @@ html;
                 $catalogo_horario_id_anterior = $catalogo_horario_id;
                 for($llave=0; $llave<count($horarios); $llave++) {
                     $valor = $horarios[$llave];
-                    
+
                     if(count($ultimo_horario) > 0){
                         if($valor['catalogo_horario_id'] == $ultimo_horario['catalogo_horario_id']){
                           if( ($llave+1) >= count($horarios) ){
@@ -1090,7 +1144,7 @@ html;
                     if($catalogo_horario_id != $catalogo_horario_id_anterior){break;}
                 }
             }
-            
+
         }
         $datos->catalogo_horario_id = $catalogo_horario_id;
 
@@ -1111,24 +1165,24 @@ html;
             }
           }
         }
-        
+
 
         /***********************************SI NO ES DIA DE TRABAJO VERIFICA QUE NO HAYA REGISTROS DE ASISTENCIA*********/
               if($valor['dia_semana'] != ''){
-                
+
 
                 if(preg_match("/nocturno/", strtolower($value['horario']))){
                   $nueva_fecha = new \DateTime($fecha_inicio->format('Y-m-d').' '.$value['hora_entrada']);
                   $nueva_fecha->modify('-2 hours');
                   //$fecha_inicio->modify('+0 minute');
                   //$fecha_inicio->modify('-0 second');
-                  $datos->fecha_inicio = $nueva_fecha->format('Y-m-d H:i:s'); 
+                  $datos->fecha_inicio = $nueva_fecha->format('Y-m-d H:i:s');
                   $fecha_aux = new \DateTime($fecha_inicio->format('Y-m-d'));
 
 
                     $fecha_aux->add(new \DateInterval('P1D'));
                     $nueva_fecha= $fecha_aux->format('Y-m-d').' '.$value['hora_salida'];
-                    $fecha_aux = new \DateTime($nueva_fecha);      
+                    $fecha_aux = new \DateTime($nueva_fecha);
                     $fecha_aux->add(new \DateInterval('PT4H0S'));
 
                     $datos->fecha_fin = $fecha_aux->format('Y-m-d H:i:s');
@@ -1137,26 +1191,26 @@ html;
                   }else{
                     $datos->fecha_inicio = $fecha_inicio->format('Y-m-d').' 00:00';
                     $datos->fecha_fin = $fecha_inicio->format('Y-m-d').' 23:59';
-                    $registro_entrada_array = IncidenciaDao::getAsistenciaModificada($datos);         
+                    $registro_entrada_array = IncidenciaDao::getAsistenciaModificada($datos);
                   }
 
-                
+
               }else{
                   $nueva_fecha = new \DateTime($fecha_inicio->format('Y-m-d').' '.$value['hora_entrada']);
                   $nueva_fecha->modify('-2 hours');
                   //$fecha_inicio->modify('+0 minute');
                   //$fecha_inicio->modify('-0 second');
-                  $datos->fecha_inicio = $nueva_fecha->format('Y-m-d H:i:s'); 
+                  $datos->fecha_inicio = $nueva_fecha->format('Y-m-d H:i:s');
                   $fecha_aux = new \DateTime($fecha_inicio->format('Y-m-d'));
-                  
+
                   if(preg_match("/nocturno/", strtolower($value['horario']))){
                     $fecha_aux->add(new \DateInterval('P1D'));
                     $nueva_fecha= $fecha_aux->format('Y-m-d').' '.$value['hora_salida'];
-                    $fecha_aux = new \DateTime($nueva_fecha);      
+                    $fecha_aux = new \DateTime($nueva_fecha);
                     $fecha_aux->add(new \DateInterval('PT4H0S'));
                   }else{
                     $nueva_fecha= $fecha_inicio->format('Y-m-d').' '.$value['hora_salida'];
-                    $fecha_aux = new \DateTime($nueva_fecha);      
+                    $fecha_aux = new \DateTime($nueva_fecha);
                     $fecha_aux->add(new \DateInterval('PT4H0S'));
                     //$fecha_aux->add(new \DateInterval('P0Y0M0DT2H0M0'));
                   }
@@ -1176,13 +1230,13 @@ html;
 
     $fecha_aux = new \DateTime($fecha_inicio->format('Y-m-d'));
     if(preg_match("/nocturno/", strtolower($value['horario']))){
-      $fecha_aux->add(new \DateInterval('P1D'));  
+      $fecha_aux->add(new \DateInterval('P1D'));
       $nueva_fecha= $fecha_aux->format('Y-m-d').' '.$value['hora_salida'];
-      $fecha_aux = new \DateTime($nueva_fecha);      
+      $fecha_aux = new \DateTime($nueva_fecha);
       $fecha_aux->add(new \DateInterval('PT4H0S'));
     }else{
       $nueva_fecha= $fecha_inicio->format('Y-m-d').' '.$value['hora_salida'];
-      $fecha_aux = new \DateTime($nueva_fecha);      
+      $fecha_aux = new \DateTime($nueva_fecha);
       $fecha_aux->add(new \DateInterval('PT4H0S'));
       //$fecha_aux->add(new \DateInterval('P0Y0M0DT2H0M0'));
     }
@@ -1215,7 +1269,7 @@ html;
         $colaborador_id = MasterDom::getData('catalogo_colaboradores_id');
 
         $incidencia = '';
-        
+
         foreach ($incidencias_colaborador as $llave => $valor) {
       if( $fecha_inicio->format('Y-m-d') === $valor['fecha_incidencia']){
         $incidencia = $valor['nombre'];
@@ -1247,6 +1301,170 @@ html;
     if($x_hora_entrada == "No Laboral" && $x_hora_salida == "No Laboral" && $x_registro_salida == "Sin registro"){
       $x_registro_salida = "";
     }
+    //MRR
+    // horas extras
+    $entrada = $x_registro_entrada;
+    $salida = $x_registro_salida;
+    if(($entrada == 'Sin registro' || $salida == 'Sin registro') || (empty($entrada) || empty($salida))){
+      $hec = 'Sin horas extras';
+    }
+    else {
+      $time1 = date('H:i:s',strtotime(substr($entrada, -8)));
+      $time2 = substr($salida, -8);
+
+      if (strtotime($time1) <= strtotime('07:10:00') && ($colaborador['identificador_noi'] == 'GATSA' || $colaborador['identificador_noi'] == 'UNIDESH')) {
+        $turno = (48*60)/6; //matutino
+        if (strtotime($time1) <= strtotime('06:40:00')) {
+          $entrada = date('Y-m-d H:i:s',strtotime($f.' '.'06:30:00'));
+        }
+
+        $h1 = substr($entrada, -8,2);
+        $m1 = substr($entrada, -5,2);
+        $s1 = substr($entrada, -2,2);
+        $t1 = date('H:i:s',strtotime('-'.$h1.'hours',strtotime($time2)));
+        $t1 = date('H:i:s',strtotime('-'.$m1.'minute',strtotime($t1)));
+        $tl = date('H:i:s',strtotime('-'.$s1.'second',strtotime($t1)));
+
+        $tlm = substr($tl, -8,2)*60 + substr($tl, -5,2);
+
+        if($tlm <= $turno){
+          $hec = 'Sin horas extras';
+        }
+        else {
+          $hex = $tlm - $turno;
+          $hec = explode(".",$hex/60);
+          if($hec[0] == 0){
+            $hec = 'Sin horas extras';
+          }
+          else {
+            $hec = $hec[0];
+          }
+        }
+      }
+      else {
+        if (strtotime($time1) <= strtotime('14:50:00') && ($colaborador['identificador_noi'] == 'GATSA' || $colaborador['identificador_noi'] == 'UNIDESH')) {
+          $turno = (45*60)/6; //matutino
+          if (strtotime($time1) <= strtotime('14:40:00')) {
+            $entrada = date('Y-m-d H:i:s',strtotime($f.' '.'14:30:00'));
+          }
+
+          $h1 = substr($entrada, -8,2);
+          $m1 = substr($entrada, -5,2);
+          $s1 = substr($entrada, -2,2);
+          $t1 = date('H:i:s',strtotime('-'.$h1.'hours',strtotime($time2)));
+          $t1 = date('H:i:s',strtotime('-'.$m1.'minute',strtotime($t1)));
+          $tl = date('H:i:s',strtotime('-'.$s1.'second',strtotime($t1)));
+
+          $tlm = substr($tl, -8,2)*60 + substr($tl, -5,2);
+
+          if($tlm <= $turno){
+            $hec = 'Sin horas extras';
+          }
+          else {
+            $hex = $tlm - $turno;
+            $hec = explode(".",$hex/60);
+            if($hec[0] == 0){
+              $hec = 'Sin horas extras';
+            }
+            else {
+              $hec = $hec[0];
+            }
+          }
+        }
+      }
+
+      if (strtotime($time1) <= strtotime('06:20:00') && ($colaborador['identificador_noi'] == 'XOCHIMILCO' || $colaborador['identificador_noi'] == 'VALLEJO')) {
+        $turno = (48*60)/6; //matutino
+        if (strtotime($time1) <= strtotime('06:10:00')) {
+          $entrada = date('Y-m-d H:i:s',strtotime($f.' '.'06:00:00'));
+        }
+
+        $h1 = substr($entrada, -8,2);
+        $m1 = substr($entrada, -5,2);
+        $s1 = substr($entrada, -2,2);
+        $t1 = date('H:i:s',strtotime('-'.$h1.'hours',strtotime($time2)));
+        $t1 = date('H:i:s',strtotime('-'.$m1.'minute',strtotime($t1)));
+        $tl = date('H:i:s',strtotime('-'.$s1.'second',strtotime($t1)));
+
+        $tlm = substr($tl, -8,2)*60 + substr($tl, -5,2);
+
+        if($tlm <= $turno){
+          $hec = 'Sin horas extras';
+        }
+        else {
+          $hex = $tlm - $turno;
+          $hec = explode(".",$hex/60);
+          if($hec[0] == 0){
+            $hec = 'Sin horas extras';
+          }
+          else {
+            $hec = $hec[0];
+          }
+        }
+      }
+      else {
+        if (strtotime($time1) <= strtotime('14:10:00')){
+          $turno = (47*60)/6;
+          // if (strtotime($time1) <= strtotime('14:10:00')) {
+          //   $entrada = date('Y-m-d H:i:s',strtotime($f.' '.'14:00:00'));
+          // }
+
+          $h1 = substr($entrada, -8,2);
+          $m1 = substr($entrada, -5,2);
+          $s1 = substr($entrada, -2,2);
+          $t1 = date('H:i:s',strtotime('-'.$h1.'hours',strtotime($time2)));
+          $t1 = date('H:i:s',strtotime('-'.$m1.'minute',strtotime($t1)));
+          $tl = date('H:i:s',strtotime('-'.$s1.'second',strtotime($t1)));
+
+          $tlm = substr($tl, -8,2)*60 + substr($tl, -5,2);
+          if($tlm <= $turno){
+            $hec = 'Sin horas extras';
+          }
+          else {
+            $hex = $tlm - $turno;
+            $hec = explode(".",$hex/60);
+            if($hec[0] == 0){
+              $hec = 'Sin horas extras';
+            }
+            else {
+              $hec = $hec[0];
+            }
+          }
+        }
+        else {
+          if (strtotime($time1) <= strtotime('22:10:00')){
+            $turno = (45*60)/6;
+            // if (strtotime($time1) <= strtotime('22:10:00')) {
+            //   $entrada = date('Y-m-d H:i:s',strtotime($f.' '.'22:00:00'));
+            // }
+            $h1 = substr($entrada, -8,2);
+            $m1 = substr($entrada, -5,2);
+            $s1 = substr($entrada, -2,2);
+            $t1 = date('H:i:s',strtotime('-'.$h1.'hours',strtotime($time2)));
+            $t1 = date('H:i:s',strtotime('-'.$m1.'minute',strtotime($t1)));
+            $tl = date('H:i:s',strtotime('-'.$s1.'second',strtotime($t1)));
+
+            $tlm = substr($tl, -8,2)*60 + substr($tl, -5,2);
+            if($tlm <= $turno){
+              $hec = 'Sin horas extras';
+            }
+            else {
+              $hex = $tlm - $turno;
+              $hec = explode(".",$hex/60);
+              if($hec[0] == 0){
+                $hec = 'Sin horas extras';
+              }
+              else {
+                $hec = $hec[0];
+              }
+            }
+          }
+          else {
+            $hec = 'Sin horas extras';
+          }
+        }
+      }
+    }
 
     $tabla .=<<<html
       <tr>
@@ -1256,6 +1474,7 @@ html;
         <td style="background:{$colorDiaFestivo} ;">{$x_hora_salida}</td>
         <td style="background:{$colorDiaFestivo} ;">{$x_registro_entrada}</td>
         <td style="background:{$colorDiaFestivo} ;">{$x_registro_salida}</td>
+        <td style="background:{$colorDiaFestivo} ;">{$hec}</td>
         <td style="background:{$colorDiaFestivo} ;">
 html;
     foreach ($incidencias_colaborador as $llave => $valor) {
@@ -1264,7 +1483,7 @@ html;
         break;
       }
     }
-        
+
     $tabla.=<<<html
       </td>
       <td style="background:{$colorDiaFestivo} ">
@@ -1272,11 +1491,11 @@ html;
       </td>
     </tr>
 html;
-            
+
 
         $fecha_inicio->add(new \DateInterval('P1D'));
       }//fin del while rango de fechas
-      
+
       $tabla .=<<<html
       </tbody>
     </table>
@@ -1287,7 +1506,7 @@ html;
 
       $colaborador = ResumenesDao::getById($idColaborador);
       $horariosAsignados = ResumenesDao::getHorariosColaborador($idColaborador);
-    
+
 
       $horarios = "";
       foreach ($horariosAsignados as $key => $value) {
@@ -1348,7 +1567,7 @@ html;
     $periodo_id = $this->getUltimoPeriodo("SEMANAL", 0); // Obtiene el ultimo periodo Abierto
     View::set('msjPeriodo',$this->getPeriodo("Al parecer no hay periodo Abierto", "Debe existir un periodo Abierto, para checar los incentivos","SEMANAL", 0,$periodo_id)); // Obtiene el periodo de la incidencia
     /*if($user['perfil_id'] == 1){
-      $accion = 4; // ESTA ES PARA CUANDO EL USUARIO SEA ROOT 
+      $accion = 4; // ESTA ES PARA CUANDO EL USUARIO SEA ROOT
     if($user['perfil_id'] == 6 || $user['perfil_id'] == 5){
       $accion = 1;
     }*/
@@ -1371,12 +1590,12 @@ html;
     $periodo_id = $this->getUltimoPeriodo("QUINCENAL", 0); // Obtiene el ultimo periodo Abierto
     View::set('msjPeriodo',$this->getPeriodo("Al parecer no hay periodo Abierto", "Debe existir un periodo Abierto, para checar los incentivos","QUINCENAL", 0,$periodo_id)); // Obtiene el periodo de la incidencia
     if($user['perfil_id'] == 1){
-      $accion = 3; // ESTA ES PARA CUANDO EL USUARIO SEA ROOT 
+      $accion = 3; // ESTA ES PARA CUANDO EL USUARIO SEA ROOT
     }
     if($user['perfil_id'] == 6 || $user['perfil_id'] == 5){
       $accion = 1;
     }
-    $this->setTabla($periodo_id, "Quincenal", $user['perfil_id'], $user['catalogo_planta_id'], $user['catalogo_departamento_id'], $user['nombre_planta'], $accion, $_POST); 
+    $this->setTabla($periodo_id, "Quincenal", $user['perfil_id'], $user['catalogo_planta_id'], $user['catalogo_departamento_id'], $user['nombre_planta'], $accion, $_POST);
     $extraFooter = $this->getFooterTable();
 
     View::set('visible_admin', "hidden");
@@ -1393,14 +1612,14 @@ html;
     if(empty($_POST)){
       $ultimoPeriodoHistorico = IncentivoDao::getUltimoPeriodoHistorico("SEMANAL");
       $idPeriodo = $ultimoPeriodoHistorico['prorrateo_periodo_id'];
-      View::set('msjPeriodo',$this->getPeriodo("Al parecer no hay ningun periodo Cerrado", "Debe existir un periodo Cerrado, para mostrar los registros","SEMANAL", 1)); 
+      View::set('msjPeriodo',$this->getPeriodo("Al parecer no hay ningun periodo Cerrado", "Debe existir un periodo Cerrado, para mostrar los registros","SEMANAL", 1));
     }else{
       $idPeriodo = MasterDom::getData('tipo_periodo');
-      View::set('msjPeriodo',$this->getPeriodoProcesado("SEMANAL", $idPeriodo)); 
+      View::set('msjPeriodo',$this->getPeriodoProcesado("SEMANAL", $idPeriodo));
     }
 
     if($user['perfil_id'] == 1)
-      $accion = 3; // ESTA ES PARA CUANDO EL USUARIO SEA ROOT 
+      $accion = 3; // ESTA ES PARA CUANDO EL USUARIO SEA ROOT
     if($user['perfil_id'] == 6 || $user['perfil_id'] == 5){
       $accion = 1;
       /*
@@ -1412,8 +1631,8 @@ html;
       */
     }
 
- 
-    echo $this->setTablaExistente($idPeriodo, "Semanal", $user['perfil_id'], $user['catalogo_planta_id'], $user['catalogo_departamento_id'], $user['nombre_planta'], $accion, $_POST); 
+
+    echo $this->setTablaExistente($idPeriodo, "Semanal", $user['perfil_id'], $user['catalogo_planta_id'], $user['catalogo_departamento_id'], $user['nombre_planta'], $accion, $_POST);
 
     //$extraFooter = $this->getFooterExtra();
     $extraFooter = $this->getFooterTable();
@@ -1429,14 +1648,14 @@ html;
     if(empty($_POST)){
       $ultimoPeriodoHistorico = IncentivoDao::getUltimoPeriodoHistorico("QUINCENAL");
       $idPeriodo = $ultimoPeriodoHistorico['prorrateo_periodo_id'];
-      View::set('msjPeriodo',$this->getPeriodo("Al parecer no hay ningun periodo Cerrado", "Debe existir un periodo Cerrado, para mostrar los registros","QUINCENAL", 1)); 
+      View::set('msjPeriodo',$this->getPeriodo("Al parecer no hay ningun periodo Cerrado", "Debe existir un periodo Cerrado, para mostrar los registros","QUINCENAL", 1));
     }else{
       $idPeriodo = MasterDom::getData('tipo_periodo');
-      View::set('msjPeriodo',$this->getPeriodoProcesado("QUINCENAL", $idPeriodo)); 
+      View::set('msjPeriodo',$this->getPeriodoProcesado("QUINCENAL", $idPeriodo));
     }
 
     if($user['perfil_id'] == 1)
-      $accion = 1; // ESTA ES PARA CUANDO EL USUARIO SEA ROOT 
+      $accion = 1; // ESTA ES PARA CUANDO EL USUARIO SEA ROOT
     if($user['perfil_id'] == 6 || $user['perfil_id'] == 5){
       $accion = 1;
       /*
@@ -1450,7 +1669,7 @@ html;
       $accion = 3;
     }
 
-    echo $this->setTablaExistente($idPeriodo, "Quincenal", $user['perfil_id'], $user['catalogo_planta_id'], $user['catalogo_departamento_id'], $user['nombre_planta'], $accion, $_POST); 
+    echo $this->setTablaExistente($idPeriodo, "Quincenal", $user['perfil_id'], $user['catalogo_planta_id'], $user['catalogo_departamento_id'], $user['nombre_planta'], $accion, $_POST);
 
     //$extraFooter = $this->getFooter();
     $extraFooter = $this->getFooterTable();
@@ -1466,14 +1685,20 @@ html;
     if(count($user) == 0){
       $user = GeneralDao::getDatosUsuarioLogeado($this->__usuario);
     }
-    $periodo_id = $this->getUltimoPeriodo("SEMANAL", 0); // Obtiene el ultimo periodo Abierto
+    //MRR
+    $num = 0;
+    $nominas = ResumenSemanalDao::consultacierresnomnoi('279');
+    foreach($nominas as $key => $value){
+      $num ++;
+    }
+    $periodo_id = $this->getUltimoPeriodo("SEMANAL", $num); // Obtiene el ultimo periodo Abierto
     /*tabla*/
-    View::set('msjPeriodo',$this->getPeriodo("Al parecer no hay periodo Abierto", "Debe existir un periodo Abierto, para checar los incentivos","SEMANAL", 0, $periodo_id, $user['perfil_id'], $user['catalogo_planta_id'])); // Obtiene el periodo de la incidencia
+    View::set('msjPeriodo',$this->getPeriodo("Al parecer no hay periodo Abierto,", "Debe existir un periodo Abierto, para checar los incentivos","SEMANAL", 0, $periodo_id, $user['perfil_id'], $user['catalogo_planta_id'])); // Obtiene el periodo de la incidencia
     if($user['perfil_id'] == 1){
-      $accion = 2; // ESTA ES PARA CUANDO EL USUARIO SEA ROOT 
+      $accion = 2; // ESTA ES PARA CUANDO EL USUARIO SEA ROOT
     }
     if($user['perfil_id'] == 2){
-      $accion = 2; // ESTA ES PARA CUANDO EL USUARIO SEA ROOT 
+      $accion = 2; // ESTA ES PARA CUANDO EL USUARIO SEA ROOT
     }
 
     if($user['perfil_id'] == 6 || $user['perfil_id'] == 5){
@@ -1482,7 +1707,7 @@ html;
       }else{
         if($user['perfil_id'] == 1){
           $accion = 2;
-        }else{  
+        }else{
           View::set('visible_admin', "hidden");
           $accion = 3;
         }
@@ -1491,18 +1716,17 @@ html;
     }else{
       if($user['perfil_id'] == 1){
         $accion = 2;
-      }else{  
+      }else{
         View::set('visible_admin', "hidden");
         //$accion = 3;
-      }      
+      }
     }
-    
+
     echo $this->setTabla($periodo_id, "Semanal", $user['perfil_id'], $user['catalogo_planta_id'], $user['catalogo_departamento_id'], $user['nombre_planta'], $accion, $_POST);
 
     //$extraFooter = $this->getFooterExtra();
     $extraFooter = $this->getFooterTable();
 
-    
     View::set('tipo_periodo', 'semanal');
     View::set('periodo_id', $periodo_id);
     View::set('header',$this->_contenedor->header($this->getHeader()));
@@ -1511,24 +1735,24 @@ html;
   }
 
   public function quincenales(){
-      
+
     $user = GeneralDao::getDatosUsuario($this->__usuario);
     if(count($user) == 0){
       $user = GeneralDao::getDatosUsuarioLogeado($this->__usuario);
     }
-    
+
     $periodo_id = $this->getUltimoPeriodo("QUINCENAL", 0); // Obtiene el ultimo periodo Abierto
     View::set('msjPeriodo',$this->getPeriodo("Al parecer no hay periodo Abierto", "Debe existir un periodo Abierto, para checar los incentivos","QUINCENAL", 0,$periodo_id, $user['perfil_id'], $user['catalogo_planta_id'])); // Obtiene el periodo de la incidencia
-    
+
     if($user['perfil_id'] == 1)
-      $accion = 2; // ESTA ES PARA CUANDO EL USUARIO SEA ROOT 
+      $accion = 2; // ESTA ES PARA CUANDO EL USUARIO SEA ROOT
     if($user['perfil_id'] == 6 || $user['perfil_id'] == 5){
       if($user['catalogo_planta_id'] == 1){
         $accion = 2;//1
       }else{
         if($user['perfil_id'] == 1){
           $accion = 2;
-        }else{  
+        }else{
           View::set('visible_admin', "hidden");
           $accion = 3;
         }
@@ -1536,7 +1760,7 @@ html;
     }else{
       if($user['perfil_id'] == 1){
           $accion = 2;
-        }else{  
+        }else{
           View::set('visible_admin', "hidden");
           //$accion = 3;
         }
@@ -1545,8 +1769,8 @@ html;
     if($user['perfil_id'] == 2){
       $accion = 2;
     }
-    
-    echo $this->setTabla($periodo_id, "Quincenal", $user['perfil_id'], $user['catalogo_planta_id'], $user['catalogo_departamento_id'], $user['nombre_planta'], $accion, $_POST); 
+
+    echo $this->setTabla($periodo_id, "Quincenal", $user['perfil_id'], $user['catalogo_planta_id'], $user['catalogo_departamento_id'], $user['nombre_planta'], $accion, $_POST);
 
     $extraFooter = $this->getFooterTable();
 
@@ -1564,14 +1788,14 @@ html;
     if(empty($_POST)){
       $ultimoPeriodoHistorico = IncentivoDao::getUltimoPeriodoHistorico("SEMANAL");
       $idPeriodo = $ultimoPeriodoHistorico['prorrateo_periodo_id'];
-      View::set('msjPeriodo',$this->getPeriodo("Al parecer no hay ningun periodo Cerrado", "Debe existir un periodo Cerrado, para mostrar los registros","SEMANAL", 1)); 
+      View::set('msjPeriodo',$this->getPeriodo("Al parecer no hay ningun periodo Cerrado", "Debe existir un periodo Cerrado, para mostrar los registros","SEMANAL", 1));
     }else{
       $idPeriodo = MasterDom::getData('tipo_periodo');
-      View::set('msjPeriodo',$this->getPeriodoProcesado("SEMANAL", $idPeriodo)); 
+      View::set('msjPeriodo',$this->getPeriodoProcesado("SEMANAL", $idPeriodo));
     }
 
     if($user['perfil_id'] == 1)
-      $accion = 2; // ESTA ES PARA CUANDO EL USUARIO SEA ROOT 
+      $accion = 2; // ESTA ES PARA CUANDO EL USUARIO SEA ROOT
     if($user['perfil_id'] == 6 || $user['perfil_id'] == 5){
       if($user['catalogo_planta_id'] == 1){
         $accion = 2;//1
@@ -1583,8 +1807,8 @@ html;
     if($user['perfil_id'] == 2){
       $accion = 2;
     }
- 
-    echo $this->setTablaExistente($idPeriodo, "Semanal", $user['perfil_id'], $user['catalogo_planta_id'], $user['catalogo_departamento_id'], $user['nombre_planta'], $accion, $_POST); 
+
+    echo $this->setTablaExistente($idPeriodo, "Semanal", $user['perfil_id'], $user['catalogo_planta_id'], $user['catalogo_departamento_id'], $user['nombre_planta'], $accion, $_POST);
 
     //$extraFooter = $this->getFooter();
     $extraFooter = $this->getFooterTable();
@@ -1602,14 +1826,14 @@ html;
     if(empty($_POST)){
       $ultimoPeriodoHistorico = IncentivoDao::getUltimoPeriodoHistorico("QUINCENAL");
       $idPeriodo = $ultimoPeriodoHistorico['prorrateo_periodo_id'];
-      View::set('msjPeriodo',$this->getPeriodo("Al parecer no hay ningun periodo Cerrado", "Debe existir un periodo Cerrado, para mostrar los registros","QUINCENAL", 1)); 
+      View::set('msjPeriodo',$this->getPeriodo("Al parecer no hay ningun periodo Cerrado", "Debe existir un periodo Cerrado, para mostrar los registros","QUINCENAL", 1));
     }else{
       $idPeriodo = MasterDom::getData('tipo_periodo');
-      View::set('msjPeriodo',$this->getPeriodoProcesado("QUINCENAL", $idPeriodo)); 
+      View::set('msjPeriodo',$this->getPeriodoProcesado("QUINCENAL", $idPeriodo));
     }
 
     if($user['perfil_id'] == 1)
-      $accion = 2; // ESTA ES PARA CUANDO EL USUARIO SEA ROOT 
+      $accion = 2; // ESTA ES PARA CUANDO EL USUARIO SEA ROOT
     if($user['perfil_id'] == 6 || $user['perfil_id'] == 5){
       if($user['catalogo_planta_id'] == 1){
         $accion = 2;//1
@@ -1621,8 +1845,8 @@ html;
     if($user['perfil_id'] == 2){
       $accion = 2;
     }
- 
-    echo $this->setTabla($idPeriodo, "Quincenal", $user['perfil_id'], $user['catalogo_planta_id'], $user['catalogo_departamento_id'], $user['nombre_planta'], $accion /*propiosSemanales*/); 
+
+    echo $this->setTabla($idPeriodo, "Quincenal", $user['perfil_id'], $user['catalogo_planta_id'], $user['catalogo_departamento_id'], $user['nombre_planta'], $accion /*propiosSemanales*/);
 
     $extraFooter = $this->getFooterTable();
 
@@ -1643,14 +1867,14 @@ html;
         }else{
           $catalogo_planta_id = $admin['catalogo_planta_id'];
           $catalogo_departamento_id = $admin['catalogo_departamento_id'];
-        } 
+        }
       }
 
       $periodo_id = $this->getUltimoPeriodo("SEMANAL", 0); // Obtiene el ultimo periodo Abiert
       if($periodo_id != ''){
         echo $this->setTablaRangoFechas($periodo_id, "Semanal"); // Coloca la tabla con el periodo abierto
       }
-      
+
       View::set('tipoPeriodo',"Semanales"); // Identificacion del periodo
       View::set('msjPeriodo',$this->getPeriodo("SEMANAL", 0,$periodo_id)); // Obtiene el periodo de la incidencia
       View::set('periodo_id',$periodo_id); // Obtiene el periodo de la incidencia
@@ -1672,7 +1896,7 @@ html;
       if($periodo_id != ''){
         echo $this->setTablaRangoFechas($periodo_id, "Semanal", $admin['catalogo_departamento_id']);
       }
-      
+
       View::set('tipoPeriodo',"Semanales"); // Identificacion del periodo
       View::set('msjPeriodo',$this->getPeriodo("Al parecer no hay periodo Abierto", "Debe existir un periodo Abierto, para checar los incentivos","SEMANAL", 0,$periodo_id)); // Obtiene el periodo de la incidencia
       View::set('periodo_id',$periodo_id); // Obtiene el periodo de la incidencia
@@ -1694,7 +1918,7 @@ html;
       if($periodo_id != ''){
         echo $this->setTablaRangoFechas($periodo_id, "Quincenal", $admin['catalogo_departamento_id']);
       }
-      
+
       View::set('tipoPeriodo',"Quincenales"); // Identificacion del periodo
       View::set('msjPeriodo',$this->getPeriodo("Al parecer no hay periodo Abierto", "Debe existir un periodo Abierto, para checar los incentivos","QUINCENAL", 0,$periodo_id)); // Obtiene el periodo de la incidencia
       View::set('periodo_id',$periodo_id); // Obtiene el periodo de la incidencia
@@ -1734,7 +1958,7 @@ html;
   }
 
   public function historicosSemanalesT(){
-      
+
       if(empty($_POST)){
         $ultimoPeriodoHistorico = ResumenesDao::getUltimoPeriodoHistorico("SEMANAL");
         $periodo_id = $ultimoPeriodoHistorico['prorrateo_periodo_id'];
@@ -1745,7 +1969,7 @@ html;
         echo $this->setTablaRangoFechas($periodo_id, "Semanal"); // Coloca la tabla con el periodo abier
         View::set('msjPeriodo',$this->getPeriodoProcesado("SEMANAL", $periodo_id)); // Obtiene el periodo de la incidencia
       }
-      
+
       View::set('tipoPeriodo',"Semanal"); // Identificacion del periodo
       View::set('option',$this->getPeriodosHistoricos("SEMANAL",$periodo_id)); // Optiene todos los periodos procesados(historicos) semanales
       View::set('busqueda',"/Resumenes/historicosSemanales/&action=historicosSemanales");
@@ -1755,7 +1979,7 @@ html;
     }
 
   public function historicosQuincenalesT(){
-      
+
       if(empty($_POST)){
         $ultimoPeriodoHistorico = ResumenesDao::getUltimoPeriodoHistorico("QUINCENAL");
         $periodo_id = $ultimoPeriodoHistorico['prorrateo_periodo_id'];
@@ -1766,7 +1990,7 @@ html;
         echo $this->setTablaRangoFechas($periodo_id, "Quincenal"); // Coloca la tabla con el periodo abier
         View::set('msjPeriodo',$this->getPeriodoProcesado("QUINCENAL", $periodo_id)); // Obtiene el periodo de la incidencia
       }
-      
+
       View::set('tipoPeriodo',"Quincenal"); // Identificacion del periodo
       View::set('option',$this->getPeriodosHistoricos("QUINCENAL",$periodo_id)); // Optiene todos los periodos procesados(historicos) semanales
       View::set('busqueda',"/Resumenes/historicosSemanales/&action=historicosSemanales");
@@ -1795,7 +2019,7 @@ html;
     $administrador = ResumenesDao::getDatosUsuarioLogeado(MasterDom::getSesion('usuario'));
     // $tipoPeriodo = Semanal o quincenal
     $colaboradores = ResumenesDao::getAllColaboradoresPago($tipoPeriodo, $administrador['administrador_id'], $administrador['usuario'], $departamento_id,$planta_id);
-    
+
     foreach($colaboradores as $key => $value){
 
       if($key <= 10){
@@ -1826,7 +2050,7 @@ html;
                 $datos->_catalogo_colaboradores_id = $value['catalogo_colaboradores_id'];
                 $datos->_fecha = $fecha_inicio->format('Y-m-d');
                 $incidencia = ResumenesDao::getIncidencia($datos);
-                
+
                 if(count($incidencia)>0){
                   $llegada = $incidencia[0]['identificador_incidencia'];
                   $color = $incidencia[0]['color'];
@@ -1838,7 +2062,7 @@ html;
                   }
                 }else{
                   $datos->fecha_inicio = $fecha_inicio->format('Y-m-d').' 00:00:00';
-                  $fecha_aux = new \DateTime($nueva_fecha).' '.$valor1['hora_entrada'];      
+                  $fecha_aux = new \DateTime($nueva_fecha).' '.$valor1['hora_entrada'];
                   $minutos_tolerancia = intval($valor1['tolerancia_entrada'])*60;
                   $fecha_aux->add(new \DateInterval('PT0H'.$minutos_tolerancia.'S'));
                   $datos->fecha_fin = $fecha_aux->format('Y-m-d H:i:s');
@@ -1856,7 +2080,7 @@ html;
                     if(count($registro_entrada) > 0){
                       $llegada = 'R'; //retardo (-2)
                       if(count(ResumenSemanalDao::getDiaFestivo($fecha_inicio->format('Y-m-d'))) >0){
-                        $llegada .= 'RDF'; //retardo en dia festivo (-25) 
+                        $llegada .= 'RDF'; //retardo en dia festivo (-25)
                       }
                       $contadorRetardos[$valor1['catalogo_horario_id']] += 1;
                     }else{
@@ -1911,7 +2135,7 @@ html;
           <td><span class="btn btn-success"><label style="color: {$color};"> {$llegada} </label></span></td>
 html;
         }
-        
+
         if($j==0){
           $encabezado .=<<<html
             <td>{$fecha_inicio->format('d')}-{$meses_traductor[intval($fecha_inicio->format('m'))]} </td>
@@ -1972,7 +2196,7 @@ html;
       @$tipo -> SEMANAL o QUINCENAL
     @status -> 1 Abierto y 0 Cerrado
   */
-  
+
   public function getPeriodo($titulo, $mensaje, $tipo, $status,$periodo_id, $perfil_id, $planta_id){
       $extraFooter = $this->getFooterExtra();
       $periodo = ResumenesDao::searchPeriodos($tipo, $status);
@@ -2009,12 +2233,12 @@ html;
       }else{
         $fechaIni = MasterDom::getFecha($periodo[0]['fecha_inicio']);
         $fechaFin = MasterDom::getFecha($periodo[0]['fecha_fin']);
-        $status = ($periodo[0]['status'] == 0) ? "Abierto": "Cerrado";
-        $label = ($periodo[0]['status'] == 0) ? "success": "danger";
+        $status = ($periodo[0]['status'] == 0 || $periodo[0]['status'] == 3) ? "Abierto": "Cerrado";
+        $label = ($periodo[0]['status'] == 0 || $periodo[0]['status'] == 3) ? "success": "danger";
       $htmlPeriodo = <<<html
       <b>( {$fechaIni} al {$fechaFin} )</b> <label class="label label-{$label}"> periodo {$status}</label>
 html;
-      } 
+      }
       return $htmlPeriodo;
     }
 
@@ -2033,7 +2257,7 @@ html;
       $htmlPeriodo = <<<html
       <b>( {$fechaIni} al {$fechaFin} )</b>
 html;
-      } 
+      }
       return $htmlPeriodo;
     }
 
@@ -2063,7 +2287,7 @@ html;
           <link href="/js/tables/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
           <link href="/js/tables/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
 html;
-    return $extraHeader;  
+    return $extraHeader;
     }
 
     public function guardarPeriodo(){
@@ -2218,7 +2442,6 @@ html;
 
                   $(".dt-buttons").addClass('col-md-3 col-sm-3 col-xs-3 form-group');
                   $(".dt-buttons").after('<div class="col-md-6 col-sm-6 col-xs-6" align="center"><div class="col-md-2 col-sm-2 col-xs-2"><span style="color:#169D5F" class="fa fa-circle"></span><label class="col-md-12 col-sm-12 col-xs-12">Asistencia</label></div><div class="col-md-2 col-sm-2 col-xs-2"><span style="color:#E9FC00" class="fa fa-circle"></span><label class="col-md-12 col-sm-12 col-xs-12">Retardo</label></div><div class="col-md-2 col-sm-2 col-xs-2"><span style="color:#FFA357" class="fa fa-circle"></span><label class="col-md-12 col-sm-12 col-xs-12">Falta Por Retardo</label></div><div class="col-md-2 col-sm-2 col-xs-2"><span style="color:#991D04" class="fa fa-circle"></span><label class="col-md-12 col-sm-12 col-xs-12">Falta</label></div><div class="col-md-2 col-sm-2 col-xs-2"><span style="color:#628881" class="fa fa-circle"></span><label class="col-md-12 col-sm-12 col-xs-12">Descanso</label></div></div>');
-
                   $(".buttons-copy").addClass('btn btn-default');
                   $(".buttons-excel").addClass('btn btn-success');
                   $(".buttons-excel").addClass('fa-file-excel-o');
@@ -2228,14 +2451,12 @@ html;
                   $(".buttons-pdf").addClass('fa fa-file-pdf-o');
 
                   verificarPeriodo();
-
                 }
               });
             });
 
 
             $("#btnGuardar").click(function(){
-              
               $.ajax({
                 url: '/ResumenSemanal/guardarPeriodo',
                 type: 'POST',
@@ -2250,7 +2471,6 @@ html;
               $("#all").attr("action", "/ResumenSemanal/guardarPeriodoAsistencia");
               $("#all").attr("target", "");
               $("#all").submit();
-
             });
 
             function verificarPeriodo(){
@@ -2302,10 +2522,9 @@ html;
                 }//funcion successsfull ajax
               });//cierre del ajax
             } //cierre del evento
-            
+
 
             $("#btnCancelarPeriodo").click(function(){
-
               $("#all").attr('action','/ResumenSemanal/cancelarPeriodo');
               $("#all").submit();
             });

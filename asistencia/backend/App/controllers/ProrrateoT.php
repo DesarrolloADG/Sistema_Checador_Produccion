@@ -6,7 +6,7 @@ use \Core\View;
 use \Core\MasterDom;
 use \Core\Controller;
 use \App\models\Prorrateo as ProrrateoDao;
-use \App\models\General AS GeneralDao;	
+use \App\models\General AS GeneralDao;
 
 class ProrrateoT extends Controller{
 
@@ -30,7 +30,7 @@ class ProrrateoT extends Controller{
 			View::set('accion','Agregar nuevo valor');
 			View::set('mensaje',"El salario minimo es <b>{$sm['cantidad']}</b>");
 		}
-		
+
 		View::render("salario");
 	}
 
@@ -65,7 +65,7 @@ html;
 	public function calculo($tipo, $identificador){
 		$user = GeneralDao::getDatosUsuario($this->__usuario);
 
-		$getIdPeriodo = ProrrateoDao::getLastPeriodoProcesado();
+		$getIdPeriodo = ProrrateoDao::getLastPeriodoProcesado($identificador);
 		if(!empty($getIdPeriodo)){
 			$count = ProrrateoDao::getRegistro($getIdPeriodo['prorrateo_periodo_id'], $identificador);
 		}else{
@@ -73,17 +73,17 @@ html;
 		}
 
 		$existeFechaDiaFestivo = $this->getRango($getIdPeriodo['fecha_inicio'], $getIdPeriodo['fecha_fin']);
-		
+
 		if($count['contador'] > 0){
 			$display = "display: none;";
 			View::set('visualizar', $display);
 			View::set('display',$display);
 			$msj = <<<html
 <div class="alert alert-success alert-dismissible" role="alert">
-	{$identificador} ya esta guardado en NOI 
+	{$identificador} ya esta guardado en NOI
 </div>
 html;
-			View::set('mensaje',$msj);	
+			View::set('mensaje',$msj);
 		}
 
 		// VALIDARA SI HAY DIA FESTIVO
@@ -102,11 +102,11 @@ html;
 				});
 			</script>
 html;
-		
+
 
 		View::set('txtAccion',"Exportar informaci&oacute;n a NOI de {$identificador}");
 		View::set('identificador', $identificador);
-		View::set('msjPeriodo',$this->getPeriodo(strtoupper($tipo), $getIdPeriodo['status'])); // Obtiene el periodo de la incidencia
+		View::set('msjPeriodo',$this->getPeriodo(strtoupper($tipo), $getIdPeriodo['status'], $getIdPeriodo['identificador_noi'])); // Obtiene el periodo de la incidencia
 		$idPeriodo = $this->getIdPeriodo(strtoupper($tipo), $getIdPeriodo['status']); // Obtiene el ultimo periodo Abierto
 		View::set('prorrateo_periodo_id', $idPeriodo);
 		View::set('tabla',$this->getColaboradores($tipo , $identificador, $idPeriodo, $existeFechaDiaFestivo)); // Coloca la informacion de la tabla de todos los colaboradores
@@ -154,7 +154,7 @@ html;
 			$msjPeriodofechas = $this->getPeriodoT(strtoupper($tipo), 1);
 			View::set('btnbackground','info');
 			View::set('btnText','Buscar');
-			//View::set('tabla',$this->getTabla('Semanal', $idPeriodo)); 
+			//View::set('tabla',$this->getTabla('Semanal', $idPeriodo));
 		}else{
 			$idPeriodo = MasterDom::getData('tipo_periodo');
 			$msjPeriodofechas = $this->getPeriodoHistoricosTipo($idPeriodo);
@@ -190,7 +190,7 @@ html;
 		$PREMIOASISTENCIA = '81.12'; //L12 */
 
 		//echo ":::::::::function getPremiodePuntualidadColaborador($SDI, $INCENTIVOS, $TOTALINCENTIVOSHORAS, $PREMIOASISTENCIA):::::::\n";
-		// CONDICION 1 
+		// CONDICION 1
 		$resultado = 0;
 		if( ($TOTALINCENTIVOSHORAS-$PREMIOASISTENCIA) > (($SDI*7)*0.1) ){
 			$resultado = (($SDI*7)*0.1);
@@ -200,19 +200,19 @@ html;
 
 		// CONDICION 2
 		if ( ($INCENTIVOS-$PREMIOASISTENCIA) < (($SDI*7)*0.1) ){
-			$resultado =($INCENTIVOS-$PREMIOASISTENCIA); 
+			$resultado =($INCENTIVOS-$PREMIOASISTENCIA);
 			//echo ":::$resultado::::\n";
 			/*
 			if($INCENTIVOS <= 0)
-				$resultado =$PREMIOASISTENCIA; 
+				$resultado =$PREMIOASISTENCIA;
 			else
-				$resultado =($INCENTIVOS-$PREMIOASISTENCIA); 
+				$resultado =($INCENTIVOS-$PREMIOASISTENCIA);
 			*/
 			if($resultado < 0){
 				$resultado = 0;
 			}
 
-			$bandera2 = true; 
+			$bandera2 = true;
 		}
 
 		if($bandera1 && $bandera2){
@@ -221,12 +221,12 @@ html;
 
 		$operacionNueva = round($resultado, 2);
 		$final = number_format($operacionNueva, 2, '.', '');
-		
+
 		if($final < 0)
 			$final = 0;
 
 		//echo "::::FUNCTION getPremiodePuntualidadColaborador() $final:::::";
-			
+
 		return /*"SDI ->" . $SDI . "<br>INCENTIVOS ->" . $INCENTIVOS . "<br>TOTALINCENTIVOSHORAS ->" . $TOTALINCENTIVOSHORAS . "<br>PREMIOASISTENCIA ->" . $PREMIOASISTENCIA . "<br>" .*/$final;
 	}
 
@@ -240,7 +240,7 @@ html;
 		/*
 		**
 		**:::JUAN CAMBIO
-		** 
+		**
 		/*
 		if($TOTALINCENTIVOSHORAS > $ope){
 			$final = $ope;
@@ -252,7 +252,6 @@ html;
 			}
 		}
 		*/
-		
 		if($TOTALINCENTIVOSHORAS > 0 AND $TOTALINCENTIVOSHORAS < $ope){
 			$final = $TOTALINCENTIVOSHORAS;
 		}else if($INCENTIVO > 0 AND $INCENTIVO < $ope){
@@ -262,7 +261,7 @@ html;
 		}else if($INCENTIVO > $ope){
 			$final = $ope;
 		}
-			
+
 		/*
 		if($TOTALINCENTIVOSHORAS > $ope){
 			$final = $ope;
@@ -274,9 +273,9 @@ html;
 			}
 		}
 		*/
-		
+
 		//echo "::::function getPremioAsistenciaColaborador $final::::\n";
-		
+
 		$resultado = number_format($final, 2, '.', '');
 		return $resultado;
 
@@ -310,9 +309,8 @@ html;
 if($value['catalogo_colaboradores_id'] != 43 ){
         continue;
 }
-     
-/******************************QUITAR PARA EL FUNCIONAMIENTO DE LA FUNCION**************************************/
 
+/******************************QUITAR PARA EL FUNCIONAMIENTO DE LA FUNCION**************************************/
 			$primaDominical = $this->getPrimaDominical($value['catalogo_colaboradores_id'], $idPeriodo);
 			$domingoLaborado = $this->getDomingoLaborados($value['catalogo_colaboradores_id'], $idPeriodo);
 			$nuervosValores = ($primaDominical == 0) ? $domingoLaborado : $primaDominical;
@@ -333,7 +331,7 @@ if($value['catalogo_colaboradores_id'] != 43 ){
 			//echo ":::LimiteHorasExtra:::$LimiteHorasExtra:::\n";
 			$premioAsistencia = $this->getPremioAsistencia($sumaIncentivos, $totalHorasExtraIncentivos, $value['sdi']);
 			//echo ":::premioAsistencia:::$premioAsistencia:::\n";
-			
+
 			$incentivoNoche = $this->getIncentivoNoche($value['catalogo_colaboradores_id'], $idPeriodo);
 
 			//$festivo = $this->getFestivo($value['sal_diario']);
@@ -349,7 +347,7 @@ if($value['catalogo_colaboradores_id'] != 43 ){
 			//echo ":::setPremiodePuntualidadColaborador:::$setPremiodePuntualidadColaborador:::\n";
 			$horasExtraPrevio = $this->horasExtraPrevio($TOTAL, $LimiteHorasExtra, $setPremioAsistenciaColaborador, $setPremiodePuntualidadColaborador);
 			//echo ":::horasExtraPrevio:::$horasExtraPrevio:::\n";
-			
+
 			$importeHorasExtra = $this->getImporteHorasExtras($value['sal_diario'], $totalHorasExtraIncentivos, $LimiteHorasExtra, $setPremioAsistenciaColaborador, $setPremiodePuntualidadColaborador, $horasExtraPrevio);
 			//echo ":::importeHorasExtra:::$importeHorasExtra:::\n";
 			$numeroHorasExtra = $this->getNumeroHorasExtra($value['sal_diario'], $importeHorasExtra);
@@ -368,7 +366,7 @@ if($value['catalogo_colaboradores_id'] != 43 ){
 			if(empty($existeFechaDiaFestivo)){
 				$displayDiaFestivo = 'display:none;';
 			}else{
-				// CHECAR LA FECHA 
+				// CHECAR LA FECHA
 				//$asistenciaFestiva = ProrrateoDao::verificarSiLaASistenciasFestivaExiste($value['clave'], $existeFechaDiaFestivo['fecha'], $value['identificador']);
 				$asistenciaFestiva = ProrrateoDao::verificaAsistenciaFestiva($idPeriodo, $value['catalogo_colaboradores_id'], $existeFechaDiaFestivo['fecha']);
 
@@ -390,14 +388,23 @@ if($value['catalogo_colaboradores_id'] != 43 ){
 			* DOMIGO DE TRABAJO
 			* Formula de excel =SI(AL15>0,(SALARIODIARIO*0.25+(SALARIODIARIO*2)),(0)) => si hay asignacion de dia de trabajo, poner la siguiente operacion
 			*/
+			if ($totalProrrateo == $TOTAL) {
+				$color = 'green';
+				$textov = 'Correcto';
+			}
+			else {
+				$color = 'red';
+				$textov = 'Incorrecto';
+			}
 
-			
 			$dmgTrabajo = 0;
 			if(!empty($primaDominical)) {
 				$dmgTrabajo = $primaDominical;
 			}elseif(!empty($domingoLaborado)){
 				$dmgTrabajo = $domingoLaborado;
 			}
+			//MRR
+			$totalP = $dmgTrabajo + $TOTAL;
 			//? $this->getDomingoTrabajo($value['sal_diario']) : 0;
 
 			$limHrsExtra = $this->getLimHrsExtra($value['sal_diario'], $cantidadPesosHorasExtra, $totalHorasExtraIncentivos);
@@ -410,16 +417,16 @@ if($value['catalogo_colaboradores_id'] != 43 ){
 html;
 			$html .= <<<html
 				<tr>
-	
+
 					<!-- 1 --><td style="text-align:center; vertical-align:middle;">{$value['clave']}</td>
 					<!-- 2 --><td style="text-align:center; vertical-align:middle;">{$value['apellido_paterno']} {$value['apellido_materno']} {$value['nombre']}</td>
 					<!-- 3 --><td style="text-align:center; vertical-align:middle;">$ {$value['sal_diario']}</td>
 					<!-- 4 --><td style="text-align:center; vertical-align:middle;">$ {$value['sdi']}</td>
 					<!-- 5 --><td style="text-align:center; vertical-align:middle;">  {$horasExtra}</td>
-					<!-- 6 --><td style="text-align:center; vertical-align:middle;">$ {$sumaIncentivos}</td>
-					<!-- 7 --><td style="text-align:center; vertical-align:middle;">$ {$cantidadPesosHorasExtra}</td>
-					<!-- 8 --><td style="text-align:center; vertical-align:middle;"></td>
-					<!-- 9 --><td style="text-align:center; vertical-align:middle;">$ {$TOTAL}</td>
+					<!-- 6 --><td style="text-align:center; vertical-align:middle;">$ {$cantidadPesosHorasExtra}</td>
+					<!-- 7 --><td style="text-align:center; vertical-align:middle;">$ {$sumaIncentivos}</td>
+					<!-- 8 --><td style="text-align:center; vertical-align:middle;">$ {$TOTAL}</td>
+					<!-- 9 <td style="text-align:center; vertical-align:middle;"></td>-->
 					<!-- 10 --><td style="text-align:center; vertical-align:middle;">$ {$limHrsExtra}</td>
 					<!-- 11 --><td style="background: #fbf6b6; text-align:center; vertical-align:middle;">$ {$setPremioAsistenciaColaborador}</td>
 					<!-- 12 --><td style="background: #fbf6b6; text-align:center; vertical-align:middle;">$ {$setPremiodePuntualidadColaborador}</td>
@@ -429,12 +436,12 @@ html;
 					<!-- 16 --><td style="background: #fbf6b6; text-align:center; vertical-align:middle;">$ {$despensaEnEfectivo}</td>
 					<!-- 17 --><td style="background: #fbf6b6; text-align:center; vertical-align:middle;">$ {$incentivo}</td>
 					<!-- 18 --><td style="text-align:center; vertical-align:middle;">$ {$totalProrrateo}</td>
-					<!-- 19 --><td style="text-align:center; vertical-align:middle;">Correcta</td>
-					<!-- 20 --><td style="background: #fbf6b6; text-align:center; vertical-align:middle;"> $ 0</td>
+					<!-- 19 --><td style="background: {$color}; color: white; text-align:center; vertical-align:middle;">{$textov}</td>
+					<!-- 20 --><td style="text-align:center; vertical-align:middle;"> $ 0</td>
 					<!-- 21 --><td style="background: #fbf6b6; text-align:center; vertical-align:middle;">$ {$dmgTrabajo} </td>
 					<!-- 22 --><td style="background: #fbf6b6; text-align:center; vertical-align:middle; {$displayDiaFestivo}"> {$festivo}</td>
-					<!-- 23 --><td style="text-align:center; vertical-align:middle;">$ 
-						{$totalHorasExtraIncentivos}
+					<!-- 23 --><td style="text-align:center; vertical-align:middle;">$
+					{$totalP/*$totalHorasExtraIncentivos*/}
 						<!--
 							Clave noi
 							Nombre
@@ -479,7 +486,7 @@ html;
 	}
 
 	public function saveProrrateo(){
-		
+
 		//exit;
 		// CREACION DEL ARRAY
 		$stdClassIncentivos = new \stdClass();
@@ -488,10 +495,10 @@ html;
 			$arr = explode("|", MasterDom::getData("datos_colaborador_" . $i));
 			$datos = ProrrateoDao::getIdColaborador($arr['0'], MasterDom::getData('identificador'));
 
-			
+
 
 			if(!empty($datos)){
-				$stdClassIncentivos->incentivos[$i] = 
+				$stdClassIncentivos->incentivos[$i] =
 					array(
 						"clave"=>$arr['0'],
 						"datos"=> array(
@@ -582,7 +589,7 @@ html;
 		/*
 		$arrayClaveNoiColaborador = array();
 		for ($i = 1; $i <= MasterDom::getData('count'); $i++) {
-			$arr = explode("|", MasterDom::getData("datos_colaborador_" . $i));	
+			$arr = explode("|", MasterDom::getData("datos_colaborador_" . $i));
 			array_push($arrayClaveNoiColaborador, $arr['0']);
 		}
 
@@ -598,7 +605,7 @@ html;
 				foreach ($busquedaFaltas as $k => $ff) {
 					$valor = $this->getStatusFalta(trim($ff['estatus']));
 					//echo "<pre>";print_r("¡".$ff['estatus']."¡"); echo "</pre>";
-					array_push($arrayFechas, array($ff['fecha'] => $valor));				
+					array_push($arrayFechas, array($ff['fecha'] => $valor));
 					$add = array(
 						"clave"=>$value,
 						"fechas"=> $arrayFechas
@@ -625,9 +632,14 @@ $msj = <<<html
 </div>
 html;
 		View::set('msjPeriodoCerrado',$msj);
+		//MRR
+		$num = 0;
+    $nominas = ProrrateoDao::consultanomnoi(MasterDom::getData('prorrateo_periodo_id'));
+    foreach($nominas as $key => $value){
+      $num ++;
+    }
 
-
-		if(MasterDom::getData('identificador') == "GATSA"){
+		if($num == 4){
 			ProrrateoDao::updatePeriodoProrrateo(MasterDom::getData('prorrateo_periodo_id'));
 			$msj = <<<html
 <div class="alert alert-success alert-dismissible" role="alert">
@@ -651,7 +663,7 @@ html;
 
 	public function getStatusFalta($status){
 		$valor = "";
-	
+
 			if((int)$status > 0){
 				$valor = $this->getStatusIncidencia($status);
 			}else{
@@ -690,7 +702,7 @@ html;
 						break;
 				}
 			}
-		
+
 
 		return $valor;
 	}
@@ -771,15 +783,32 @@ html;
 	}
 
 	// Suma de cantidades de pesos de horas extra y la suma de incentivos
-	public function getSumaHorasExtra_IncentivosPeriodos($horasExtra, $sumaIncentivos, $nuervosValores){		
+	//MRR
+	public function getSumaHorasExtra_IncentivosPeriodos($horasExtra, $sumaIncentivos, $nuervosValores){
+		if ($horasExtra != '0.00' AND $sumaIncentivos != '0.00' AND $nuervosValores != '0.00') {
+			return $horasExtra + $sumaIncentivos + $nuervosValores;
+		}
+		else if ($horasExtra != '0.00' AND $sumaIncentivos == '0.00' AND $nuervosValores != '0.00') {
+			return $horasExtra + $nuervosValores;
+		}
+		else if ($horasExtra == '0.00' AND $sumaIncentivos != '0.00' AND $nuervosValores != '0.00') {
+			return $sumaIncentivos + $nuervosValores;
+		}
+		else if ($horasExtra != '0.00' AND $sumaIncentivos == '0.00' AND $nuervosValores == '0.00') {
+			return $horasExtra;
+		}
+		else if ($sumaIncentivos != '0.00' AND $horasExtra == '0.00' AND $nuervosValores == '0.00') {
+			return $sumaIncentivos;
+		}
+		else {
+			return 0;
+		}
 
-		return $horasExtra + $sumaIncentivos + $nuervosValores;
-	
 		/*
 		**:::JUAN::070319
 		**:::REGRESAR BLOQUE DE ABAJO Y BORRAR ARRIBA
 		*/
-		
+
 		/*
 		if($sumaIncentivos != '0.00'){
 			return $horasExtra + $sumaIncentivos + $nuervosValores;
@@ -787,17 +816,17 @@ html;
 			return '0.00';
 		}
 		*/
-		
+
 	}
 
 	// Limite de horas extra
 	public function getLimiteHorasExtra($salarioDiario){
-		return number_format((($salarioDiario * 2) / 8 ) * 9, 2, '.', '');	
+		return number_format((($salarioDiario * 2) / 8 ) * 9, 2, '.', '');
 	}
 
 	// Coloca la cantidad del incentivo de premio de asistencia
 	public function getPremioAsistencia($sumaIncentivos, $totalHorasExtraIncentivos, $sdi){
-	
+
 		/*
 		if($totalHorasExtraIncentivos>0){
 			$operacion = (($sdi * 7)*0.1);
@@ -811,21 +840,19 @@ html;
 			return 0;
 		}
 		*/
-		
+
 		/*
 		**::JUAN CAMBIO 07/03/2019
 		**
 		*/
-		
 		if($totalHorasExtraIncentivos>0 OR $sumaIncentivos > 0){
 			$operacion = (($sdi * 7)*0.1);
 			$nuevoResultado = number_format($operacion, 2, '.', '');
 			return $nuevoResultado;
-		}else{
+		}
+		else{
 			return 0;
 		}
-		
-		
 	}
 
 	// Coloca la cantidad del incentivo de premio de asistencia
@@ -883,7 +910,7 @@ html;
 
 		$operacion = number_format($totalHorasExtraIncentivos - $premioAsistencia - $premioPuntualidad - $importeHorasExtra, 2, '.','');
 		$operacionSalarioMinimo = number_format( (($salarioMinimo * 7) * 0.4), 2, '.','');
-		
+
 		$ope = 0;
 		if($operacion > $operacionSalarioMinimo){
 			$ope = $operacionSalarioMinimo;
@@ -907,7 +934,7 @@ html;
 
 	// Importe de horas extras
 	public function getImporteHorasExtras($salarioDiario, $totalHorasExtraIncentivos, $LimiteHorasExtra, $permioAsistencia, $premioPuntualidad, $horasExtraPrevio){
-		
+
 		$operacion = ($salarioDiario / 8) * 2;
 
 		if($horasExtraPrevio >= $operacion){
@@ -931,7 +958,7 @@ html;
 	}
 
 	public function getIncentivo($totalHorasExtraIncentivos, $premioAsistencia, $premioPuntualidad, $importeHorasExtra, $despensaEnEfectivo){
-		
+
 		$operacion1 = number_format($totalHorasExtraIncentivos-$premioAsistencia-$premioPuntualidad-$importeHorasExtra,2,'.','')-$despensaEnEfectivo;
 
 		if($operacion1 <= 0){
@@ -966,10 +993,10 @@ html;
 		@$tipo -> SEMANAL o QUINCENAL
 		@status -> 1 Abierto y 0 Cerrado
 	*/
-	public function getPeriodo($tipo, $status){
+		//MRR
+	public function getPeriodo($tipo, $status, $identificador_noi){
 		$periodo = ProrrateoDao::searchPeriodos($tipo, $status);
-
-		if($status == 0 ){
+		if($status == 0 || empty($identificador_noi)){
 			$h2 =<<<html
 				<h1>Guardar resumenes</h1>
 html;
@@ -1000,7 +1027,7 @@ html;
 		}else{
 			$fechaIni = MasterDom::getFecha($periodo[0]['fecha_inicio']);
 			$fechaFin = MasterDom::getFecha($periodo[0]['fecha_fin']);
-			
+
 			if ($periodo[0]['status'] == 0) {
 				$label = "success";
 				$status = "Abierto";
@@ -1025,7 +1052,7 @@ html;
 
 			$fechaIni = MasterDom::getFecha($periodo[0]['fecha_inicio']);
 			$fechaFin = MasterDom::getFecha($periodo[0]['fecha_fin']);
-			
+
 			if ($periodo[0]['status'] == 0) {
 				$label = "success";
 				$status = "Abierto";
@@ -1048,7 +1075,7 @@ html;
 		$periodo = ProrrateoDao::getPeriodoId($id);
 		$fechaIni = MasterDom::getFecha($periodo['fecha_inicio']);
 		$fechaFin = MasterDom::getFecha($periodo['fecha_fin']);
-			
+
 		if ($periodo['status'] == 0) {
 			$label = "success";
 			$status = "Abierto";
@@ -1126,15 +1153,15 @@ html;
     public function getHeader(){
     	$extraHeader = <<<html
         	<style>.foto{ width:100px; height:100px; border-radius: 50px;}</style>
-			
+
 			<link href="/js/tables/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
 			<link href="/js/tables/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
 			<link href="/js/tables/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
 			<link href="/js/tables/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
 			<link href="/js/tables/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
-			
+
 html;
-		return $extraHeader;	
+		return $extraHeader;
     }
 
     /*
@@ -1158,7 +1185,7 @@ html;
 			<script src="/js/tables/vendors/jszip/dist/jszip.min.js"></script>
 			<script src="/js/tables/vendors/pdfmake/build/pdfmake.min.js"></script>
 			<script src="/js/tables/vendors/pdfmake/build/vfs_fonts.js"></script>
-			
+
 html;
 		$extraFooter .=<<<html
 			<script>
@@ -1174,7 +1201,7 @@ html;
                        	dom: 'Bfrtip',
                       	buttons: [
                           'excelHtml5'
-                      	]	
+                      	]
 					});
 
 					$('#muestra-colaboradores input[type=search]').keyup( function () {

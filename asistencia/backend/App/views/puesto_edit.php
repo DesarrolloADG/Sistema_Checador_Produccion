@@ -34,6 +34,28 @@
                 </select>
               </div>
             </div>
+            <div class="x_title">
+              <br><br>
+              <h2>Selecciona Incentivo</h2>
+              <div class="clearfix"></div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="numeroi">Número de incentivos <span class="required">*</span></label>
+              <div class="col-md-2 col-sm-6 col-xs-12">
+                <input type="number" step="1" min="1" max="10" class="form-control col-md-7 col-xs-12" placeholder="Ingresa el numero de incentivos del puesto" name="numeroi" id="numeroi" value="<?php echo $puesto['numero_incentivos'];?>" required>
+              </div>
+              <!-- <span id="availability"></span> -->
+              <label class="control-label col-md-2 col-sm-3 col-xs-12" for="numeroi">Total Efectivo <span class="required">*</span></label>
+              <div class="col-md-2 col-sm-6 col-xs-12">
+                <input type="number" class="form-control col-md-7 col-xs-12" placeholder="Dinero Total" name="ti" id="ti" value="<?php echo $puesto['total_valor_incentivos'];?>" required>
+              </div>
+              <!-- <span id="availability"></span> -->
+            </div>
+
+            <span id="incentivo" name="incentivo">
+              <span class="rem"></span>
+            </span>
 
             <input type="hidden" name="catalogo_puesto_id" id="catalogo_puesto_id" value="<?php echo $puesto['catalogo_puesto_id']; ?>">
 

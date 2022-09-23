@@ -45,11 +45,11 @@
               <label class="control-label col-md-3 col-sm-3 col-xs-12" for="sexo">Sexo <span class="">*</span></label>
               <div class="col-md-6 col-sm-6 col-xs-12">
                 <div id="gender" data-toggle="buttons">
-                  <label class="btn btn-default <?php echo ($colaborador['sexo']=='masculino')? 'active' : ''; ?>" data-toggle-class="btn" style="color: #41b0d9;" data-toggle-passive-class="btn-default">
-                    <input <?php echo $hidden; ?> type="radio" name="genero" value="masculino" <?php echo ($colaborador['sexo']=='masculino')? 'checked' : ''; ?> > &nbsp; Masculino &nbsp;
+                  <label class="btn btn-default <?php echo (strtoupper($colaborador['sexo'])=='MASCULINO')? 'active' : ''; ?>" data-toggle-class="btn" style="color: #41b0d9;" data-toggle-passive-class="btn-default">
+                    <input <?php echo $hidden; ?> type="radio" name="genero" value="MASCULINO" <?php echo (strtoupper($colaborador['sexo'])=='MASCULINO')? 'checked' : ''; ?> > &nbsp; Masculino &nbsp;
                   </label>
-                  <label class="btn btn-default <?php echo ($colaborador['sexo']=='femenino')? 'active' : ''; ?>" data-toggle-class="btn" style="color: #d749a7;" data-toggle-passive-class="btn-default">
-                    <input <?php echo $hidden; ?> type="radio" name="genero" value="femenino" <?php echo ($colaborador['sexo']=='femenino')? 'checked' : ''; ?> >  &nbsp;  &nbsp; Femenino  &nbsp;  &nbsp;
+                  <label class="btn btn-default <?php echo (strtoupper($colaborador['sexo'])=='FEMENINO')? 'active' : ''; ?>" data-toggle-class="btn" style="color: #d749a7;" data-toggle-passive-class="btn-default">
+                    <input <?php echo $hidden; ?> type="radio" name="genero" value="FEMENINO" <?php echo (strtoupper($colaborador['sexo'])=='FEMENINO')? 'checked' : ''; ?> >  &nbsp;  &nbsp; Femenino  &nbsp;  &nbsp;
                   </label>
                 </div>
               </div>
@@ -75,7 +75,7 @@
             <div class="form-group">
               <label class="control-label col-md-3 col-sm-3 col-xs-12" for="catalogo_lector_id">ID Catálogo Lector Primario<span class="required">*</span></label>
               <div class="col-md-6 col-sm-6 col-xs-12">
-                <select class="form-control" name="catalogo_lector_id" id="catalogo_lector_id" disabled>
+                <select class="form-control" name="catalogo_lector_id" id="catalogo_lector_id" readonly>
                   <?php echo $idLector; ?>
                 </select>
               </div>
@@ -84,7 +84,7 @@
               <div class="form-group">
                   <label class="control-label col-md-3 col-sm-3 col-xs-12" for="numero_identificacion">Número de Identificación <span class="required">*</span></label>
                   <div class="col-md-6 col-sm-6 col-xs-12">
-                      <input type="text" name="numero_identificacion" id="numero_identificacion" class="form-control col-md-7 col-xs-12" placeholder="Ingresa el número de Identificación" value="<?php echo $colaborador['numero_identificador']; ?>" disabled>
+                      <input type="text" name="numero_identificacion" id="numero_identificacion" class="form-control col-md-7 col-xs-12" placeholder="Ingresa el número de Identificación" value="<?php echo $colaborador['numero_identificador']; ?>" readonly>
                   </div>
               </div>
 
@@ -271,29 +271,31 @@
               </div>
             </div>
 
-	    <br />
+	          <br />
 
-            <div class="form-group">
-              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="opcion">&nbsp;</label>
-              <div class="col-md-6 col-sm-6 col-xs-12">
-                <p>Para eliminar incentivos puedes darle click en la "X" o quitar la opcion del checkbox</p>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="incentivos">Incentivos<span class="required">*</span></label>
-              <div class="col-md-6 col-sm-6 col-xs-12">
-                <div class="col-md-9 col-sm-9 col-xs-9">
-                  <select class="form-control" name="incentivos" id="incentivos">
-                    <option value="" hidden>Selecciona un Incentivo</option>
-                    <?php echo $idIncentivo; ?>
-                  </select>
-                </div>
-                <div class="col-md-3 col-sm-3 col-xs-3">
-                  <input type="button" class="btn btn-success" id="btnIncentivoAdd" value="Agregar">
+            <span id="inc">
+              <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="opcion">&nbsp;</label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  <p>Para eliminar incentivos puedes darle click en la "X" o quitar la opcion del checkbox</p>
                 </div>
               </div>
-            </div>
+
+              <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="incentivos">Incentivos<span class="required">*</span></label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  <div class="col-md-9 col-sm-9 col-xs-9">
+                    <select class="form-control" name="incentivos" id="incentivos">
+                      <option value="" hidden>Selecciona un Incentivo</option>
+                      <?php echo $idIncentivo; ?>
+                    </select>
+                  </div>
+                  <div class="col-md-3 col-sm-3 col-xs-3">
+                    <input type="button" class="btn btn-success" id="btnIncentivoAdd" value="Agregar">
+                  </div>
+                </div>
+              </div>
+            </span>
 
             <div class="form-group">
               <label class="control-label col-md-3 col-sm-3 col-xs-12" for="incentivo">Incentivos Asignados</label>

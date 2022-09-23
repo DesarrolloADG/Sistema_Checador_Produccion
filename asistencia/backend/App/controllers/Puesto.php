@@ -116,6 +116,21 @@ html;
     }
 
     public function add(){
+      //MRR
+      $numeroi = "";
+      $num = 0;
+      foreach (PuestoDao::getIncentivo() as $key => $value) {
+        $num ++;
+        $val = html_entity_decode($value['nombre']);
+        $numeroi .= <<<html
+        option{$num} = document.createElement('option');
+        option{$num}.setAttribute('value','{$value['catalogo_incentivo_id']}');
+        let optionv{$num} = document.createTextNode('{$val}');
+        option{$num}.appendChild(optionv{$num});
+        select.appendChild(option{$num});
+html;
+      }
+
       $extraFooter =<<<html
       <script>
         $(document).ready(function(){
@@ -180,6 +195,451 @@ html;
             window.location.href = "/Puesto/";
           });//fin del btnAdd
 
+
+          //MRR
+          let vali = 0;
+          let value = 0;
+
+          $("#numeroi").change( function(){
+            value = parseInt($(this).val());
+
+            if(value != vali) {
+              let rem = document.querySelector(".rem");
+              rem.parentNode.removeChild(rem);
+            }
+
+            let remn = document.createElement('span');
+            remn.classList.add('rem');
+
+            for (i = 1 ; i < value; i ++) {
+              let div = document.createElement('div');
+              div.classList.add('form-group');
+              let label = document.createElement('label');
+              label.classList.add('control-label','col-md-3','col-sm-3','col-xs-12');
+              let textl = document.createTextNode('Incentivo '+i);
+
+
+              let subdiv = document.createElement('div');
+              subdiv.classList.add('col-md-2','col-sm-3','col-xs-12');
+              let select = document.createElement('select');
+              select.classList.add('form-control');
+              select.setAttribute('name','incentivo'+i);
+
+              {$numeroi}
+
+              let divp = document.createElement('div');
+              divp.classList.add('col-md-3','col-sm-3','col-xs-12');
+              let labelp = document.createElement('label');
+              labelp.classList.add('control-label','col-md-1','col-sm-3','col-xs-12');
+              let textlp = document.createTextNode('% '+i);
+
+              let pdiv = document.createElement('div');
+              pdiv.classList.add('col-md-1','col-sm-3','col-xs-12');
+              let inputp = document.createElement('input');
+              inputp.classList.add('form-control');
+              inputp.setAttribute('type','number');
+              inputp.setAttribute('name','por'+i);
+              inputp.setAttribute('id','por'+i);
+              inputp.setAttribute('max','100');
+              inputp.setAttribute('value', 100/value);
+
+              label.appendChild(textl);
+              subdiv.appendChild(select);
+              div.appendChild(label);
+              div.appendChild(subdiv);
+              labelp.appendChild(textlp);
+              divp.appendChild(inputp);
+              div.appendChild(labelp);
+              div.appendChild(divp);
+              remn.appendChild(div);
+            }
+
+            let div = document.createElement('div');
+            div.classList.add('form-group');
+            let label = document.createElement('label');
+            label.classList.add('control-label','col-md-3','col-sm-3','col-xs-12');
+            let textl = document.createTextNode('Incentivo '+i);
+
+
+            let subdiv = document.createElement('div');
+            subdiv.classList.add('col-md-2','col-sm-3','col-xs-12');
+            let select = document.createElement('select');
+            select.classList.add('form-control');
+            select.setAttribute('name','incentivo'+i);
+
+            {$numeroi}
+
+            let divp = document.createElement('div');
+            divp.classList.add('col-md-3','col-sm-3','col-xs-12');
+            let labelp = document.createElement('label');
+            labelp.classList.add('control-label','col-md-1','col-sm-3','col-xs-12');
+            let textlp = document.createTextNode('% '+i);
+
+            let pdiv = document.createElement('div');
+            pdiv.classList.add('col-md-1','col-sm-3','col-xs-12');
+            let inputp = document.createElement('input');
+            inputp.classList.add('form-control');
+            inputp.setAttribute('type','number');
+            inputp.setAttribute('name','por'+i);
+            inputp.setAttribute('id','por'+i);
+            // inputp.setAttribute('readonly','');
+            inputp.setAttribute('value', 100/value);
+
+            label.appendChild(textl);
+            subdiv.appendChild(select);
+            div.appendChild(label);
+            div.appendChild(subdiv);
+            labelp.appendChild(textlp);
+            divp.appendChild(inputp);
+            div.appendChild(labelp);
+            div.appendChild(divp);
+            remn.appendChild(div);
+
+            incentivo.appendChild(remn);
+            vali = value;
+
+            // let id = value - 1;
+            $("#por1").change( function(){
+              let spor = 0;
+              let por = 0;
+              for(p=1; p< value; p ++){
+                por = parseInt($("#por"+p).val());
+                spor = spor + por;
+                // let r = ti * (por/100); //dinero
+              }
+
+              let rpor = 100 - spor;
+              $("#por"+value).val(rpor);
+
+              if(rpor <= 0){
+                let dival = document.createElement('div');
+                dival.classList.add('col-md-10','col-sm-3','col-xs-12');
+                let labelal = document.createElement('label');
+                labelal.setAttribute('id','alerta');
+                labelal.setAttribute('style','color: red;');
+                labelal.classList.add('control-label','col-md-10','col-sm-3','col-xs-12');
+                let textal = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+
+                // let al = document.createElement('p');
+                // al.classList.add('col-md-3','col-sm-3','col-xs-12');
+                // let altext = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+                labelal.appendChild(textal);
+                dival.appendChild(labelal);
+                rem.appendChild(dival);
+              }
+              // else {
+              //   let ale = document.querySelector("#alerta");
+              //   alerta.parentNode.removeChild(ale);
+              // }
+            });
+
+            $("#por2").change( function(){
+              let spor = 0;
+              let por = 0;
+              for(p=1; p< value; p ++){
+                por = parseInt($("#por"+p).val());
+                spor = spor + por;
+                // let r = ti * (por/100); //dinero
+              }
+
+              let rpor = 100 - spor;
+              $("#por"+value).val(rpor);
+
+              if(rpor <= 0){
+                let dival = document.createElement('div');
+                dival.classList.add('col-md-10','col-sm-3','col-xs-12');
+                let labelal = document.createElement('label');
+                labelal.setAttribute('id','alerta');
+                labelal.setAttribute('style','color: red;');
+                labelal.classList.add('control-label','col-md-10','col-sm-3','col-xs-12');
+                let textal = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+
+                // let al = document.createElement('p');
+                // al.classList.add('col-md-3','col-sm-3','col-xs-12');
+                // let altext = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+                labelal.appendChild(textal);
+                dival.appendChild(labelal);
+                rem.appendChild(dival);
+              }
+              else {
+                let ale = document.querySelector("#alerta");
+                alerta.parentNode.removeChild(ale);
+              }
+            });
+
+            $("#por3").change( function(){
+              let spor = 0;
+              let por = 0;
+              for(p=1; p< value; p ++){
+                por = parseInt($("#por"+p).val());
+                spor = spor + por;
+                // let r = ti * (por/100); //dinero
+              }
+
+              let rpor = 100 - spor;
+              $("#por"+value).val(rpor);
+
+              if(rpor <= 0){
+                let dival = document.createElement('div');
+                dival.classList.add('col-md-10','col-sm-3','col-xs-12');
+                let labelal = document.createElement('label');
+                labelal.setAttribute('id','alerta');
+                labelal.setAttribute('style','color: red;');
+                labelal.classList.add('control-label','col-md-10','col-sm-3','col-xs-12');
+                let textal = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+
+                // let al = document.createElement('p');
+                // al.classList.add('col-md-3','col-sm-3','col-xs-12');
+                // let altext = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+                labelal.appendChild(textal);
+                dival.appendChild(labelal);
+                rem.appendChild(dival);
+              }
+              else {
+                let ale = document.querySelector("#alerta");
+                alerta.parentNode.removeChild(ale);
+              }
+            });
+
+            $("#por4").change( function(){
+              let spor = 0;
+              let por = 0;
+              for(p=1; p< value; p ++){
+                por = parseInt($("#por"+p).val());
+                spor = spor + por;
+                // let r = ti * (por/100); //dinero
+              }
+
+              let rpor = 120 - spor;
+              $("#por"+value).val(rpor);
+
+              if(rpor <= 0){
+                let dival = document.createElement('div');
+                dival.classList.add('col-md-10','col-sm-3','col-xs-12');
+                let labelal = document.createElement('label');
+                labelal.setAttribute('id','alerta');
+                labelal.setAttribute('style','color: red;');
+                labelal.classList.add('control-label','col-md-10','col-sm-3','col-xs-12');
+                let textal = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+
+                // let al = document.createElement('p');
+                // al.classList.add('col-md-3','col-sm-3','col-xs-12');
+                // let altext = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+                labelal.appendChild(textal);
+                dival.appendChild(labelal);
+                rem.appendChild(dival);
+              }
+              else {
+                let ale = document.querySelector("#alerta");
+                alerta.parentNode.removeChild(ale);
+              }
+            });
+
+            $("#por5").change( function(){
+              let spor = 0;
+              let por = 0;
+              for(p=1; p< value; p ++){
+                por = parseInt($("#por"+p).val());
+                spor = spor + por;
+                // let r = ti * (por/100); //dinero
+              }
+
+              let rpor = 100 - spor;
+              $("#por"+value).val(rpor);
+
+              if(rpor <= 0){
+                let dival = document.createElement('div');
+                dival.classList.add('col-md-10','col-sm-3','col-xs-12');
+                let labelal = document.createElement('label');
+                labelal.setAttribute('id','alerta');
+                labelal.setAttribute('style','color: red;');
+                labelal.classList.add('control-label','col-md-10','col-sm-3','col-xs-12');
+                let textal = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+
+                // let al = document.createElement('p');
+                // al.classList.add('col-md-3','col-sm-3','col-xs-12');
+                // let altext = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+                labelal.appendChild(textal);
+                dival.appendChild(labelal);
+                rem.appendChild(dival);
+              }
+              else {
+                let ale = document.querySelector("#alerta");
+                alerta.parentNode.removeChild(ale);
+              }
+            });
+
+            $("#por6").change( function(){
+              let spor = 0;
+              let por = 0;
+              for(p=1; p< value; p ++){
+                por = parseInt($("#por"+p).val());
+                spor = spor + por;
+                // let r = ti * (por/100); //dinero
+              }
+
+              let rpor = 100 - spor;
+              $("#por"+value).val(rpor);
+
+              if(rpor <= 0){
+                let dival = document.createElement('div');
+                dival.classList.add('col-md-10','col-sm-3','col-xs-12');
+                let labelal = document.createElement('label');
+                labelal.setAttribute('id','alerta');
+                labelal.setAttribute('style','color: red;');
+                labelal.classList.add('control-label','col-md-10','col-sm-3','col-xs-12');
+                let textal = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+
+                // let al = document.createElement('p');
+                // al.classList.add('col-md-3','col-sm-3','col-xs-12');
+                // let altext = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+                labelal.appendChild(textal);
+                dival.appendChild(labelal);
+                rem.appendChild(dival);
+              }
+              else {
+                let ale = document.querySelector("#alerta");
+                alerta.parentNode.removeChild(ale);
+              }
+            });
+
+            $("#por7").change( function(){
+              let spor = 0;
+              let por = 0;
+              for(p=1; p< value; p ++){
+                por = parseInt($("#por"+p).val());
+                spor = spor + por;
+                // let r = ti * (por/100); //dinero
+              }
+
+              let rpor = 100 - spor;
+              $("#por"+value).val(rpor);
+
+              if(rpor <= 0){
+                let dival = document.createElement('div');
+                dival.classList.add('col-md-10','col-sm-3','col-xs-12');
+                let labelal = document.createElement('label');
+                labelal.setAttribute('id','alerta');
+                labelal.setAttribute('style','color: red;');
+                labelal.classList.add('control-label','col-md-10','col-sm-3','col-xs-12');
+                let textal = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+
+                // let al = document.createElement('p');
+                // al.classList.add('col-md-3','col-sm-3','col-xs-12');
+                // let altext = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+                labelal.appendChild(textal);
+                dival.appendChild(labelal);
+                rem.appendChild(dival);
+              }
+              else {
+                let ale = document.querySelector("#alerta");
+                alerta.parentNode.removeChild(ale);
+              }
+            });
+
+            $("#por8").change( function(){
+              let spor = 0;
+              let por = 0;
+              for(p=1; p< value; p ++){
+                por = parseInt($("#por"+p).val());
+                spor = spor + por;
+                // let r = ti * (por/100); //dinero
+              }
+
+              let rpor = 100 - spor;
+              $("#por"+value).val(rpor);
+
+              if(rpor <= 0){
+                let dival = document.createElement('div');
+                dival.classList.add('col-md-10','col-sm-3','col-xs-12');
+                let labelal = document.createElement('label');
+                labelal.setAttribute('id','alerta');
+                labelal.setAttribute('style','color: red;');
+                labelal.classList.add('control-label','col-md-10','col-sm-3','col-xs-12');
+                let textal = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+
+                // let al = document.createElement('p');
+                // al.classList.add('col-md-3','col-sm-3','col-xs-12');
+                // let altext = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+                labelal.appendChild(textal);
+                dival.appendChild(labelal);
+                rem.appendChild(dival);
+              }
+              else {
+                let ale = document.querySelector("#alerta");
+                alerta.parentNode.removeChild(ale);
+              }
+            });
+
+            $("#por9").change( function(){
+              let spor = 0;
+              let por = 0;
+              for(p=1; p< value; p ++){
+                por = parseInt($("#por"+p).val());
+                spor = spor + por;
+                // let r = ti * (por/100); //dinero
+              }
+
+              let rpor = 100 - spor;
+              $("#por"+value).val(rpor);
+
+              if(rpor <= 0){
+                let dival = document.createElement('div');
+                dival.classList.add('col-md-10','col-sm-3','col-xs-12');
+                let labelal = document.createElement('label');
+                labelal.setAttribute('id','alerta');
+                labelal.setAttribute('style','color: red;');
+                labelal.classList.add('control-label','col-md-10','col-sm-3','col-xs-12');
+                let textal = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+
+                // let al = document.createElement('p');
+                // al.classList.add('col-md-3','col-sm-3','col-xs-12');
+                // let altext = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+                labelal.appendChild(textal);
+                dival.appendChild(labelal);
+                rem.appendChild(dival);
+              }
+              else {
+                let ale = document.querySelector("#alerta");
+                alerta.parentNode.removeChild(ale);
+              }
+            });
+
+            $("#por10").change( function(){
+              let spor = 0;
+              let por = 0;
+              for(p=1; p< value; p ++){
+                por = parseInt($("#por"+p).val());
+                spor = spor + por;
+                // let r = ti * (por/100); //dinero
+              }
+
+              let rpor = 100 - spor;
+              $("#por"+value).val(rpor);
+
+              if(rpor <= 0){
+                let dival = document.createElement('div');
+                dival.classList.add('col-md-10','col-sm-3','col-xs-12');
+                let labelal = document.createElement('label');
+                labelal.setAttribute('id','alerta');
+                labelal.setAttribute('style','color: red;');
+                labelal.classList.add('control-label','col-md-10','col-sm-3','col-xs-12');
+                let textal = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+
+                // let al = document.createElement('p');
+                // al.classList.add('col-md-3','col-sm-3','col-xs-12');
+                // let altext = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+                labelal.appendChild(textal);
+                dival.appendChild(labelal);
+                rem.appendChild(dival);
+              }
+              else {
+                let ale = document.querySelector("#alerta");
+                alerta.parentNode.removeChild(ale);
+              }
+            });
+          });
+
         });//fin del document.ready
       </script>
 html;
@@ -189,63 +649,1201 @@ html;
         <option value="{$value['catalogo_status_id']}">{$value['nombre']}</option>
 html;
       }
+
       View::set('sStatus',$sStatus);
+      View::set('numeroi',$numeroi);
       View::set('header',$this->_contenedor->header(''));
       View::set('footer',$this->_contenedor->footer($extraFooter));
       View::render("puesto_add");
     }
+//MRR
+public function incentivoPuesto(){
 
-    public function edit($id){
-      $extraFooter =<<<html
-      <script>
-        $(document).ready(function(){
+  $extraFooter =<<<html
+  <script>
+    $(document).ready(function(){
+      $("#add").validate({
+        messages:{
+          quebrado:{
+            required: "Este campo es requerido"
+          },
+          solido:{
+            required: "Este campo es requerido"
+          }
+        }
+      });//fin del jquery validate
 
-          $("#edit").validate({
-            rules:{
-              nombre:{
-                required: true
-              },
-              descripcion:{
-                required: true
-              },
-              status:{
-                required: true
-              }
-            },
-            messages:{
-              nombre:{
-                required: "Este campo es requerido"
-              },
-              descripcion:{
-                required: "Este campo es requerido"
-              },
-              status:{
-                required: "Este campo es requerido"
-              }
-            }
-          });//fin del jquery validate
+      $("#btnCancel").click(function(){
+        window.location.href = "/Principal/";
+      });//fin del btnAdd
 
-          $("#btnCancel").click(function(){
-            window.location.href = "/Puesto/";
-          });//fin del btnAdd
-
-        });//fin del document.ready
-      </script>
+    });//fin del document.ready
+  </script>
 html;
-      $puesto = PuestoDao::getById($id);
-      $sStatus = "";
-      foreach (PuestoDao::getStatus() as $key => $value) {
-        $selected = ($puesto['status']==$value['catalogo_status_id'])? 'selected' : '';
-        $sStatus .=<<<html
-        <option {$selected} value="{$value['catalogo_status_id']}">{$value['nombre']}</option>
-html;
+
+  $ppi = PuestoDao::getpid();
+  // $tipoq = PuestoDao::getEficiencia($ppi['ppi'],'QUEBRADO');
+  $tipos = PuestoDao::getEficiencia($ppi['ppi'],'SOLIDOS');
+
+  if ($tipoq = PuestoDao::getEficiencia($ppi['ppi'],'QUEBRADO')) {
+    $quebrado = $tipoq['porcentaje'];
+  }
+  else {
+    $quebrado = 'SIN ASIGNAR';
+  }
+
+  if ($tipos = PuestoDao::getEficiencia($ppi['ppi'],'SOLIDOS')) {
+    $solido = $tipos['porcentaje'];
+  }
+  else {
+    $solido = 'SIN ASIGNAR';
+  }
+
+  View::set('quebrado',$quebrado);
+  View::set('solido',$solido);
+  View::set('header',$this->_contenedor->header(''));
+  View::set('footer',$this->_contenedor->footer($extraFooter));
+  View::render("puesto_incentivo");
+}
+
+//MRR
+public function puestoIncentivoEdit(){
+  $quebrado = MasterDom::getData('quebrado');
+  $solido = MasterDom::getData('solido');
+
+  if ($quebrado > 98.00) {
+    $quebrado = 100;
+  }
+  else if ($quebrado > 96.00 && $quebrado <= 98.00) {
+    $quebrado = 85;
+  }
+  else if ($quebrado > 94.01 && $quebrado <= 96.00) {
+    $quebrado = 70;
+  }
+  else if ($quebrado <= 94.00) {
+    $quebrado = 0;
+  }
+
+  if ($solido >= 44.00) {
+    $solido = 100;
+  }
+  else{
+    $solido = 0;
+  }
+
+  $ppi = PuestoDao::ultimoPeriodo('SEMANAL');
+  $ppi = $ppi['ppi'];
+
+
+  $eficienciaq = new \stdClass();
+  $eficienciaq->_id_periodo_prorrateo = $ppi;
+  $eficienciaq->_porcentaje = MasterDom::getData('quebrado');
+  $eficienciaq->_tipo = 'QUEBRADO';
+  PuestoDao::insertEficiencia($eficienciaq);
+
+  $eficiencias = new \stdClass();
+  $eficiencias->_id_periodo_prorrateo = $ppi;
+  $eficiencias->_porcentaje = MasterDom::getData('solido');
+  $eficiencias->_tipo = 'SOLIDOS';
+  PuestoDao::insertEficiencia($eficiencias);
+
+  foreach (PuestoDao::colaboradores() as $key => $v) {
+    $data = new \stdClass();
+    $cid = $v['cci'];
+    $p = $v['cpi'];
+    $puesto = PuestoDao::getById($p);
+    $totalv = $puesto['total_valor_incentivos'];
+
+    for ($i=1; $i <= 10; $i++) {
+      $incentivo = $puesto['incentivo'.$i];
+      if($incentivo == 59){
+        $cii = 59;
+        $por = $puesto['porcentaje'.$i];
+        // $cantidad = $totalv * ($por/100);
+        $cantidad = $totalv * ($por/100);
       }
-      View::set('puesto',$puesto);
-      View::set('sStatus',$sStatus);
-      View::set('header',$this->_contenedor->header(''));
-      View::set('footer',$this->_contenedor->footer($extraFooter));
-      View::render("puesto_edit");
+      else if($incentivo == 64){
+        $cii = 64;
+        $por = $puesto['porcentaje'.$i];
+        // $cantidad = $totalv * ($por/100);
+        $cantidad = $totalv * ($por/100);
+      }
+      else {
+        $cii = 0;
+      }
+
+      if ($cii == 59) {
+        $iai = PuestoDao::incentivoAsignado($ppi,$cid,$cii);
+        $iai = $iai['iai'];
+        $data->_iai = $iai;
+        $cantidad = $cantidad * ($quebrado/100);
+        $data->_cantidad = $cantidad;
+        // print_r($data);
+        // echo '<br/>';
+        $ins = PuestoDao::updIncentivoA($data);
+      }
+
+      if ($cii == 64) {
+        $iai = PuestoDao::incentivoAsignado($ppi,$cid,$cii);
+        $iai = $iai['iai'];
+        $data->_iai = $iai;
+        $cantidad = $cantidad * ($solido/100);
+        $data->_cantidad = $cantidad;
+        // print_r($data);
+        // echo '<br/>';
+        $ins = PuestoDao::updIncentivoA($data);
+      }
     }
+  }
+  // exit;
+  $id = 1;
+  if($id >= 1)
+    $this->alerta($id,'up');
+  else
+    $this->alerta($id,'error');
+}
+
+
+public function edit($id){
+  //MRR
+
+  $puesto = PuestoDao::getById($id);
+  if($incentivo1 = $puesto['incentivo1']) {
+    $incentivo1 = $puesto['incentivo1'];
+    $porcentaje1 = $puesto['porcentaje1'];
+    $incentivo2 = $puesto['incentivo2'];
+    $porcentaje2 = $puesto['porcentaje2'];
+    $incentivo3 = $puesto['incentivo3'];
+    $porcentaje3 = $puesto['porcentaje3'];
+    $incentivo4 = $puesto['incentivo4'];
+    $porcentaje4 = $puesto['porcentaje4'];
+    $incentivo5 = $puesto['incentivo5'];
+    $porcentaje5 = $puesto['porcentaje5'];
+    $incentivo6 = $puesto['incentivo6'];
+    $porcentaje6 = $puesto['porcentaje6'];
+    $incentivo7 = $puesto['incentivo7'];
+    $porcentaje7 = $puesto['porcentaje7'];
+    $incentivo8 = $puesto['incentivo8'];
+    $porcentaje8 = $puesto['porcentaje8'];
+    $incentivo9 = $puesto['incentivo9'];
+    $porcentaje9 = $puesto['porcentaje9'];
+    $incentivo10 = $puesto['incentivo10'];
+    $porcentaje10 = $puesto['porcentaje10'];
+
+    $nombre1 = PuestoDao::incentivop($incentivo1);
+    $nombre1 = $nombre1['nombre'];
+    $nombre2 = PuestoDao::incentivop($incentivo2);
+    $nombre2 = $nombre2['nombre'];
+    $nombre3 = PuestoDao::incentivop($incentivo3);
+    $nombre3 = $nombre3['nombre'];
+    $nombre4 = PuestoDao::incentivop($incentivo4);
+    $nombre4 = $nombre4['nombre'];
+    $nombre5 = PuestoDao::incentivop($incentivo5);
+    $nombre5 = $nombre5['nombre'];
+    $nombre6 = PuestoDao::incentivop($incentivo6);
+    $nombre6 = $nombre6['nombre'];
+    $nombre7 = PuestoDao::incentivop($incentivo7);
+    $nombre7 = $nombre7['nombre'];
+    $nombre8 = PuestoDao::incentivop($incentivo8);
+    $nombre8 = $nombre8['nombre'];
+    $nombre9 = PuestoDao::incentivop($incentivo9);
+    $nombre9 = $nombre9['nombre'];
+    $nombre10 = PuestoDao::incentivop($incentivo10);
+    $nombre10 = $nombre10['nombre'];
+  }
+  else {
+    $incentivo1 = 0;
+    $porcentaje1 = 0;
+    $incentivo2 = 0;
+    $porcentaje2 = 0;
+    $incentivo3 = 0;
+    $porcentaje3 = 0;
+    $incentivo4 = 0;
+    $porcentaje4 = 0;
+    $incentivo5 = 0;
+    $porcentaje5 = 0;
+    $incentivo6 = 0;
+    $porcentaje6 = 0;
+    $incentivo7 = 0;
+    $porcentaje7 = 0;
+    $incentivo8 = 0;
+    $porcentaje8 = 0;
+    $incentivo9 = 0;
+    $porcentaje9 = 0;
+    $incentivo10 = 0;
+    $porcentaje10 = 0;
+
+    $nombre1 = '';
+    $nombre2 = '';
+    $nombre3 = '';
+    $nombre4 = '';
+    $nombre5 = '';
+    $nombre6 = '';
+    $nombre7 = '';
+    $nombre8 = '';
+    $nombre9 = '';
+    $nombre10 = '';
+  }
+
+  $numeroi = "";
+  $num = 0;
+  foreach (PuestoDao::getIncentivo() as $key => $value) {
+    $num ++;
+    $val = html_entity_decode($value['nombre']);
+    $numeroi .= <<<html
+    option{$num} = document.createElement('option');
+    option{$num}.setAttribute('value','{$value['catalogo_incentivo_id']}');
+    let optionv{$num} = document.createTextNode('{$val}');
+    option{$num}.appendChild(optionv{$num});
+    select.appendChild(option{$num});
+html;
+  }
+  $extraFooter =<<<html
+  <script>
+    $(document).ready(function(){
+
+      $("#edit").validate({
+        rules:{
+          nombre:{
+            required: true
+          },
+          descripcion:{
+            required: true
+          },
+          status:{
+            required: true
+          }
+        },
+        messages:{
+          nombre:{
+            required: "Este campo es requerido"
+          },
+          descripcion:{
+            required: "Este campo es requerido"
+          },
+          status:{
+            required: "Este campo es requerido"
+          }
+        }
+      });//fin del jquery validate
+
+      $("#btnCancel").click(function(){
+        window.location.href = "/Puesto/";
+      });//fin del btnAdd
+
+      //MRR
+
+      let rem = document.querySelector(".rem");
+      rem.parentNode.removeChild(rem);
+
+      let remn = document.createElement('span');
+      remn.classList.add('rem');
+
+      let value = {$puesto['numero_incentivos']};
+      console.log(value);
+      if (value >= 1) {
+      }
+      let vi = 0;
+      let vn = "";
+      let vp = 0;
+      for (let i = 1; i <= value; i ++) {
+        if (i==1) {
+          vi = {$incentivo1};
+          vn = '{$nombre1}';
+          vp = {$porcentaje1};
+        }
+        else if (i==2) {
+          vi = {$incentivo2};
+          vn = '{$nombre2}';
+          vp = {$porcentaje2};
+        }
+        else if (i==3) {
+          vi = {$incentivo3};
+          vn = '{$nombre3}';
+          vp = {$porcentaje3};
+        }
+        else if (i==4) {
+          vi = {$incentivo4};
+          vn = '{$nombre4}';
+          vp = {$porcentaje4};
+        }
+        else if (i==5) {
+          vi = {$incentivo5};
+          vn = '{$nombre5}';
+          vp = {$porcentaje5};
+        }
+        else if (i==6) {
+          vi = {$incentivo6};
+          vn = '{$nombre6}';
+          vp = {$porcentaje6};
+        }
+        else if (i==7) {
+          vi = {$incentivo7};
+          vn = '{$nombre7}';
+          vp = {$porcentaje7};
+        }
+        else if (i==8) {
+          vi = {$incentivo8};
+          vn = '{$nombre8}';
+          vp = {$porcentaje8};
+        }
+        else if (i==9) {
+          vi = {$incentivo9};
+          vn = '{$nombre9}';
+          vp = {$porcentaje9};
+        }
+        else if (i==10) {
+          vi = {$incentivo10};
+          vn = '{$nombre10}';
+          vp = {$porcentaje10};
+        }
+
+        let div = document.createElement('div');
+        div.classList.add('form-group');
+        let label = document.createElement('label');
+        label.classList.add('control-label','col-md-3','col-sm-3','col-xs-12');
+        let textl = document.createTextNode('Incentivo '+i);
+
+
+        let subdiv = document.createElement('div');
+        subdiv.classList.add('col-md-2','col-sm-3','col-xs-12');
+        let select = document.createElement('select');
+        select.classList.add('form-control');
+        select.setAttribute('name','incentivo'+i);
+        option = document.createElement('option');
+        option.setAttribute('value',vi);
+        option.setAttribute('hidden','');
+        let optionv = document.createTextNode(vn);
+        option.appendChild(optionv);
+        select.appendChild(option);
+
+        {$numeroi}
+
+        let divp = document.createElement('div');
+        divp.classList.add('col-md-3','col-sm-3','col-xs-12');
+        let labelp = document.createElement('label');
+        labelp.classList.add('control-label','col-md-1','col-sm-3','col-xs-12');
+        let textlp = document.createTextNode('% '+i);
+
+        let pdiv = document.createElement('div');
+        pdiv.classList.add('col-md-1','col-sm-3','col-xs-12');
+        let inputp = document.createElement('input');
+        inputp.classList.add('form-control');
+        inputp.setAttribute('type','number');
+        inputp.setAttribute('name','por'+i);
+        inputp.setAttribute('id','por'+i);
+        inputp.setAttribute('max','100');
+        inputp.setAttribute('value', vp);
+
+        label.appendChild(textl);
+        subdiv.appendChild(select);
+        div.appendChild(label);
+        div.appendChild(subdiv);
+        labelp.appendChild(textlp);
+        divp.appendChild(inputp);
+        div.appendChild(labelp);
+        div.appendChild(divp);
+        rem.appendChild(div);
+      }
+      incentivo.appendChild(rem);
+
+      $("#por1").change( function(){
+        let spor = 0;
+        let por = 0;
+        for(p=1; p< value; p ++){
+          por = parseInt($("#por"+p).val());
+          spor = spor + por;
+          // let r = ti * (por/100); //dinero
+        }
+
+        let rpor = 100 - spor;
+        $("#por"+value).val(rpor);
+
+        if(rpor <= 0){
+          let dival = document.createElement('div');
+          dival.classList.add('col-md-10','col-sm-3','col-xs-12');
+          let labelal = document.createElement('label');
+          labelal.setAttribute('id','alerta');
+          labelal.setAttribute('style','color: red;');
+          labelal.classList.add('control-label','col-md-10','col-sm-3','col-xs-12');
+          let textal = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+
+          // let al = document.createElement('p');
+          // al.classList.add('col-md-3','col-sm-3','col-xs-12');
+          // let altext = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+          labelal.appendChild(textal);
+          dival.appendChild(labelal);
+          rem.appendChild(dival);
+        }
+        else {
+          let ale = document.querySelector("#alerta");
+          alerta.parentNode.removeChild(ale);
+        }
+      });
+
+      $("#por2").change( function(){
+        let spor = 0;
+        let por = 0;
+        for(p=1; p< value; p ++){
+          por = parseInt($("#por"+p).val());
+          spor = spor + por;
+          // let r = ti * (por/100); //dinero
+        }
+
+        let rpor = 100 - spor;
+        $("#por"+value).val(rpor);
+
+        if(rpor <= 0){
+          let dival = document.createElement('div');
+          dival.classList.add('col-md-10','col-sm-3','col-xs-12');
+          let labelal = document.createElement('label');
+          labelal.setAttribute('id','alerta');
+          labelal.setAttribute('style','color: red;');
+          labelal.classList.add('control-label','col-md-10','col-sm-3','col-xs-12');
+          let textal = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+
+          // let al = document.createElement('p');
+          // al.classList.add('col-md-3','col-sm-3','col-xs-12');
+          // let altext = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+          labelal.appendChild(textal);
+          dival.appendChild(labelal);
+          rem.appendChild(dival);
+        }
+        else {
+          let ale = document.querySelector("#alerta");
+          alerta.parentNode.removeChild(ale);
+        }
+      });
+
+      $("#por3").change( function(){
+        let spor = 0;
+        let por = 0;
+        for(p=1; p< value; p ++){
+          por = parseInt($("#por"+p).val());
+          spor = spor + por;
+          // let r = ti * (por/100); //dinero
+        }
+
+        let rpor = 100 - spor;
+        $("#por"+value).val(rpor);
+
+        if(rpor <= 0){
+          let dival = document.createElement('div');
+          dival.classList.add('col-md-10','col-sm-3','col-xs-12');
+          let labelal = document.createElement('label');
+          labelal.setAttribute('id','alerta');
+          labelal.setAttribute('style','color: red;');
+          labelal.classList.add('control-label','col-md-10','col-sm-3','col-xs-12');
+          let textal = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+
+          // let al = document.createElement('p');
+          // al.classList.add('col-md-3','col-sm-3','col-xs-12');
+          // let altext = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+          labelal.appendChild(textal);
+          dival.appendChild(labelal);
+          rem.appendChild(dival);
+        }
+        else {
+          let ale = document.querySelector("#alerta");
+          alerta.parentNode.removeChild(ale);
+        }
+      });
+
+      $("#por4").change( function(){
+        let spor = 0;
+        let por = 0;
+        for(p=1; p< value; p ++){
+          por = parseInt($("#por"+p).val());
+          spor = spor + por;
+          // let r = ti * (por/100); //dinero
+        }
+
+        let rpor = 100 - spor;
+        $("#por"+value).val(rpor);
+
+        if(rpor <= 0){
+          let dival = document.createElement('div');
+          dival.classList.add('col-md-10','col-sm-3','col-xs-12');
+          let labelal = document.createElement('label');
+          labelal.setAttribute('id','alerta');
+          labelal.setAttribute('style','color: red;');
+          labelal.classList.add('control-label','col-md-10','col-sm-3','col-xs-12');
+          let textal = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+
+          // let al = document.createElement('p');
+          // al.classList.add('col-md-3','col-sm-3','col-xs-12');
+          // let altext = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+          labelal.appendChild(textal);
+          dival.appendChild(labelal);
+          rem.appendChild(dival);
+        }
+        else {
+          let ale = document.querySelector("#alerta");
+          alerta.parentNode.removeChild(ale);
+        }
+      });
+
+      $("#por5").change( function(){
+        let spor = 0;
+        let por = 0;
+        for(p=1; p< value; p ++){
+          por = parseInt($("#por"+p).val());
+          spor = spor + por;
+          // let r = ti * (por/100); //dinero
+        }
+
+        let rpor = 100 - spor;
+        $("#por"+value).val(rpor);
+
+        if(rpor <= 0){
+          let dival = document.createElement('div');
+          dival.classList.add('col-md-10','col-sm-3','col-xs-12');
+          let labelal = document.createElement('label');
+          labelal.setAttribute('id','alerta');
+          labelal.setAttribute('style','color: red;');
+          labelal.classList.add('control-label','col-md-10','col-sm-3','col-xs-12');
+          let textal = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+
+          // let al = document.createElement('p');
+          // al.classList.add('col-md-3','col-sm-3','col-xs-12');
+          // let altext = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+          labelal.appendChild(textal);
+          dival.appendChild(labelal);
+          rem.appendChild(dival);
+        }
+        else {
+          let ale = document.querySelector("#alerta");
+          alerta.parentNode.removeChild(ale);
+        }
+      });
+
+      $("#por6").change( function(){
+        let spor = 0;
+        let por = 0;
+        for(p=1; p< value; p ++){
+          por = parseInt($("#por"+p).val());
+          spor = spor + por;
+          // let r = ti * (por/100); //dinero
+        }
+
+        let rpor = 100 - spor;
+        $("#por"+value).val(rpor);
+
+        if(rpor <= 0){
+          let dival = document.createElement('div');
+          dival.classList.add('col-md-10','col-sm-3','col-xs-12');
+          let labelal = document.createElement('label');
+          labelal.setAttribute('id','alerta');
+          labelal.setAttribute('style','color: red;');
+          labelal.classList.add('control-label','col-md-10','col-sm-3','col-xs-12');
+          let textal = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+
+          // let al = document.createElement('p');
+          // al.classList.add('col-md-3','col-sm-3','col-xs-12');
+          // let altext = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+          labelal.appendChild(textal);
+          dival.appendChild(labelal);
+          rem.appendChild(dival);
+        }
+        else {
+          let ale = document.querySelector("#alerta");
+          alerta.parentNode.removeChild(ale);
+        }
+      });
+
+      $("#por7").change( function(){
+        let spor = 0;
+        let por = 0;
+        for(p=1; p< value; p ++){
+          por = parseInt($("#por"+p).val());
+          spor = spor + por;
+          // let r = ti * (por/100); //dinero
+        }
+
+        let rpor = 100 - spor;
+        $("#por"+value).val(rpor);
+
+        if(rpor <= 0){
+          let dival = document.createElement('div');
+          dival.classList.add('col-md-10','col-sm-3','col-xs-12');
+          let labelal = document.createElement('label');
+          labelal.setAttribute('id','alerta');
+          labelal.setAttribute('style','color: red;');
+          labelal.classList.add('control-label','col-md-10','col-sm-3','col-xs-12');
+          let textal = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+
+          // let al = document.createElement('p');
+          // al.classList.add('col-md-3','col-sm-3','col-xs-12');
+          // let altext = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+          labelal.appendChild(textal);
+          dival.appendChild(labelal);
+          rem.appendChild(dival);
+        }
+        else {
+          let ale = document.querySelector("#alerta");
+          alerta.parentNode.removeChild(ale);
+        }
+      });
+
+      $("#por8").change( function(){
+        let spor = 0;
+        let por = 0;
+        for(p=1; p< value; p ++){
+          por = parseInt($("#por"+p).val());
+          spor = spor + por;
+          // let r = ti * (por/100); //dinero
+        }
+
+        let rpor = 100 - spor;
+        $("#por"+value).val(rpor);
+
+        if(rpor <= 0){
+          let dival = document.createElement('div');
+          dival.classList.add('col-md-10','col-sm-3','col-xs-12');
+          let labelal = document.createElement('label');
+          labelal.setAttribute('id','alerta');
+          labelal.setAttribute('style','color: red;');
+          labelal.classList.add('control-label','col-md-10','col-sm-3','col-xs-12');
+          let textal = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+
+          // let al = document.createElement('p');
+          // al.classList.add('col-md-3','col-sm-3','col-xs-12');
+          // let altext = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+          labelal.appendChild(textal);
+          dival.appendChild(labelal);
+          rem.appendChild(dival);
+        }
+        else {
+          let ale = document.querySelector("#alerta");
+          alerta.parentNode.removeChild(ale);
+        }
+      });
+
+      $("#por9").change( function(){
+        let spor = 0;
+        let por = 0;
+        for(p=1; p< value; p ++){
+          por = parseInt($("#por"+p).val());
+          spor = spor + por;
+          // let r = ti * (por/100); //dinero
+        }
+
+        let rpor = 100 - spor;
+        $("#por"+value).val(rpor);
+
+        if(rpor <= 0){
+          let dival = document.createElement('div');
+          dival.classList.add('col-md-10','col-sm-3','col-xs-12');
+          let labelal = document.createElement('label');
+          labelal.setAttribute('id','alerta');
+          labelal.setAttribute('style','color: red;');
+          labelal.classList.add('control-label','col-md-10','col-sm-3','col-xs-12');
+          let textal = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+
+          // let al = document.createElement('p');
+          // al.classList.add('col-md-3','col-sm-3','col-xs-12');
+          // let altext = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+          labelal.appendChild(textal);
+          dival.appendChild(labelal);
+          rem.appendChild(dival);
+        }
+        else {
+          let ale = document.querySelector("#alerta");
+          alerta.parentNode.removeChild(ale);
+        }
+      });
+
+      $("#por10").change( function(){
+        let spor = 0;
+        let por = 0;
+        for(p=1; p< value; p ++){
+          por = parseInt($("#por"+p).val());
+          spor = spor + por;
+          // let r = ti * (por/100); //dinero
+        }
+
+        let rpor = 100 - spor;
+        $("#por"+value).val(rpor);
+
+        if(rpor <= 0){
+          let dival = document.createElement('div');
+          dival.classList.add('col-md-10','col-sm-3','col-xs-12');
+          let labelal = document.createElement('label');
+          labelal.setAttribute('id','alerta');
+          labelal.setAttribute('style','color: red;');
+          labelal.classList.add('control-label','col-md-10','col-sm-3','col-xs-12');
+          let textal = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+
+          // let al = document.createElement('p');
+          // al.classList.add('col-md-3','col-sm-3','col-xs-12');
+          // let altext = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+          labelal.appendChild(textal);
+          dival.appendChild(labelal);
+          rem.appendChild(dival);
+        }
+        else {
+          let ale = document.querySelector("#alerta");
+          alerta.parentNode.removeChild(ale);
+        }
+      });
+      let vali = 0;
+
+      $("#numeroi").change( function(){
+        value = parseInt($(this).val());
+
+        if(value != vali) {
+          let rem = document.querySelector(".rem");
+          rem.parentNode.removeChild(rem);
+        }
+
+        let remn = document.createElement('span');
+        remn.classList.add('rem');
+
+        for (i = 1 ; i < value; i ++) {
+          let div = document.createElement('div');
+          div.classList.add('form-group');
+          let label = document.createElement('label');
+          label.classList.add('control-label','col-md-3','col-sm-3','col-xs-12');
+          let textl = document.createTextNode('Incentivo '+i);
+
+
+          let subdiv = document.createElement('div');
+          subdiv.classList.add('col-md-2','col-sm-3','col-xs-12');
+          let select = document.createElement('select');
+          select.classList.add('form-control');
+          select.setAttribute('name','incentivo'+i);
+
+          {$numeroi}
+
+          let divp = document.createElement('div');
+          divp.classList.add('col-md-3','col-sm-3','col-xs-12');
+          let labelp = document.createElement('label');
+          labelp.classList.add('control-label','col-md-1','col-sm-3','col-xs-12');
+          let textlp = document.createTextNode('% '+i);
+
+          let pdiv = document.createElement('div');
+          pdiv.classList.add('col-md-1','col-sm-3','col-xs-12');
+          let inputp = document.createElement('input');
+          inputp.classList.add('form-control');
+          inputp.setAttribute('type','number');
+          inputp.setAttribute('name','por'+i);
+          inputp.setAttribute('id','por'+i);
+          inputp.setAttribute('max','100');
+          inputp.setAttribute('value', 100/value);
+
+          label.appendChild(textl);
+          subdiv.appendChild(select);
+          div.appendChild(label);
+          div.appendChild(subdiv);
+          labelp.appendChild(textlp);
+          divp.appendChild(inputp);
+          div.appendChild(labelp);
+          div.appendChild(divp);
+          remn.appendChild(div);
+        }
+
+        let div = document.createElement('div');
+        div.classList.add('form-group');
+        let label = document.createElement('label');
+        label.classList.add('control-label','col-md-3','col-sm-3','col-xs-12');
+        let textl = document.createTextNode('Incentivo '+i);
+
+
+        let subdiv = document.createElement('div');
+        subdiv.classList.add('col-md-2','col-sm-3','col-xs-12');
+        let select = document.createElement('select');
+        select.classList.add('form-control');
+        select.setAttribute('name','incentivo'+i);
+
+        {$numeroi}
+
+        let divp = document.createElement('div');
+        divp.classList.add('col-md-3','col-sm-3','col-xs-12');
+        let labelp = document.createElement('label');
+        labelp.classList.add('control-label','col-md-1','col-sm-3','col-xs-12');
+        let textlp = document.createTextNode('% '+i);
+
+        let pdiv = document.createElement('div');
+        pdiv.classList.add('col-md-1','col-sm-3','col-xs-12');
+        let inputp = document.createElement('input');
+        inputp.classList.add('form-control');
+        inputp.setAttribute('type','number');
+        inputp.setAttribute('name','por'+i);
+        inputp.setAttribute('id','por'+i);
+        inputp.setAttribute('readonly','');
+        inputp.setAttribute('value', 100/value);
+
+        label.appendChild(textl);
+        subdiv.appendChild(select);
+        div.appendChild(label);
+        div.appendChild(subdiv);
+        labelp.appendChild(textlp);
+        divp.appendChild(inputp);
+        div.appendChild(labelp);
+        div.appendChild(divp);
+        remn.appendChild(div);
+
+        incentivo.appendChild(remn);
+        vali = value;
+
+        // let id = value - 1;
+        $("#por1").change( function(){
+          let spor = 0;
+          let por = 0;
+          for(p=1; p< value; p ++){
+            por = parseInt($("#por"+p).val());
+            spor = spor + por;
+            // let r = ti * (por/100); //dinero
+          }
+
+          let rpor = 100 - spor;
+          $("#por"+value).val(rpor);
+
+          if(rpor <= 0){
+            let dival = document.createElement('div');
+            dival.classList.add('col-md-10','col-sm-3','col-xs-12');
+            let labelal = document.createElement('label');
+            labelal.setAttribute('id','alerta');
+            labelal.setAttribute('style','color: red;');
+            labelal.classList.add('control-label','col-md-10','col-sm-3','col-xs-12');
+            let textal = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+
+            // let al = document.createElement('p');
+            // al.classList.add('col-md-3','col-sm-3','col-xs-12');
+            // let altext = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+            labelal.appendChild(textal);
+            dival.appendChild(labelal);
+            rem.appendChild(dival);
+          }
+          else {
+            let ale = document.querySelector("#alerta");
+            alerta.parentNode.removeChild(ale);
+          }
+        });
+
+        $("#por2").change( function(){
+          let spor = 0;
+          let por = 0;
+          for(p=1; p< value; p ++){
+            por = parseInt($("#por"+p).val());
+            spor = spor + por;
+            // let r = ti * (por/100); //dinero
+          }
+
+          let rpor = 100 - spor;
+          $("#por"+value).val(rpor);
+
+          if(rpor <= 0){
+            let dival = document.createElement('div');
+            dival.classList.add('col-md-10','col-sm-3','col-xs-12');
+            let labelal = document.createElement('label');
+            labelal.setAttribute('id','alerta');
+            labelal.setAttribute('style','color: red;');
+            labelal.classList.add('control-label','col-md-10','col-sm-3','col-xs-12');
+            let textal = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+
+            // let al = document.createElement('p');
+            // al.classList.add('col-md-3','col-sm-3','col-xs-12');
+            // let altext = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+            labelal.appendChild(textal);
+            dival.appendChild(labelal);
+            rem.appendChild(dival);
+          }
+          else {
+            let ale = document.querySelector("#alerta");
+            alerta.parentNode.removeChild(ale);
+          }
+        });
+
+        $("#por3").change( function(){
+          let spor = 0;
+          let por = 0;
+          for(p=1; p< value; p ++){
+            por = parseInt($("#por"+p).val());
+            spor = spor + por;
+            // let r = ti * (por/100); //dinero
+          }
+
+          let rpor = 100 - spor;
+          $("#por"+value).val(rpor);
+
+          if(rpor <= 0){
+            let dival = document.createElement('div');
+            dival.classList.add('col-md-10','col-sm-3','col-xs-12');
+            let labelal = document.createElement('label');
+            labelal.setAttribute('id','alerta');
+            labelal.setAttribute('style','color: red;');
+            labelal.classList.add('control-label','col-md-10','col-sm-3','col-xs-12');
+            let textal = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+
+            // let al = document.createElement('p');
+            // al.classList.add('col-md-3','col-sm-3','col-xs-12');
+            // let altext = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+            labelal.appendChild(textal);
+            dival.appendChild(labelal);
+            rem.appendChild(dival);
+          }
+          else {
+            let ale = document.querySelector("#alerta");
+            alerta.parentNode.removeChild(ale);
+          }
+        });
+
+        $("#por4").change( function(){
+          let spor = 0;
+          let por = 0;
+          for(p=1; p< value; p ++){
+            por = parseInt($("#por"+p).val());
+            spor = spor + por;
+            // let r = ti * (por/100); //dinero
+          }
+
+          let rpor = 100 - spor;
+          $("#por"+value).val(rpor);
+
+          if(rpor <= 0){
+            let dival = document.createElement('div');
+            dival.classList.add('col-md-10','col-sm-3','col-xs-12');
+            let labelal = document.createElement('label');
+            labelal.setAttribute('id','alerta');
+            labelal.setAttribute('style','color: red;');
+            labelal.classList.add('control-label','col-md-10','col-sm-3','col-xs-12');
+            let textal = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+
+            // let al = document.createElement('p');
+            // al.classList.add('col-md-3','col-sm-3','col-xs-12');
+            // let altext = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+            labelal.appendChild(textal);
+            dival.appendChild(labelal);
+            rem.appendChild(dival);
+          }
+          else {
+            let ale = document.querySelector("#alerta");
+            alerta.parentNode.removeChild(ale);
+          }
+        });
+
+        $("#por5").change( function(){
+          let spor = 0;
+          let por = 0;
+          for(p=1; p< value; p ++){
+            por = parseInt($("#por"+p).val());
+            spor = spor + por;
+            // let r = ti * (por/100); //dinero
+          }
+
+          let rpor = 100 - spor;
+          $("#por"+value).val(rpor);
+
+          if(rpor <= 0){
+            let dival = document.createElement('div');
+            dival.classList.add('col-md-10','col-sm-3','col-xs-12');
+            let labelal = document.createElement('label');
+            labelal.setAttribute('id','alerta');
+            labelal.setAttribute('style','color: red;');
+            labelal.classList.add('control-label','col-md-10','col-sm-3','col-xs-12');
+            let textal = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+
+            // let al = document.createElement('p');
+            // al.classList.add('col-md-3','col-sm-3','col-xs-12');
+            // let altext = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+            labelal.appendChild(textal);
+            dival.appendChild(labelal);
+            rem.appendChild(dival);
+          }
+          else {
+            let ale = document.querySelector("#alerta");
+            alerta.parentNode.removeChild(ale);
+          }
+        });
+
+        $("#por6").change( function(){
+          let spor = 0;
+          let por = 0;
+          for(p=1; p< value; p ++){
+            por = parseInt($("#por"+p).val());
+            spor = spor + por;
+            // let r = ti * (por/100); //dinero
+          }
+
+          let rpor = 100 - spor;
+          $("#por"+value).val(rpor);
+
+          if(rpor <= 0){
+            let dival = document.createElement('div');
+            dival.classList.add('col-md-10','col-sm-3','col-xs-12');
+            let labelal = document.createElement('label');
+            labelal.setAttribute('id','alerta');
+            labelal.setAttribute('style','color: red;');
+            labelal.classList.add('control-label','col-md-10','col-sm-3','col-xs-12');
+            let textal = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+
+            // let al = document.createElement('p');
+            // al.classList.add('col-md-3','col-sm-3','col-xs-12');
+            // let altext = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+            labelal.appendChild(textal);
+            dival.appendChild(labelal);
+            rem.appendChild(dival);
+          }
+          else {
+            let ale = document.querySelector("#alerta");
+            alerta.parentNode.removeChild(ale);
+          }
+        });
+
+        $("#por7").change( function(){
+          let spor = 0;
+          let por = 0;
+          for(p=1; p< value; p ++){
+            por = parseInt($("#por"+p).val());
+            spor = spor + por;
+            // let r = ti * (por/100); //dinero
+          }
+
+          let rpor = 100 - spor;
+          $("#por"+value).val(rpor);
+
+          if(rpor <= 0){
+            let dival = document.createElement('div');
+            dival.classList.add('col-md-10','col-sm-3','col-xs-12');
+            let labelal = document.createElement('label');
+            labelal.setAttribute('id','alerta');
+            labelal.setAttribute('style','color: red;');
+            labelal.classList.add('control-label','col-md-10','col-sm-3','col-xs-12');
+            let textal = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+
+            // let al = document.createElement('p');
+            // al.classList.add('col-md-3','col-sm-3','col-xs-12');
+            // let altext = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+            labelal.appendChild(textal);
+            dival.appendChild(labelal);
+            rem.appendChild(dival);
+          }
+          else {
+            let ale = document.querySelector("#alerta");
+            alerta.parentNode.removeChild(ale);
+          }
+        });
+
+        $("#por8").change( function(){
+          let spor = 0;
+          let por = 0;
+          for(p=1; p< value; p ++){
+            por = parseInt($("#por"+p).val());
+            spor = spor + por;
+            // let r = ti * (por/100); //dinero
+          }
+
+          let rpor = 100 - spor;
+          $("#por"+value).val(rpor);
+
+          if(rpor <= 0){
+            let dival = document.createElement('div');
+            dival.classList.add('col-md-10','col-sm-3','col-xs-12');
+            let labelal = document.createElement('label');
+            labelal.setAttribute('id','alerta');
+            labelal.setAttribute('style','color: red;');
+            labelal.classList.add('control-label','col-md-10','col-sm-3','col-xs-12');
+            let textal = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+
+            // let al = document.createElement('p');
+            // al.classList.add('col-md-3','col-sm-3','col-xs-12');
+            // let altext = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+            labelal.appendChild(textal);
+            dival.appendChild(labelal);
+            rem.appendChild(dival);
+          }
+          else {
+            let ale = document.querySelector("#alerta");
+            alerta.parentNode.removeChild(ale);
+          }
+        });
+
+        $("#por9").change( function(){
+          let spor = 0;
+          let por = 0;
+          for(p=1; p< value; p ++){
+            por = parseInt($("#por"+p).val());
+            spor = spor + por;
+            // let r = ti * (por/100); //dinero
+          }
+
+          let rpor = 100 - spor;
+          $("#por"+value).val(rpor);
+
+          if(rpor <= 0){
+            let dival = document.createElement('div');
+            dival.classList.add('col-md-10','col-sm-3','col-xs-12');
+            let labelal = document.createElement('label');
+            labelal.setAttribute('id','alerta');
+            labelal.setAttribute('style','color: red;');
+            labelal.classList.add('control-label','col-md-10','col-sm-3','col-xs-12');
+            let textal = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+
+            // let al = document.createElement('p');
+            // al.classList.add('col-md-3','col-sm-3','col-xs-12');
+            // let altext = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+            labelal.appendChild(textal);
+            dival.appendChild(labelal);
+            rem.appendChild(dival);
+          }
+          else {
+            let ale = document.querySelector("#alerta");
+            alerta.parentNode.removeChild(ale);
+          }
+        });
+
+        $("#por10").change( function(){
+          let spor = 0;
+          let por = 0;
+          for(p=1; p< value; p ++){
+            por = parseInt($("#por"+p).val());
+            spor = spor + por;
+            // let r = ti * (por/100); //dinero
+          }
+
+          let rpor = 100 - spor;
+          $("#por"+value).val(rpor);
+
+          if(rpor <= 0){
+            let dival = document.createElement('div');
+            dival.classList.add('col-md-10','col-sm-3','col-xs-12');
+            let labelal = document.createElement('label');
+            labelal.setAttribute('id','alerta');
+            labelal.setAttribute('style','color: red;');
+            labelal.classList.add('control-label','col-md-10','col-sm-3','col-xs-12');
+            let textal = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+
+            // let al = document.createElement('p');
+            // al.classList.add('col-md-3','col-sm-3','col-xs-12');
+            // let altext = document.createTextNode('No puede haber incentivos en 0 o Negativos');
+            labelal.appendChild(textal);
+            dival.appendChild(labelal);
+            rem.appendChild(dival);
+          }
+          else {
+            let ale = document.querySelector("#alerta");
+            alerta.parentNode.removeChild(ale);
+          }
+        });
+      });
+
+    });//fin del document.ready
+  </script>
+html;
+  $sStatus = "";
+  foreach (PuestoDao::getStatus() as $key => $value) {
+    $selected = ($puesto['status']==$value['catalogo_status_id'])? 'selected' : '';
+    $sStatus .=<<<html
+    <option {$selected} value="{$value['catalogo_status_id']}">{$value['nombre']}</option>
+html;
+  }
+  View::set('puesto',$puesto);
+  View::set('sStatus',$sStatus);
+  View::set('header',$this->_contenedor->header(''));
+  View::set('footer',$this->_contenedor->footer($extraFooter));
+  View::render("puesto_edit");
+}
 
     public function show($id){
       $extraFooter =<<<html
@@ -266,6 +1864,10 @@ html;
       View::set('header',$this->_contenedor->header(''));
       View::set('footer',$this->_contenedor->footer($extraFooter));
       View::render("puesto_view");
+    }
+
+    public function incentivo(){
+      $dato = PuestoDao::getIncentivo();
     }
 
     public function delete(){
@@ -291,13 +1893,108 @@ html;
       $descripcion = MasterDom::procesoAcentosNormal($descripcion);
       $puesto->_descripcion = $descripcion;
       $puesto->_status = MasterDom::getData('status');
+      //MRR
+      $puesto->_numeroi = MasterDom::getData('numeroi');
+      $puesto->_ti = MasterDom::getData('ti');
+
+      if ($_POST['incentivo1']) {
+        $puesto->_incentivo1 = MasterDom::getData('incentivo1');
+        $puesto->_por1 = MasterDom::getData('por1');
+      }
+      else {
+        $puesto->_incentivo1 = 0;
+        $puesto->_por1 = 0;
+      }
+
+      if ($_POST['incentivo2']) {
+        $puesto->_incentivo2 = MasterDom::getData('incentivo2');
+        $puesto->_por2 = MasterDom::getData('por2');
+      }
+      else {
+        $puesto->_incentivo2 = 0;
+        $puesto->_por2 = 0;
+      }
+
+      if ($_POST['incentivo3']) {
+        $puesto->_incentivo3 = MasterDom::getData('incentivo3');
+        $puesto->_por3 = MasterDom::getData('por3');
+      }
+      else {
+        $puesto->_incentivo3 = 0;
+        $puesto->_por3 = 0;
+      }
+
+      if ($_POST['incentivo4']) {
+        $puesto->_incentivo4 = MasterDom::getData('incentivo4');
+        $puesto->_por4 = MasterDom::getData('por4');
+      }
+      else {
+        $puesto->_incentivo4 = 0;
+        $puesto->_por4 = 0;
+      }
+
+      if ($_POST['incentivo5']) {
+        $puesto->_incentivo5 = MasterDom::getData('incentivo5');
+        $puesto->_por5 = MasterDom::getData('por5');
+      }
+      else {
+        $puesto->_incentivo5 = 0;
+        $puesto->_por5 = 0;
+      }
+
+      if ($_POST['incentivo6']) {
+        $puesto->_incentivo6 = MasterDom::getData('incentivo6');
+        $puesto->_por6 = MasterDom::getData('por6');
+      }
+      else {
+        $puesto->_incentivo6 = 0;
+        $puesto->_por6 = 0;
+      }
+
+      if ($_POST['incentivo7']) {
+        $puesto->_incentivo7 = MasterDom::getData('incentivo7');
+        $puesto->_por7 = MasterDom::getData('por7');
+      }
+      else {
+        $puesto->_incentivo7 = 0;
+        $puesto->_por7 = 0;
+      }
+
+      if ($_POST['incentivo8']) {
+        $puesto->_incentivo8 = MasterDom::getData('incentivo8');
+        $puesto->_por8 = MasterDom::getData('por8');
+      }
+      else {
+        $puesto->_incentivo8 = 0;
+        $puesto->_por8 = 0;
+      }
+
+      if ($_POST['incentivo9']) {
+        $puesto->_incentivo9 = MasterDom::getData('incentivo9');
+        $puesto->_por9 = MasterDom::getData('por9');
+      }
+      else {
+        $puesto->_incentivo9 = 0;
+        $puesto->_por9 = 0;
+      }
+
+      if ($_POST['incentivo10']) {
+        $puesto->_incentivo10 = MasterDom::getData('incentivo10');
+        $puesto->_por10 = MasterDom::getData('por10');
+      }
+      else {
+        $puesto->_incentivo10 = 0;
+        $puesto->_por10 = 0;
+      }
+      // print_r($puesto);
+      // exit;
       $id = PuestoDao::insert($puesto);
       if($id >= 1)
         $this->alerta($id,'add');
       else
         $this->alerta($id,'error');
     }
-
+//MRR
     public function puestoEdit(){
       $puesto = new \stdClass();
       $id = PuestoDao::verificarRelacion(MasterDom::getData('catalogo_puesto_id'));
@@ -309,18 +2006,146 @@ html;
       $puesto->_descripcion = $descripcion;
       $puesto->_status = MasterDom::getData('status');
       $puesto->_catalogo_puesto_id = MasterDom::getData('catalogo_puesto_id');
+      $puesto->_numeroi = MasterDom::getData('numeroi');
+      $puesto->_ti = MasterDom::getData('ti');
 
+      if ($_POST['incentivo1']) {
+        $puesto->_incentivo1 = MasterDom::getData('incentivo1');
+        $puesto->_por1 = MasterDom::getData('por1');
+      }
+      else {
+        $puesto->_incentivo1 = 0;
+        $puesto->_por1 = 0;
+      }
+
+      if ($_POST['incentivo2']) {
+        $puesto->_incentivo2 = MasterDom::getData('incentivo2');
+        $puesto->_por2 = MasterDom::getData('por2');
+      }
+      else {
+        $puesto->_incentivo2 = 0;
+        $puesto->_por2 = 0;
+      }
+
+      if ($_POST['incentivo3']) {
+        $puesto->_incentivo3 = MasterDom::getData('incentivo3');
+        $puesto->_por3 = MasterDom::getData('por3');
+      }
+      else {
+        $puesto->_incentivo3 = 0;
+        $puesto->_por3 = 0;
+      }
+
+      if ($_POST['incentivo4']) {
+        $puesto->_incentivo4 = MasterDom::getData('incentivo4');
+        $puesto->_por4 = MasterDom::getData('por4');
+      }
+      else {
+        $puesto->_incentivo4 = 0;
+        $puesto->_por4 = 0;
+      }
+
+      if ($_POST['incentivo5']) {
+        $puesto->_incentivo5 = MasterDom::getData('incentivo5');
+        $puesto->_por5 = MasterDom::getData('por5');
+      }
+      else {
+        $puesto->_incentivo5 = 0;
+        $puesto->_por5 = 0;
+      }
+
+      if ($_POST['incentivo6']) {
+        $puesto->_incentivo6 = MasterDom::getData('incentivo6');
+        $puesto->_por6 = MasterDom::getData('por6');
+      }
+      else {
+        $puesto->_incentivo6 = 0;
+        $puesto->_por6 = 0;
+      }
+
+      if ($_POST['incentivo7']) {
+        $puesto->_incentivo7 = MasterDom::getData('incentivo7');
+        $puesto->_por7 = MasterDom::getData('por7');
+      }
+      else {
+        $puesto->_incentivo7 = 0;
+        $puesto->_por7 = 0;
+      }
+
+      if ($_POST['incentivo8']) {
+        $puesto->_incentivo8 = MasterDom::getData('incentivo8');
+        $puesto->_por8 = MasterDom::getData('por8');
+      }
+      else {
+        $puesto->_incentivo8 = 0;
+        $puesto->_por8 = 0;
+      }
+
+      if ($_POST['incentivo9']) {
+        $puesto->_incentivo9 = MasterDom::getData('incentivo9');
+        $puesto->_por9 = MasterDom::getData('por9');
+      }
+      else {
+        $puesto->_incentivo9 = 0;
+        $puesto->_por9 = 0;
+      }
+
+      if ($_POST['incentivo10']) {
+        $puesto->_incentivo10 = MasterDom::getData('incentivo10');
+        $puesto->_por10 = MasterDom::getData('por10');
+      }
+      else {
+        $puesto->_incentivo10 = 0;
+        $puesto->_por10 = 0;
+      }
       $array = array();
       if($id['seccion'] == 2){
         array_push($array, array('seccion' => 2, 'id' => $id['id'] ));
-        //
         $idStatus = (MasterDom::getData('status')!=2) ? true : false;
         if($idStatus){
-          if(PuestoDao::update($puesto) > 0)
+          if(PuestoDao::update($puesto) > 0){
+            // MRR
+            // $getpid = PuestoDao::ultimoPeriodo('semanal');
+            $getpid = PuestoDao::getpid();
+            foreach (PuestoDao::colaboradoresPuesto($puesto->_catalogo_puesto_id) as $key => $v) {
+              $datos = new \stdClass();
+              $datos->_colaborador_id = $v['cci'];
+              $datos->_prorrateo_periodo_id = $getpid['ppi'];
+
+              $del = PuestoDao::delP($v['cci']);
+              foreach (PuestoDao::getIa($v['cci'],$getpid['ppi']) as $val => $vol) {//,$incentivo->_catalogo_incentivo_id
+                $dele = PuestoDao::delIa($vol['iai']);
+              }
+
+              $incentivos_colaborador = PuestoDao::getIncentivos($puesto->_catalogo_puesto_id);
+              $ti = $incentivos_colaborador['total_valor_incentivos'];
+              for ($i = 1; $i <= $incentivos_colaborador['numero_incentivos']; $i ++) {
+                $incentivo = new \stdClass();
+                $incentivo->_catalogo_colaboradores_id = $v['cci'];
+                $incentivo->_catalogo_incentivo_id = $incentivos_colaborador['incentivo'.$i];
+                $incentivo->_cantidad = $ti * ($incentivos_colaborador['porcentaje'.$i]/100);
+                $insert = PuestoDao::insertIncentivo($incentivo);
+
+                $getin = PuestoDao::getIn($datos->_colaborador_id,$incentivo->_catalogo_incentivo_id);
+
+                $data = new \stdClass();
+                $data->_colaborador_id = $v['cci'];
+                $data->_prorrateo_periodo_id = $getpid['ppi'];
+                $data->_catalogo_incentivo_id = $incentivo->_catalogo_incentivo_id;//$getin['catalogo_incentivo_id'];
+                $data->_cantidad = $incentivo->_cantidad;//$getin['cantidad'];
+                $data->_asignado = 0;
+                $data->_valido = 0;
+                $id = PuestoDao::insertIncentivos($data);
+              }
+            }
+            // exit;
             $this->alerta($id,'edit');
-          else
+          }
+          else{
             $this->alerta($id,'nothing');
-        }else{
+          }
+        }
+        else{
           $this->alertas("Eliminación de puesto", $array, "/Puesto/");
         }
       }
@@ -330,12 +2155,13 @@ html;
         if(MasterDom::getData('status') == 2){
           PuestoDao::update($puesto);
           $this->alerta(MasterDom::getData('catalogo_puesto_id'),'delete');
-        }else{
+        }
+        else{
           if(PuestoDao::update($puesto) >= 1) $this->alerta($id,'edit');
           else $this->alerta("",'nothing');
         }
-
       }
+
     }
 
     public function validarNombrePuesto(){
@@ -546,6 +2372,12 @@ html;
 
       if($parametro == 'add'){
         $mensaje = "Se ha agregado correctamente";
+        $class = "success";
+      }
+
+      //MRR
+      if($parametro == 'up'){
+        $mensaje = "Se ha actualizado los incentivos correctamente";
         $class = "success";
       }
 

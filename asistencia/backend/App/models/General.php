@@ -23,38 +23,38 @@ html;
 
     $mysqli = Database::getInstance();
     $query =<<<sql
-SELECT c.catalogo_colaboradores_id, c.catalogo_colaboradores_id, c.nombre, c.apellido_paterno, c.apellido_materno, c.identificador_noi, c.foto, c.numero_empleado, c.pago, ce.nombre AS nombre_empresa, cp.nombre AS nombre_puesto, cd.nombre AS nombre_departamento FROM catalogo_colaboradores c 
-INNER JOIN catalogo_empresa AS ce USING (catalogo_empresa_id) 
-INNER JOIN catalogo_puesto AS cp USING (catalogo_puesto_id) 
-INNER JOIN catalogo_departamento AS cd USING (catalogo_departamento_id) 
+SELECT c.catalogo_colaboradores_id, c.catalogo_colaboradores_id, c.nombre, c.apellido_paterno, c.apellido_materno, c.identificador_noi, c.foto, c.numero_empleado, c.pago, ce.nombre AS nombre_empresa, cp.nombre AS nombre_puesto, cd.nombre AS nombre_departamento FROM catalogo_colaboradores c
+INNER JOIN catalogo_empresa AS ce USING (catalogo_empresa_id)
+INNER JOIN catalogo_puesto AS cp USING (catalogo_puesto_id)
+INNER JOIN catalogo_departamento AS cd USING (catalogo_departamento_id)
 sql;
     // FILTRO POR PERFIL
     if($perfil == 1){ // PERFIL ROOT
 $query .=<<<sql
-WHERE c.status = 1 
+WHERE c.status = 1
 sql;
     }elseif($perfil == 4){ // PERFIL ADMINISTRADOR
       $query .=<<<sql
-WHERE c.status = 1 
+WHERE c.status = 1
 sql;
     }elseif($perfil == 5){ // PERFIL PERSONALIZADO
-// WHERE c.status = 1 AND c.identificador_noi = "$identificador" 
+// WHERE c.status = 1 AND c.identificador_noi = "$identificador"
       $query .=<<<sql
-WHERE c.status = 1 AND c.catalogo_departamento_id = "$departamento" 
+WHERE c.status = 1 AND c.catalogo_departamento_id = "$departamento"
 sql;
     }elseif($perfil == 6){ // PERFIL RECURSOS HUMANOS
       if($planta == 1){
         $query .=<<<sql
-WHERE c.status = 1 
+WHERE c.status = 1
 sql;
       }else{
         $query .=<<<sql
-WHERE c.status = 1 AND c.identificador_noi = "$identificador" 
+WHERE c.status = 1 AND c.identificador_noi = "$identificador"
 sql;
       }
-    }else{ 
+    }else{
       $query .=<<<sql
-WHERE c.status = 3 
+WHERE c.status = 3
 sql;
     }
 
@@ -67,7 +67,7 @@ sql;
     }
 
     $query .=<<<sql
-{$nuevoFiltro} ORDER BY c.apellido_paterno ASC 
+{$nuevoFiltro} ORDER BY c.apellido_paterno ASC
 sql;
     return $mysqli->queryAll($query);
   }
@@ -76,7 +76,7 @@ sql;
     $mysqli = Database::getInstance();
     if($data->_tipo_busqueda == 0){ /* CUANDO SE BUSCA UN UNICO PERIODO ABIERTO*/
       $query =<<<sql
-SELECT * FROM prorrateo_periodo WHERE status = 0 AND tipo = "$data->_tipo" ORDER BY prorrateo_periodo_id ASC 
+SELECT * FROM prorrateo_periodo WHERE status = 0 AND tipo = "$data->_tipo" ORDER BY prorrateo_periodo_id ASC
 sql;
     }
 
@@ -88,7 +88,7 @@ sql;
 
     if($data->_tipo_busqueda == 2){ /* CUANDO SE BUSCA UN UNICO PERIODO POR ID */
       $query =<<<sql
-SELECT * FROM prorrateo_periodo WHERE prorrateo_periodo_id = "$data->_prorrateo_periodo_id" 
+SELECT * FROM prorrateo_periodo WHERE prorrateo_periodo_id = "$data->_prorrateo_periodo_id"
 sql;
     }
 
@@ -115,19 +115,20 @@ sql;
     public static function getDatosUsuarioLogeado($user){
         $mysqli = Database::getInstance();
         $query1=<<<sql
-SELECT *, cp.nombre AS nombre_planta, cp.catalogo_planta_id 
-FROM utilerias_administradores AS a 
+SELECT *, cp.nombre AS nombre_planta, cp.catalogo_planta_id
+FROM utilerias_administradores AS a
 INNER JOIN catalogo_planta AS cp USING (catalogo_planta_id)
 WHERE usuario LIKE '$user'
 sql;
       $query=<<<sql
 SELECT u.administrador_id, u.usuario, u.perfil_id, u.identificador, u.catalogo_planta_id,
 cd.nombre AS nombre_departamento, cd.catalogo_departamento_id
-FROM `utilerias_administradores` u 
+FROM `utilerias_administradores` u
 INNER JOIN utilerias_administradores_departamentos ud ON (u.administrador_id = ud.id_administrador)
 INNER JOIN catalogo_departamento cd ON (ud.catalogo_departamento_id = cd.catalogo_departamento_id)
 WHERE u.status = 1 AND u.usuario = "$user"
 sql;
+// print_r($query1);
         return $mysqli->queryOne($query);
     }
 
@@ -135,9 +136,9 @@ sql;
         $mysqli = Database::getInstance();
         $query=<<<sql
 SELECT cc.catalogo_colaboradores_id, cc.clave_noi, cc.identificador_noi, cc.nombre, o.sal_diario, o.sdi
-FROM catalogo_colaboradores cc 
-INNER JOIN operacion_noi o ON (cc.clave_noi = o.clave) 
-WHERE cc.catalogo_colaboradores_id = "$idColaborador" AND cc.identificador_noi = o.identificador 
+FROM catalogo_colaboradores cc
+INNER JOIN operacion_noi o ON (cc.clave_noi = o.clave)
+WHERE cc.catalogo_colaboradores_id = "$idColaborador" AND cc.identificador_noi = o.identificador
 sql;
         return $mysqli->queryOne($query);
     }
@@ -154,6 +155,7 @@ JOIN utilerias_administradores_departamentos uad ON ( uad.id_administrador = ua.
 JOIN catalogo_departamento cd ON ( cd.catalogo_departamento_id = uad.catalogo_departamento_id )
 WHERE ua.usuario = "$user"
 sql;
+// print_r($query);
         return $mysqli->queryOne($query);
     }
 
@@ -239,7 +241,7 @@ sql;
     public static function getPermisos($usuario){
       $mysqli = Database::getInstance();
       $query=<<<sql
-      SELECT * FROM utilerias_permisos WHERE usuario LIKE '$usuario'   
+      SELECT * FROM utilerias_permisos WHERE usuario LIKE '$usuario'
 sql;
       return $mysqli->queryAll($query);
     }
@@ -247,13 +249,13 @@ sql;
     public static function getUsuario($usuario){
       $mysqli = Database::getInstance();
       $query=<<<sql
-      SELECT * FROM utilerias_permisos WHERE usuario LIKE '$usuario'   
+      SELECT * FROM utilerias_permisos WHERE usuario LIKE '$usuario'
 sql;
       return $mysqli->queryOne($query);
     }
 
     /*
-        Buscar los colaboradores 
+        Buscar los colaboradores
         @tipo: SEMANAL o QUINCENAL
     */
     public static function getColaboradores($tipo, $perfilUsuario, $catalogoDepartamentoId, $catalogoPlantaId, $status, $identificadorNOI, $filtro){
@@ -261,14 +263,14 @@ sql;
         $mysqli = Database::getInstance();
         if($perfilUsuario == 1 || $perfilUsuario == 4 || $perfilUsuario == 2){
             $query=<<<sql
-SELECT 
+SELECT
 cc.catalogo_colaboradores_id, cc.identificador_noi, cc.nombre, cc.apellido_paterno, cc.apellido_materno, cc.numero_identificador, cc.catalogo_departamento_id,
 cc.pago, cc.foto, cd.nombre AS nombre_departamento, cp.nombre AS nombre_puesto, cu.nombre nombre_ubicacion, cc.catalogo_ubicacion_id, ce.nombre AS nombre_empresa, cc.numero_empleado
-FROM catalogo_colaboradores cc 
+FROM catalogo_colaboradores cc
 INNER JOIN catalogo_departamento cd USING (catalogo_departamento_id)
 INNER JOIN catalogo_puesto cp USING (catalogo_puesto_id)
-INNER JOIN catalogo_ubicacion cu USING (catalogo_ubicacion_id) 
-INNER JOIN catalogo_empresa ce USING (catalogo_empresa_id) 
+INNER JOIN catalogo_ubicacion cu USING (catalogo_ubicacion_id)
+INNER JOIN catalogo_empresa ce USING (catalogo_empresa_id)
 sql;
             if($status == 1){
                 $query.=<<<sql
@@ -295,13 +297,13 @@ sql;
 
             if($status == 5){ // TODAS LAS PLANTAS
                 $query.=<<<sql
-WHERE cc.status = 1 
+WHERE cc.status = 1
 sql;
             }
 
             if($status == 6){ // TODAS LAS PLANTAS
                 $query.=<<<sql
-WHERE cc.pago  = "$tipo" AND cc.status = 1 
+WHERE cc.pago  = "$tipo" AND cc.status = 1
 sql;
             }
 
@@ -315,10 +317,10 @@ sql;
         // PERFIL PARA 4 "Administrador" y 5 "Personalizado"
         if($perfilUsuario == 5){
             $query =<<<sql
-SELECT 
+SELECT
 cc.catalogo_colaboradores_id, cc.identificador_noi, cc.nombre, cc.apellido_paterno, cc.apellido_materno, cc.numero_identificador, cc.catalogo_departamento_id,
 cc.pago, cc.foto, cd.nombre AS nombre_departamento, cp.nombre AS nombre_puesto, cu.nombre nombre_ubicacion, cc.catalogo_ubicacion_id, ce.nombre AS nombre_empresa, cc.numero_empleado
-FROM catalogo_colaboradores cc 
+FROM catalogo_colaboradores cc
 INNER JOIN catalogo_departamento cd USING (catalogo_departamento_id)
 INNER JOIN catalogo_puesto cp USING (catalogo_puesto_id)
 INNER JOIN catalogo_ubicacion cu USING (catalogo_ubicacion_id)
@@ -330,41 +332,41 @@ sql;
 
         if($perfilUsuario == 6){
             $query=<<<sql
-SELECT 
+SELECT
 cc.catalogo_colaboradores_id, cc.identificador_noi, cc.nombre, cc.apellido_paterno, cc.apellido_materno, cc.numero_identificador, cc.catalogo_departamento_id,
 cc.pago, cc.foto, cd.nombre AS nombre_departamento, cp.nombre AS nombre_puesto, cu.nombre nombre_ubicacion, cc.catalogo_ubicacion_id, ce.nombre AS nombre_empresa, cc.numero_empleado
-FROM catalogo_colaboradores cc 
+FROM catalogo_colaboradores cc
 INNER JOIN catalogo_departamento cd USING (catalogo_departamento_id)
 INNER JOIN catalogo_puesto cp USING (catalogo_puesto_id)
-INNER JOIN catalogo_ubicacion cu USING (catalogo_ubicacion_id) 
+INNER JOIN catalogo_ubicacion cu USING (catalogo_ubicacion_id)
 INNER JOIN catalogo_empresa ce USING (catalogo_empresa_id)
 sql;
             if($status == 1){ // ES DE RH XOCHIMILCO Y PUEDE VER TODO
                 $query.=<<<sql
-                WHERE cc.pago = "$tipo" AND cc.status = 1 
+                WHERE cc.pago = "$tipo" AND cc.status = 1
 sql;
             }
 
             if($status == 2){ // ES DE RECUSOS HUMANOS Y PUEDE VER TODOS LOS DEPARTAMENTOS DE SU PLANTA EXCEPTO RH XOCHIMILCO
                 $query.=<<<sql
-                WHERE cc.pago = "$tipo" AND cc.status = 1 AND cc.catalogo_departamento_id = "$catalogoDepartamentoId" 
+                WHERE cc.pago = "$tipo" AND cc.status = 1 AND cc.catalogo_departamento_id = "$catalogoDepartamentoId"
 sql;
             }
 
              //WHERE cc.pago = "$tipo" AND cc.status = 1 AND cc.catalogo_ubicacion_id = "$catalogoPlantaId" AND cc.catalogo_departamento_id = "$catalogoDepartamentoId"
-            if($status == 3){ // ES DE RH y tiene incentivos propios 
+            if($status == 3){ // ES DE RH y tiene incentivos propios
                 $query.=<<<sql
-                WHERE cc.pago = "$tipo" AND cc.status = 1 AND cc.identificador_noi = "$identificadorNOI" 
+                WHERE cc.pago = "$tipo" AND cc.status = 1 AND cc.identificador_noi = "$identificadorNOI"
 sql;
             }
 
-            if($status == 4){ // ES DE RH y tiene incentivos propios 
+            if($status == 4){ // ES DE RH y tiene incentivos propios
                 $query.=<<<sql
-                WHERE cc.pago = "$tipo" AND cc.status = 1 AND cc.catalogo_ubicacion_id = "$catalogoPlantaId" AND cc.catalogo_departamento_id = "$catalogoDepartamentoId" 
+                WHERE cc.pago = "$tipo" AND cc.status = 1 AND cc.catalogo_ubicacion_id = "$catalogoPlantaId" AND cc.catalogo_departamento_id = "$catalogoDepartamentoId"
 sql;
             }
 
-            if($status == 5){ // ES DE RH y tiene incentivos propios 
+            if($status == 5){ // ES DE RH y tiene incentivos propios
                 $query.=<<<sql
                 WHERE cc.pago = "$tipo" AND cc.status = 1 AND cc.catalogo_ubicacion_id = "$catalogoPlantaId"
 sql;
@@ -388,7 +390,7 @@ sql;
     public static function getLastPeriodo($tipo){
       $mysqli = Database::getInstance();
       $query=<<<sql
-      SELECT * FROM `prorrateo_periodo` WHERE tipo = "$tipo" ORDER BY `prorrateo_periodo`.`fecha_inicio` DESC 
+      SELECT * FROM `prorrateo_periodo` WHERE tipo = "$tipo" ORDER BY `prorrateo_periodo`.`fecha_inicio` DESC
 sql;
       return $mysqli->queryOne($query);
     }
@@ -396,7 +398,7 @@ sql;
     public static function getSalarioMinimo(){
       $mysqli = Database::getInstance();
       $query=<<<sql
-SELECT * FROM `salario_minimo` ORDER BY `salario_minimo`.`id_salario` DESC LIMIT 1 
+SELECT * FROM `salario_minimo` ORDER BY `salario_minimo`.`id_salario` DESC LIMIT 1
 sql;
       return $mysqli->queryOne($query);
     }

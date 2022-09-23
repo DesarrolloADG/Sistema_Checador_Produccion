@@ -97,7 +97,7 @@ html;
     $filtros = "";
     if($_POST != "")
       $filtros = $this->getFiltro($post);
-    
+
     View::set('nomina',$this->getNominas());
     View::set('idPuesto',$this->getPuestos());
     View::set('idEmpresa',$this->getEmpresas());
@@ -118,9 +118,9 @@ html;
   public function getAllColaboradoresAsignados($perfil, $identificador, $planta, $departamento, $filtros){
     $html = "";
     foreach (GeneralDao::getAllColaboradores($perfil, $identificador, $planta, $departamento, $filtros) as $key => $value) {
-      $value['apellido_paterno'] = utf8_encode($value['apellido_paterno']); 
-      $value['apellido_materno'] = utf8_encode($value['apellido_materno']); 
-      $value['nombre'] = utf8_encode($value['nombre']); 
+      $value['apellido_paterno'] = utf8_encode($value['apellido_paterno']);
+      $value['apellido_materno'] = utf8_encode($value['apellido_materno']);
+      $value['nombre'] = utf8_encode($value['nombre']);
 
       $value['identificador_noi'] = (!empty($value['identificador_noi'])) ? $value['identificador_noi'] : "SIN<br>IDENTIFICADOR";
       $html .=<<<html
@@ -162,7 +162,7 @@ html;
       }else{
         $titulo .= "Recursos humanos {$identificador}, Administra a usuarios de {$identificador}";
       }
-    }else{ // NO HAY PERFIL 
+    }else{ // NO HAY PERFIL
       $titulo .= " -> lo sentimos, no hay ningun perfil asignado para este usuario.";
     }
     return " " . $titulo;
@@ -237,7 +237,7 @@ html;
         $nomina .=<<<html
         <option value="vacio">SIN NOMINA NOI</option>
 html;
-      } 
+      }
     }
     return $nomina;
   }
@@ -253,12 +253,12 @@ html;
         .foto{width:100px;height:100px;border-radius: 50px;}
       </style>
 html;
-      
+
       $extraFooter =<<<html
       <script>
         $(document).ready(function(){
 
-          
+
           $("#muestra-cupones").tablesorter();
           var oTable = $('#muestra-cupones').DataTable({
                 "columnDefs": [{
@@ -328,7 +328,7 @@ html;
               });
             });*/
 
-            
+
 
         });
       </script>
@@ -501,7 +501,7 @@ html;
       View::set('eliminarHidden',$eliminarHidden);
 
       //$datosUsuario = ColaboradoresDao::GeneralDao($this->__usuario);
-    $datosUsuario = GeneralDao::getDatosUsuario($this->__usuario);  
+    $datosUsuario = GeneralDao::getDatosUsuario($this->__usuario);
 
     if($datosUsuario['perfil_id'] == 1 || $datosUsuario['perfil_id'] == 4){
       $accion = 2;
@@ -541,7 +541,7 @@ html;
         $value['apellido_paterno'] = utf8_encode($value['apellido_paterno']);
         $value['apellido_materno'] = utf8_encode($value['apellido_materno']);
         $value['identificador_noi'] = ($value['identificador_noi'] != '') ? $value['identificador_noi'] : "SIN IDENTIFICADOR";
-      
+
         $tabla .=<<<html
           <tr>
             <td {$editarHidden} style="text-align:center; vertical-align:middle;"><input type="checkbox" name="borrar[]" value="{$value['catalogo_colaboradores_id']}"/></td>
@@ -609,7 +609,7 @@ html;
             <option value="vacio">SIN NOMINA NOI</option>
 html;
         }
-        
+
       }
 
       View::set('nomina', $nomina);
@@ -743,7 +743,7 @@ html;
       $secciones = ColaboradoresDao::getDepartamentos($datosUsuario['administrador_id']);
       $datosUsuario = ColaboradoresDao::getDatosUsuarioLogeado($this->__usuario);*/
 
-      $datosUsuario = GeneralDao::getDatosUsuario($this->__usuario);  
+      $datosUsuario = GeneralDao::getDatosUsuario($this->__usuario);
 
     $accion = 4; // ES PARA PROPIOS DE RH O ROOT
     $tabla = '';
@@ -887,12 +887,12 @@ html;
 
             $("#id_catalogo_lector").change("Act", function(value, element) {
                 if ($(this).val() === "0") {
-                    
+
                     $("#numero_identificacion").prop("disabled", true);
                     document.getElementById("numero_identificacion").value = "";
                      $('#availability').html('<span class="text-success"></span></span>');
-                    
-                     
+
+
                 } else {
                     $("#numero_identificacion").prop("disabled", false);
                     document.getElementById("numero_identificacion").value = "";
@@ -900,7 +900,7 @@ html;
                      $('#btnAdd').attr("disabled", false);
                 }
             });
-           
+
             $.validator.addMethod("checkPlantilla", function(value, element) {
               var result = false;
               $.ajax({
@@ -908,7 +908,7 @@ html;
                 async: false,
                 url: "/Colaboradores/isValidatePlantilla", // script to validate in server side
                 data:  {
-                    id_catalogo_lector: function() 
+                    id_catalogo_lector: function()
                     {
                       return $("#id_catalogo_lector").val();
                     }
@@ -926,7 +926,7 @@ html;
                        $("#numero_identificacion").prop("disabled", true);
                     document.getElementById("numero_identificacion").value = "";
                      $('#availability').html('<span class="text-success"></span></span>');
-                      
+
                     }
                 }
               });
@@ -935,7 +935,7 @@ html;
               },
               "¡La Plantilla esta Completa para la Unidad, Contacte a Sistemas!"
           );
-            
+
           $.validator.addMethod("checkUserName", function(value, element) {
               var result = false;
               $.ajax({
@@ -967,7 +967,7 @@ html;
               },
               "¡Este número de identificación ya pertenece a otro Colaborador! Prueba otro."
           );
-            
+
           $(".check").change(function(){
             var incentivo = $(this);
 
@@ -1095,7 +1095,7 @@ html;
                 required: "Este campo es requerido"
               },
               tipo_horario:{
-                required: "Este campo es requerido" 
+                required: "Este campo es requerido"
               }
             }
           });//fin del jquery validate
@@ -1134,6 +1134,17 @@ html;
                 return true;
               }
           }, jQuery.validator.format("Se requiere por lo menos el horario default"));
+
+          //MRR
+          $("#id_catalogo_lector").change(function(){
+            let clp = parseInt($(this).val());
+            if (clp == 3 || clp == 4) {
+              $("#inc").hide();
+            }
+            else {
+              $("#inc").show();
+            }
+          });
 
 	        $("#horario_1").rules("add", {
             required: true,
@@ -1330,7 +1341,7 @@ html;
         ({
           format: 'DD/MM/YYYY HH:mm',
           lang: 'es',
-          weekStart: 1, 
+          weekStart: 1,
           cancelText : 'ANNULER',
           nowButton : true,
           switchOnClick : true
@@ -1932,7 +1943,14 @@ html;
           $("#horario_3").change();
           $("#horario_4").change();
 
-
+          //MRR
+          /*let clp = parseInt($("#catalogo_lector_id").val());
+          if (clp == 3 || clp == 4) {
+            $("#inc").hide();
+          }
+          else {
+            $("#inc").show();
+          }*/
         });//fin del document.ready
       </script>
 
@@ -1966,7 +1984,7 @@ html;
         ({
           format: 'DD/MM/YYYY HH:mm',
           lang: 'es',
-          weekStart: 1, 
+          weekStart: 1,
           cancelText : 'ANNULER',
           nowButton : true,
           switchOnClick : true
@@ -2031,7 +2049,7 @@ html;
 html;
 
       }
-	
+
       if($colaborador['catalogo_lector_secundario_id'] == 0)
           $idLectorSecundario = '<option selected value="0">Catalogo Lector Secundario Nulo o vacio</option>'.$idLectorSecundario;
       else
@@ -2098,12 +2116,20 @@ html;
           }
 
           if($existe){
+            if (condition) {
+              // code...
+            }
             $signo = ($cantidad!='')? '$':'';
             $idIncentivos_asignados .=<<<html
               <div class="col-md-4 col-sm-4 col-xs-4" id="incentivo_asignado_{$value['catalogo_incentivo_id']}" style="background-color:{$value['color']}; border-radius:10px; margin:5px; justify-content: center;">
+                <!--MRR-->
+                <!--<input type="text" name="cantidad_{$value['catalogo_incentivo_id']}" id="cantidad_{$value['catalogo_incentivo_id']}" class="col-md-9 col-sm-9 col-xs-9" style="margin-right:10px;margin-top:10px; border-radius:10px; border-color: white;" value="{$cantidad}" placeholder="Cantidad" readonly>-->
                 <input type="text" name="cantidad_{$value['catalogo_incentivo_id']}" id="cantidad_{$value['catalogo_incentivo_id']}" class="col-md-9 col-sm-9 col-xs-9" style="margin-right:10px;margin-top:10px; border-radius:10px; border-color: white;" value="{$cantidad}" placeholder="Cantidad">
+                <!--<i class="fa fa-times-circle-o col-md-1 col-sm-1 col-xs-1" id="{$value['catalogo_incentivo_id']}" nombre="{$value['nombre']}" color="{$value['color']}" style="font-size: 18px; margin-top:3px; margin-left:5px; color:#C9302C;"></i>-->
                 <i class="fa fa-times-circle-o cerrar col-md-1 col-sm-1 col-xs-1" id="{$value['catalogo_incentivo_id']}" nombre="{$value['nombre']}" color="{$value['color']}" style="font-size: 18px; margin-top:3px; margin-left:5px; color:#C9302C;"></i>
                 <div class="col-md-11 col-sm-11 col-xs-11" style="justify-content: center; margin-top: 5px;">
+                  <!--<input class="checkbox checkbox-circle col-md-2 col-sm-2 col-xs-2" type="checkbox" name="incentivo[]" value="{$value['catalogo_incentivo_id']}" checked="checked" onclick="this.checked=!this.checked"/>-->
+                  <!--<label class="col-md-9 col-sm-9 col-xs-9" style="text-align:center;color:#000000;border-radius:10px; padding:5px;margin-left:5px;word-wrap: break-word;" > {$value['nombre']} </label>-->
                   <input class="checkbox checkbox-circle col-md-2 col-sm-2 col-xs-2" type="checkbox" name="incentivo[]" value="{$value['catalogo_incentivo_id']}" checked/>
                   <label class="col-md-9 col-sm-9 col-xs-9" style="text-align:center;color:#000000;border-radius:10px; padding:5px;margin-left:5px;word-wrap: break-word;" > {$value['nombre']} </label>
                 </div>
@@ -2700,7 +2726,163 @@ html;
       View::render("colaboradores_existente");
     }
 
+    public function bajas(){
+      $extraFooter =<<<html
+      <script>
+        $(document).ready(function(){
+          $("#existente").bootstrapSwitch();
+
+          $('input[name="existente"]').on('switchChange.bootstrapSwitch', function(event, state) {
+            if(state){
+              $("#identificador").show();
+              $("#tabla_muestra").show();
+            }
+            else{
+              $("#identificador").hide();
+              $("#tabla_muestra").hide();
+              $("input[type=radio]").attr('checked', false);
+            }
+          });
+
+          $("#muestra-cupones").tablesorter();
+
+          var oTable = $('#muestra-cupones').DataTable({
+            "columnDefs": [{
+              "orderable": false,
+              "targets": 0
+            }],
+            "order": false,
+            "language": {
+              "emptyTable": "No hay datos disponibles",
+              "infoEmpty": "Mostrando 0 a 0 de 0 registros",
+              "info": "Mostrar _START_ a _END_ de _TOTAL_ registros",
+              "infoFiltered":   "(Filtrado de _MAX_ total de registros)",
+              "lengthMenu": "Mostrar _MENU_ registros",
+              "zeroRecords":  "No se encontraron resultados",
+              "search": "Buscar:",
+              "processing": "Procesando...",
+              "paginate" : {
+                "next": "Siguiente",
+                "previous" : "Anterior"
+              }
+            }
+          });
+
+          $('#muestra-cupones input[type=search]').keyup( function () {
+              var table = $('#example').DataTable();
+              table.search(
+                  jQuery.fn.DataTable.ext.type.search.html(this.value)
+              ).draw();
+          });
+
+          $(document).on("change","#identificador",function(e){
+            e.stopPropagation();//evita que se ejecute 2 veces el mismo evento
+            $.ajax({
+              url:'/Colaboradores/getTablaBajas/',
+              type:'POST',
+              data:{"identificador": $(this).val()},
+              success:function(response){
+                $("#tabla_muestra").html(response);
+                $('#muestra-cupones').DataTable({
+                      "columnDefs": [{
+                          "orderable": false,
+                          "targets": 0
+                      }],
+                       "order": false,
+                       "language": {
+                          "emptyTable": "No hay datos disponibles",
+                          "infoEmpty": "Mostrando 0 a 0 de 0 registros",
+                          "info": "Mostrar _START_ a _END_ de _TOTAL_ registros",
+                          "infoFiltered":   "(Filtrado de _MAX_ total de registros)",
+                          "lengthMenu": "Mostrar _MENU_ registros",
+                          "zeroRecords":  "No se encontraron resultados",
+                          "search": "Buscar:",
+                          "processing": "Procesando...",
+                          "paginate" : {
+                              "next": "Siguiente",
+                              "previous" : "Anterior"
+                          }
+                      }
+                  });//fin del dataTable
+              }
+            });//fin del ajax
+          });//fin del evento change de #identificador
+        });//fin del document ready
+      </script>
+html;
+      $tabla = "";
+      $colaboradores_existentes = ColaboradoresDao::getBajaEmpleados();
+      foreach ($colaboradores_existentes as $key => $value) {
+        $value['nc'] = utf8_encode($value['nc']);
+        $value['fa'];
+        $value['fb'];
+        $value['d'] = utf8_encode($value['d']);
+        $tabla .=<<<html
+        <tr>
+          <td>{$value['nc']}</td>
+          <td>{$value['fa']}</td>
+          <td>{$value['fb']}</td>
+          <td>{$value['d']}</td>
+        </tr>
+html;
+      }
+
+      View::set("tabla",$tabla);
+      View::set('header',$this->_contenedor->header($extraHeader));
+      View::set('footer',$this->_contenedor->footer($extraFooter));
+      View::render("colaboradores_bajas");
+    }
+
     public function getTablaOperaciones(){
+      $identificador = MasterDom::getData('identificador');
+      $filtro = ($identificador!='')? " AND identificador = '".$identificador."'" : '';
+
+      echo <<<html
+      <div class="dataTable_wrapper">
+        <table class="table table-striped table-bordered table-hover" id="muestra-cupones">
+          <thead>
+            <tr>
+              <th ></th>
+              <th>Nombre</th>
+              <th>Apellido Paterno</th>
+              <th>Apellido Materno</th>
+              <th>Planta</th>
+              <th>RFC</th>
+              <th>Clave NOI</th>
+              <th>Fecha Alta</th>
+            </tr>
+          </thead>
+          <tbody id="registros">
+html;
+      foreach (ColaboradoresDao::getOperacionNoi($filtro) as $key => $value) {
+        $value['nombre'] = utf8_encode($value['nombre']);
+        $value['ap_pat'] = utf8_encode($value['ap_pat']);
+        $value['ap_mat'] = utf8_encode($value['ap_mat']);
+        $value['rfc'] = utf8_encode($value['rfc']);
+        $value['fecha_alta'] = utf8_encode($value['fecha_alta']);
+        echo <<<html
+        <tr>
+          <td><input type="radio" name="colaborador_id" value="{$value['identificador']}{$value['clave']}"/></td>
+          <td>{$value['nombre']}</td>
+          <td>{$value['ap_pat']}</td>
+          <td>{$value['ap_mat']}</td>
+          <td>{$value['identificador']}</td>
+          <td>{$value['rfc']}</td>
+          <td>{$value['clave']}</td>
+          <td>{$value['fecha_alta']}</td>
+        </tr>
+html;
+      }
+
+      echo <<<html
+      </tbody>
+    </table>
+  </div>
+html;
+
+    }
+
+    public function getTablaBajas(){
       $identificador = MasterDom::getData('identificador');
       $filtro = ($identificador!='')? " AND identificador = '".$identificador."'" : '';
 
@@ -2846,24 +3028,54 @@ html;
         }
 
         /**add**/
-        $reporte->_horarios = $horarios;
-        $incentivos_colaborador = MasterDom::getDataAll('incentivo');
-        $incentivos = array();
-        $contador = 0;
-
-        if(count($incentivos_colaborador)>0){
-          foreach ($incentivos_colaborador as $key => $value) {
-
+        if (MasterDom::getData('id_catalogo_lector') == 3 || MasterDom::getData('id_catalogo_lector') == 4) {
+          $reporte->_horarios = $horarios;
+          $puesto = MasterDom::getData('id_catalogo_puesto');
+          // $incentivos_colaborador = MasterDom::getDataAll('incentivo');
+          //MRR
+          $incentivos_colaborador = ColaboradoresDao::getIncentivos($puesto);
+          $ti = $incentivos_colaborador['total_valor_incentivos'];
+          // $reporte->_id_colaborador = 930;
+          for ($i=1; $i <= $incentivos_colaborador['numero_incentivos']; $i++) {
             $incentivo = new \stdClass();
             $incentivo->_catalogo_colaboradores_id = $reporte->_id_colaborador;
-            $incentivo->_catalogo_incentivo_id = $value;
-            $incentivo->_cantidad = MasterDom::getData("cantidad_".$value);
+            $incentivo->_catalogo_incentivo_id = $incentivos_colaborador['incentivo'.$i];
+            $incentivo->_cantidad = $ti * ($incentivos_colaborador['porcentaje'.$i]/100);
+            $insert = ColaboradoresDao::insertIncentivo($incentivo);
 
-	    if($incentivo->_cantidad == 0 || $incentivo->_cantidad == "")
+            // $getin = ColaboradoresDao::getIn($reporte->_id_colaborador,$incentivo->_catalogo_incentivo_id);
+            // $getpid = ColaboradoresDao::getpid();
+            // $data = new \stdClass();
+            // $data->_colaborador_id = $reporte->_id_colaborador;
+            // $data->_prorrateo_periodo_id = $getpid['prorrateo_periodo_id'];
+            // $data->_catalogo_incentivo_id = $getin['catalogo_incentivo_id'];
+            // $data->_cantidad = $getin['cantidad'];
+            // $data->_asignado = 0;
+            // $data->_valido = 0;
+            // $id = ColaboradoresDao::insertIncentivos($data);
+            // print_r($data);
+            // echo '<br/>';
+          }
+        }
+        else {
+          $reporte->_horarios = $horarios;
+          $incentivos_colaborador = MasterDom::getDataAll('incentivo');
+          $incentivos = array();
+          $contador = 0;
+
+          if(count($incentivos_colaborador)>0){
+            foreach ($incentivos_colaborador as $key => $value) {
+
+              $incentivo = new \stdClass();
+              $incentivo->_catalogo_colaboradores_id = $reporte->_id_colaborador;
+              $incentivo->_catalogo_incentivo_id = $value;
+              $incentivo->_cantidad = MasterDom::getData("cantidad_".$value);
+
+        	    if($incentivo->_cantidad == 0 || $incentivo->_cantidad == "")
                 continue;
-
-            $incentivos[$contador] = ColaboradoresDao::insertIncentivo($incentivo);
-            $contador += 1;
+              $incentivos[$contador] = ColaboradoresDao::insertIncentivo($incentivo);
+              $contador += 1;
+            }
           }
         }
         $reporte->_incentivos = $incentivos;
@@ -2882,7 +3094,7 @@ html;
         $nombre = explode('.',$foto['name']);
         $nombre = uniqid().'.'.$nombre[1];
 
-        $directorio = dirname(__DIR__).'/../public/img/colaboradores/';  
+        $directorio = dirname(__DIR__).'/../public/img/colaboradores/';
         move_uploaded_file($foto['tmp_name'], $directorio/*"/home/granja/backend/public/img/colaboradores/"*/.$nombre);
 
       }else{
@@ -2899,7 +3111,7 @@ html;
         $colaborador->_numero_identificacion = MasterDom::getData('numero_identificacion');
         $colaborador->_rfc = MasterDom::getData('rfc');
         $colaborador->_id_catalogo_empresa = MasterDom::getData('id_catalogo_empresa');
-	$colaborador->_id_catalogo_lector = MasterDom::getData('catalogo_lector_id');
+	      $colaborador->_id_catalogo_lector = MasterDom::getData('catalogo_lector_id');
         $colaborador->_id_catalogo_lector_secundario = MasterDom::getData('catalogo_lector_secundario_id');
         $colaborador->_id_catalogo_ubicacion = MasterDom::getData('id_catalogo_ubicacion');
         $colaborador->_id_catalogo_departamento = MasterDom::getData('id_catalogo_departamento');
@@ -2923,11 +3135,11 @@ html;
         $update_puestos->_id_colaborador = MasterDom::getData('catalogo_colaboradores_id');
 
         if($update_puestos->_id_catalogo_puesto == $colaborador->_id_catalogo_puesto) {
-            echo "son iguales";
+          echo "son iguales";
         }
         else {
-            $update_puestos->_id_puesto = MasterDom::getData('id_catalogo_puesto');
-            ColaboradoresDao::insertPuestosOcupados($update_puestos);
+          $update_puestos->_id_puesto = MasterDom::getData('id_catalogo_puesto');
+          ColaboradoresDao::insertPuestosOcupados($update_puestos);
         }
 
         $reporte = new \stdClass();
@@ -2951,26 +3163,80 @@ html;
         $reporte->_horarios = $horarios;
 
         ColaboradoresDao::deleteIncentivo($colaborador->_catalogo_colaboradores_id);
+        //MRR
 
-        $incentivos = MasterDom::getDataAll('incentivo');
-        $incentivos_error = array();
-        $contador = 0;
-        if(count($incentivos)>0){
-          foreach ($incentivos as $key => $value) {
-            $incentivo = new \stdClass();
-            $incentivo->_catalogo_colaboradores_id = $colaborador->_catalogo_colaboradores_id;
-            $incentivo->_catalogo_incentivo_id = $value;
-            $incentivo->_cantidad = MasterDom::getData("cantidad_".$value);
+        if(MasterDom::getData('id_catalogo_puesto') == 31){
+          $incentivos = MasterDom::getDataAll('incentivo');
+          $incentivos_error = array();
+          $contador = 0;
+          if(count($incentivos)>0){
+            foreach ($incentivos as $key => $value) {
+              $incentivo = new \stdClass();
+              $incentivo->_catalogo_colaboradores_id = $colaborador->_catalogo_colaboradores_id;
+              $incentivo->_catalogo_incentivo_id = $value;
+              $incentivo->_cantidad = MasterDom::getData("cantidad_".$value);
 
-	    if($incentivo->_cantidad == 0 || $incentivo->_cantidad == "")
-                continue;
-
-            $incentivos_error[$contador] = ColaboradoresDao::insertIncentivo($incentivo);
-            $contador += 1;
+              if($incentivo->_cantidad == 0 || $incentivo->_cantidad == "")
+              continue;
+              $incentivos_error[$contador] = ColaboradoresDao::insertIncentivo($incentivo);
+              $contador += 1;
+            }
+            $reporte->_incentivos = $incentivos_error;
           }
-          $reporte->_incentivos = $incentivos_error;
         }
+        else if (MasterDom::getData('catalogo_lector_id') == 3 || MasterDom::getData('catalogo_lector_id') == 4) {
+          $getpid = ColaboradoresDao::getpid();
+          foreach (ColaboradoresDao::getIa(MasterDom::getData('catalogo_colaboradores_id'),$getpid['ppi']) as $val => $vol) {//,$incentivo->_catalogo_incentivo_id
+            $dele = ColaboradoresDao::delIa($vol['iai']);
+          }
 
+          $reporte->_horarios = $horarios;
+          $puesto = MasterDom::getData('id_catalogo_puesto');
+          // $incentivos_colaborador = MasterDom::getDataAll('incentivo');
+          //MRR
+          $incentivos_colaborador = ColaboradoresDao::getIncentivos($puesto);
+          $ti = $incentivos_colaborador['total_valor_incentivos'];
+          // $reporte->_id_colaborador = 930;
+          for ($i=1; $i <= $incentivos_colaborador['numero_incentivos']; $i++) {
+            $incentivo = new \stdClass();
+            $incentivo->_catalogo_colaboradores_id = $reporte->_id_colaborador;
+            $incentivo->_catalogo_incentivo_id = $incentivos_colaborador['incentivo'.$i];
+            $incentivo->_cantidad = $ti * ($incentivos_colaborador['porcentaje'.$i]/100);
+            $insert = ColaboradoresDao::insertIncentivo($incentivo);
+
+            // $getin = ColaboradoresDao::getIn($reporte->_id_colaborador,$incentivo->_catalogo_incentivo_id);
+            // // $getpid = ColaboradoresDao::getpid();
+            // $data = new \stdClass();
+            // $data->_colaborador_id = $reporte->_id_colaborador;
+            // $data->_prorrateo_periodo_id = $getpid['ppi'];
+            // $data->_catalogo_incentivo_id = $getin['catalogo_incentivo_id'];
+            // $data->_cantidad = $getin['cantidad'];
+            // $data->_asignado = 0;
+            // $data->_valido = 0;
+            // $id = ColaboradoresDao::insertIncentivos($data);
+            // print_r($data);
+            // echo '<br/>';
+          }
+        }
+        else {
+          $incentivos = MasterDom::getDataAll('incentivo');
+          $incentivos_error = array();
+          $contador = 0;
+          if(count($incentivos)>0){
+            foreach ($incentivos as $key => $value) {
+              $incentivo = new \stdClass();
+              $incentivo->_catalogo_colaboradores_id = $colaborador->_catalogo_colaboradores_id;
+              $incentivo->_catalogo_incentivo_id = $value;
+              $incentivo->_cantidad = MasterDom::getData("cantidad_".$value);
+
+              if($incentivo->_cantidad == 0 || $incentivo->_cantidad == "")
+              continue;
+              $incentivos_error[$contador] = ColaboradoresDao::insertIncentivo($incentivo);
+              $contador += 1;
+            }
+            $reporte->_incentivos = $incentivos_error;
+          }
+        }
         $this->alerta($reporte,'edit');
     }
 
@@ -3386,7 +3652,7 @@ html;
       <script>
         $(document).ready(function(){
 
-          
+
           $("#muestra-cupones").tablesorter();
           var oTable = $('#muestra-cupones').DataTable({
                 "columnDefs": [{
@@ -3422,6 +3688,12 @@ html;
               $('#all').attr('target', '_blank');
               $("#all").submit();
             });
+
+            $("#btnBajas").click(function(){
+               $('#all').attr('action', '/Colaboradores/bajas/');
+               $('#all').attr('target', '_blank');
+               $("#all").submit();
+             });
 
             $("#btnPDF").click(function(){
               $('#all').attr('action', '/Colaboradores/generarPDF/');

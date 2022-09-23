@@ -96,6 +96,7 @@
                             <button id="delete" type="button" class="btn btn-danger btn-circle"  <?= $eliminarHidden?>><i class="fa fa-remove"> <b>Eliminar</b></i></button>
                             <button id="btnPDF" type="button" class="btn btn-info btn-circle" <?= $pdfHidden ?>><i class="fa fa-file-pdf-o"> <b>Exportar a PDF</b></i></button>
                             <button id="btnExcel" type="button" class="btn btn-success btn-circle" <?= $excelHidden?>><i class="fa fa-file-excel-o"> <b>Exportar a Excel</b></i></button>
+                            <button id="btnBajas" type="button" class="btn btn-info btn-circle"><i class="fa fa-user-times" aria-hidden="true"> <b>Bajas</b></i></button>
                             <button class="btn btn-warning" type="reset" id="btnReiniciar">Reiniciar Busqueda</button>
                         </div>
                     </div>

@@ -74,7 +74,7 @@ html;
       $periodos = AdminPeriodoDao::getPeriodosHistoricos($estatus, $tipo);
       $html = "";
       foreach ($periodos as $key => $value) {
-        if($value['status'] == 2) 
+        if($value['status'] == 2)
           $status = "En proceso de cierre";
         if($value['status'] == 1)
           $status = "Cerrado";
@@ -101,7 +101,7 @@ html;
         $this->alerta("El periodo con ID {$idPeriodo}, se ha elimininado, ahora puedes crear un nuevo periodo", 'cerrar-periodo','abiertos');
       else
         $this->alerta("Ups, ha ocurrido un error", 'error','abiertos');
-      
+
     }
 
     public function abrirPeriodo($idPeriodo){
@@ -405,12 +405,37 @@ html;
         $busquedaPeriodo = AdminPeriodoDao::getPeriodoFechas($periodo);
         if(count($busquedaPeriodo) > 0){
           $this->alertasError("Ya existe un periodo {$periodo->_tipo}, con las fechas {$periodo->_fecha_inicio} - {$periodo->_fecha_fin}, favor de intentar con otro.", "error","add");
-        }else{
-          if(AdminPeriodoDao::insert($periodo) >= 1) $this->alerta($id,'add', "abiertos" );
-          else $this->alerta($id,'error', "abiertos");
+        }
+        else{
+          if(AdminPeriodoDao::insert($periodo) >= 1){
+            //MRR
+            //insertar insentivos
+
+            $ppi = AdminPeriodoDao::ultimoPeriodo($periodo->_tipo);
+            $ppi = $ppi['ppi'];
+            foreach (AdminPeriodoDao::colaboradores() as $key => $v) {
+              $data = new \stdClass();
+              $data->_colaborador_id = $v['cci'];
+              $data->_prorrateo_periodo_id = $ppi;
+
+              foreach (AdminPeriodoDao::incentivoColaborador($data->_colaborador_id) as $k => $val){
+                $data->_catalogo_incentivo_id = $val['catalogo_incentivo_id'];
+                $data->_cantidad = $val['cantidad'];
+                $data->_asignado = 0;
+                $data->_valido = 0;
+                $id = AdminPeriodoDao::insertIncentivos($data);
+              }
+              // print_r($data);
+              // echo '<br/>';
+            }
+            // exit;
+            $this->alerta($id,'add', "abiertos" );
+          }
+          else{
+            $this->alerta($id,'error', "abiertos");
+          }
         }
       }
-
     }
 
 

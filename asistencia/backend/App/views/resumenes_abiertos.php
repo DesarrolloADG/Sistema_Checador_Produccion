@@ -28,7 +28,7 @@
           <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
               <div class="x_title">
-                <h1>Colaboradores </h1>
+                <h1>Colaboradores</h1>
               </div>
                 <div id="contenedorRelog" class="col-md-12 col-sm-12 col-xs-12">
                   <h2 class="col-md-3 col-sm-3 col-xs-3">Guardando Resumen ...</h2><br>
@@ -105,20 +105,35 @@
                     <input type="hidden" id="tipo_periodo" name="tipo_periodo" value="<?= $tipo_periodo?>" />
                     <input type="hidden" id="mensaje" name="mensaje" value="<?= $mensaje?>" />
 
-                    <div class="col-md-6 col-sm-6 col-xs-6 form-group" align="center" style="<?php echo $displayBtn; ?>" <?= $visible_admin?>>
+                    <div class="col-md-10 col-sm-8 col-xs-6 form-group" align="center" style="<?php echo $displayBtn; ?>" <?= $visible_admin?>>
                       <div class="col-md-3 col-sm-3 col-xs-3" hidden>
                         <button class="btn btn-primary" id="btnAplicar" type="button">Buscar</button>
                       </div>
-                      <div class="col-md-3 col-sm-3 col-xs-3">
-                        <button class="btn btn-primary" id="btnGuardar" type="button" >Cerrar</button>
+                      <?php
+                        if($tipo_periodo == 'semanal'){
+                          ?>
+                      <div class="form-group col-md-6 col-sm-6 col-xs-6 col-lg-6">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="status">Nomina<span class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <select class="form-control" name="nomnoi" id="nomnoi" title="Seleccione una nomina para cerrar">
+                            <option value="">TODAS LAS NOMINAS</option>
+                            <?php echo $nominanoi; ?>
+                          </select>
+                        </div>
                       </div>
-                      <div class="col-md-3 col-sm-3 col-xs-3" hidden>
+                          <?php
+                        }
+                      ?>
+                      <div class="col-md-2 col-sm-3 col-xs-3">
+                        <button class="btn btn-primary" id="btnGuardar" type="button" title="Cierra la nomina seleccionada">Cerrar</button>
+                      </div>
+                      <div class="col-md-2 col-sm-3 col-xs-3" hidden>
                         <button class="btn btn-danger" id="btnCancelarPeriodo" type="button" >Cancelar</button>
                       </div>
-                      <div class="col-md-3 col-sm-3 col-xs-3">
+                      <div class="col-md-2 col-sm-3 col-xs-3">
                         <button class="btn btn-warning" id="btnRespaldarPeriodo" type="button" >Respaldar</button>
                       </div>
-                      <div class="col-md-3 col-sm-3 col-xs-3">
+                      <div class="col-md-2 col-sm-3 col-xs-3">
                         <button class="btn btn-primary" id="btnRestaurarPeriodo" type="button" >Restaurar</button>
                       </div>
                     </div>

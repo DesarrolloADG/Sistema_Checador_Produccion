@@ -31,15 +31,15 @@ sql;
     public static function getColaboradores($tipo, $perfilUsuario, $catalogoDepartamentoId, $catalogoPlantaId, $estatusRH){
         $mysqli = Database::getInstance();
 
-        if($perfilUsuario == 1 || $perfilUsuario == 4){            
+        if($perfilUsuario == 1 || $perfilUsuario == 4){
             $query=<<<sql
-SELECT 
+SELECT
 cc.catalogo_colaboradores_id, cc.identificador_noi, cc.nombre, cc.apellido_paterno, cc.apellido_materno, cc.numero_identificador, cc.catalogo_departamento_id,
 cc.pago, cc.foto, cd.nombre AS nombre_departamento, cp.nombre AS nombre_puesto, cu.nombre nombre_ubicacion, cc.catalogo_ubicacion_id
-FROM catalogo_colaboradores cc 
+FROM catalogo_colaboradores cc
 INNER JOIN catalogo_departamento cd USING (catalogo_departamento_id)
 INNER JOIN catalogo_puesto cp USING (catalogo_puesto_id)
-INNER JOIN catalogo_ubicacion cu USING (catalogo_ubicacion_id) 
+INNER JOIN catalogo_ubicacion cu USING (catalogo_ubicacion_id)
 sql;
             if($estatusRH == 1){
                 $query.=<<<sql
@@ -58,10 +58,10 @@ sql;
         // PERFIL PARA 4 "Administrador" y 5 "Personalizado"
         if($perfilUsuario == 5){
             $query =<<<sql
-SELECT 
+SELECT
 cc.catalogo_colaboradores_id, cc.identificador_noi, cc.nombre, cc.apellido_paterno, cc.apellido_materno, cc.numero_identificador, cc.catalogo_departamento_id,
 cc.pago, cc.foto, cd.nombre AS nombre_departamento, cp.nombre AS nombre_puesto, cu.nombre nombre_ubicacion, cc.catalogo_ubicacion_id
-FROM catalogo_colaboradores cc 
+FROM catalogo_colaboradores cc
 INNER JOIN catalogo_departamento cd USING (catalogo_departamento_id)
 INNER JOIN catalogo_puesto cp USING (catalogo_puesto_id)
 INNER JOIN catalogo_ubicacion cu USING (catalogo_ubicacion_id)
@@ -72,13 +72,13 @@ sql;
 
         if($perfilUsuario == 6){
             $query=<<<sql
-SELECT 
+SELECT
 cc.catalogo_colaboradores_id, cc.identificador_noi, cc.nombre, cc.apellido_paterno, cc.apellido_materno, cc.numero_identificador, cc.catalogo_departamento_id,
 cc.pago, cc.foto, cd.nombre AS nombre_departamento, cp.nombre AS nombre_puesto, cu.nombre nombre_ubicacion, cc.catalogo_ubicacion_id
-FROM catalogo_colaboradores cc 
+FROM catalogo_colaboradores cc
 INNER JOIN catalogo_departamento cd USING (catalogo_departamento_id)
 INNER JOIN catalogo_puesto cp USING (catalogo_puesto_id)
-INNER JOIN catalogo_ubicacion cu USING (catalogo_ubicacion_id) 
+INNER JOIN catalogo_ubicacion cu USING (catalogo_ubicacion_id)
 sql;
             if($estatusRH == 1){
                 $query.=<<<sql
@@ -88,7 +88,7 @@ sql;
 
             if($estatusRH == 2){
                 $query.=<<<sql
-WHERE cc.pago = "$tipo" AND cc.status = 1 
+WHERE cc.pago = "$tipo" AND cc.status = 1
 sql;
             }
 
@@ -98,9 +98,50 @@ sql;
 
         return $mysqli->queryAll($query);
     }
+//MRR
+    public static function empleadosPAM(){
+      $mysqli = Database::getInstance();
+      $query = <<<sql
+        SELECT
+        	catalogo_colaboradores_id AS 'cci',
+        	CONCAT(apellido_paterno,' ',apellido_materno,' ',nombre) AS 'nc',
+          identificador_noi AS 'in'
+        FROM catalogo_colaboradores
+        WHERE
+        	pago = 'SEMANAL' AND
+        	catalogo_puesto_id = 21 AND
+          STATUS != 3
+        ORDER BY CONCAT(apellido_paterno,' ',apellido_materno,' ',nombre) ASC
+sql;
+    return $mysqli->queryAll($query);
+    }
 
+    public static function empleadosPAMReadonly($id){
+      $mysqli = Database::getInstance();
+      $query = <<<sql
+        SELECT
+          identificador_noi AS 'in',
+          catalogo_puesto_id AS 'cpi'
+        FROM catalogo_colaboradores
+        WHERE
+          catalogo_colaboradores_id = $id
+sql;
+    return $mysqli->queryAll($query);
+    }
+
+    public static function dias(){
+      $mysqli = Database::getInstance();
+      $query = <<<sql
+        SELECT
+          dias_laborales_id AS 'dli',
+          nombre AS 'dia'
+        FROM dias_laborales
+        ORDER BY dias_laborales_id
+sql;
+      return $mysqli->queryAll($query);
+    }
     /*
-        Busqueda de incentivo 
+        Busqueda de incentivo
         @params
         @tipo: SEMANAL O QUINCENAL
         @statis: 1 es Cerrado y 0 es Cerrado
@@ -109,17 +150,160 @@ sql;
     public static function searchPeriodos($tipo, $status){
         $mysqli = Database::getInstance();
         $query=<<<sql
-SELECT * FROM prorrateo_periodo 
-WHERE tipo = "$tipo" AND status = "$status" 
-ORDER BY prorrateo_periodo.fecha_inicio DESC
+          SELECT
+            *
+          FROM prorrateo_periodo
+          WHERE
+            tipo = "$tipo" AND
+            status = "$status"
+          ORDER BY prorrateo_periodo.fecha_inicio DESC
 sql;
         return $mysqli->queryAll($query);
+    }
+//MRR
+    public static function periodo(){
+        $mysqli = Database::getInstance();
+        $query=<<<sql
+          SELECT
+            prorrateo_periodo_id
+          FROM prorrateo_periodo
+          WHERE
+            tipo = "SEMANAL" AND
+            status = "0"
+sql;
+        return $mysqli->queryOne($query);
+    }
+
+    public static function inserBotesDias($data){
+      $mysqli = Database::getInstance();
+      $query=<<<sql
+        INSERT INTO botes_dia (
+          id_prorrateo_periodo,
+          id_catalogo_colaborador,
+          id_dia,
+          botes_clara,
+          botes_yema
+        )
+        VALUES(
+          :id_prorrateo_periodo,
+          :id_catalogo_colaborador,
+          :id_dia,
+          :botes_clara,
+          :botes_yema
+        )
+sql;
+      $parametros = array(
+        ':id_prorrateo_periodo' => $data->_periodo,
+        ':id_catalogo_colaborador' => $data->_nombre,
+        ':id_dia' => $data->_dia,
+        ':botes_clara' => $data->_clara,
+        ':botes_yema' => $data->_yema
+      );
+
+      $id = $mysqli->insert($query,$parametros);
+      $accion = new \stdClass();
+      $accion->_sql= $query;
+      $accion->_parametros = $parametros;
+      $accion->_id = $id;
+
+      UtileriasLog::addAccion($accion);
+      return $id;
+    }
+
+    public static function avanceBotes($id,$periodo){
+      $mysqli = Database::getInstance();
+      if ($id == '') {
+        $where .= '';
+        $r = 0;
+      }
+      else {
+        $where .= "id_catalogo_colaborador = $id AND ";
+        $r = 1;
+      }
+      $query = <<<sql
+      SELECT
+        id_catalogo_colaborador AS 'icc',
+      	CONCAT(t2.apellido_paterno,' ',t2.apellido_materno,' ',t2.nombre) AS 'nc',
+      	SUM(t1.botes_clara) AS 'sbc',
+      	SUM(t1.botes_yema) AS 'sby'
+      FROM botes_dia t1
+      INNER JOIN catalogo_colaboradores t2 ON t1.id_catalogo_colaborador = t2.catalogo_colaboradores_id
+      WHERE
+        $where
+        id_prorrateo_periodo = $periodo
+      GROUP BY
+        nc
+sql;
+      // print_r($query);
+      if ($r == 1) {
+        return $mysqli->queryOne($query);
+      }
+      else {
+        return $mysqli->queryAll($query);
+      }
+    }
+
+    public static function incentivoColaborador($cci){
+      $mysqli = Database::getInstance();
+      $query =<<<sql
+      SELECT
+      	*
+      FROM incentivo_colaborador
+      WHERE catalogo_colaboradores_id = $cci
+sql;
+  // print_r($query);
+      return $mysqli->queryAll($query);
+    }
+
+    public static function insertIncentivos2($data){
+      $mysqli = Database::getInstance();
+      $query=<<<sql
+        INSERT INTO incentivos_asignados (
+          colaborador_id,
+          prorrateo_periodo_id,
+          catalogo_incentivo_id,
+          cantidad,
+          asignado,
+          valido
+        )
+        VALUES (
+          :colaborador_id,
+          :prorrateo_periodo_id,
+          :catalogo_incentivo_id,
+          :cantidad,
+          :asignado,
+          :valido
+        );
+sql;
+      $params = array(
+          ':colaborador_id'=>$data->_colaborador_id,
+          ':prorrateo_periodo_id'=>$data->_prorrateo_periodo_id,
+          ':catalogo_incentivo_id'=>$data->_catalogo_incentivo_id,
+          ':cantidad'=>$data->_cantidad,
+          ':asignado'=>$data->_asignado,
+          ':valido'=>$data->_valido
+      );
+
+      return $mysqli->insert($query,$params);
+    }
+
+    public static function derechoIncentivo($id,$periodo){
+      $mysqli = Database::getInstance();
+      $query = <<<sql
+        SELECT
+        	*
+        FROM incentivos_asignados
+        WHERE
+        	prorrateo_periodo_id = $periodo AND
+        	colaborador_id = $id
+sql;
+      return $mysqli->queryAll($query);
     }
 
     public static function searchLastPeriodos($tipo, $status){
         $mysqli = Database::getInstance();
         $query=<<<sql
-SELECT * FROM prorrateo_periodo WHERE tipo = "SEMANAL" AND status != 0 ORDER BY fecha_inicio ASC LIMIT 1 
+SELECT * FROM prorrateo_periodo WHERE tipo = "SEMANAL" AND status != 0 ORDER BY fecha_inicio ASC LIMIT 1
 sql;
         return $mysqli->queryAll($query);
     }
@@ -131,21 +315,21 @@ sql;
     public static function getIncentivosPorColabordor($idColaborador){
         $mysqli = Database::getInstance();
         $query=<<<sql
-SELECT * FROM incentivo_colaborador ic 
-INNER JOIN catalogo_incentivo ci USING (catalogo_incentivo_id) 
-WHERE ic.catalogo_colaboradores_id = "$idColaborador" AND ic.catalogo_incentivo_id != 47 AND ic.catalogo_incentivo_id != 48 
+SELECT * FROM incentivo_colaborador ic
+INNER JOIN catalogo_incentivo ci USING (catalogo_incentivo_id)
+WHERE ic.catalogo_colaboradores_id = "$idColaborador" AND ic.catalogo_incentivo_id != 47 AND ic.catalogo_incentivo_id != 48
 sql;
         return $mysqli->queryAll($query);
     }
 
     /*
-        Obtiene el periodo 
+        Obtiene el periodo
         @tipoPeriodo: SEMANAL O QUINCENAL
     */
     public static function getTipoPeriodo($tipoPeriodo){
         $mysqli = Database::getInstance();
         $query=<<<sql
-SELECT * FROM prorrateo_periodo  
+SELECT * FROM prorrateo_periodo
 WHERE tipo = "$tipoPeriodo" AND status != 0
 ORDER BY prorrateo_periodo.fecha_inicio  DESC
 sql;
@@ -155,19 +339,19 @@ sql;
     public static function getAllperiodosSemanales(){
         $mysqli = Database::getInstance();
         $query=<<<sql
-SELECT * FROM prorrateo_periodo WHERE tipo = "SEMANAL" ORDER BY prorrateo_periodo_id DESC 
+SELECT * FROM prorrateo_periodo WHERE tipo = "SEMANAL" ORDER BY prorrateo_periodo_id DESC
 sql;
         return $mysqli->queryAll($query);
     }
 
     /*
-        Obtiene el periodo 
+        Obtiene el periodo
         @idPeriodo: id del periodo
     */
     public static function getPeriodo($idPeriodo){
         $mysqli = Database::getInstance();
         $query=<<<sql
-SELECT * FROM prorrateo_periodo  
+SELECT * FROM prorrateo_periodo
 WHERE prorrateo_periodo_id = "$idPeriodo"
 sql;
         return $mysqli->queryOne($query);
@@ -176,7 +360,7 @@ sql;
    public static function getPeriodoLast(){
         $mysqli = Database::getInstance();
         $query=<<<sql
-SELECT * FROM prorrateo_periodo WHERE tipo = "SEMANAL" ORDER BY prorrateo_periodo.prorrateo_periodo_id DESC LIMIT 1 
+SELECT * FROM prorrateo_periodo WHERE tipo = "SEMANAL" ORDER BY prorrateo_periodo.prorrateo_periodo_id DESC LIMIT 1
 sql;
         return $mysqli->queryOne($query);
     }
@@ -188,16 +372,17 @@ sql;
     public static function getUltimoPeriodoHistorico($tipo){
         $mysqli = Database::getInstance();
         $query=<<<sql
-SELECT * FROM prorrateo_periodo 
+SELECT * FROM prorrateo_periodo
 WHERE tipo = "$tipo" AND status != 0
-ORDER BY prorrateo_periodo.fecha_inicio DESC LIMIT 1 
+ORDER BY prorrateo_periodo.fecha_inicio DESC LIMIT 1
 sql;
+// print_r($query);
         return $mysqli->queryOne($query);
     }
 
     /*
         Obtiene las horas extra del colaborador dependiendo el periodo
-        @idColaborador -> Entero 
+        @idColaborador -> Entero
         @idPeriodo -> Periodo / status Abierto "0" o status cerrado "1"
     */
     public static function getHorasExtraPeriodo($idColaborador, $idPeriodo){
@@ -232,7 +417,7 @@ sql;
     public static function buscarHorasExtra($colaboradorId, $periodoId){
         $mysqli = Database::getInstance();
         $query=<<<sql
-SELECT * FROM prorrateo_horas_extra WHERE catalogo_colaboradores_id = "$colaboradorId" AND prorrateo_periodo_id = "$periodoId" 
+SELECT * FROM prorrateo_horas_extra WHERE catalogo_colaboradores_id = "$colaboradorId" AND prorrateo_periodo_id = "$periodoId"
 sql;
         $id = $mysqli->update($query);
         return $id;
@@ -293,9 +478,9 @@ sql;
     public static function getIncentivosColaboradorAsignados($idColaborador,$idPeriodo){
         $mysqli = Database::getInstance();
         $query=<<<sql
-        SELECT * FROM incentivos_asignados i 
+        SELECT * FROM incentivos_asignados i
         INNER JOIN catalogo_incentivo ci ON (ci.catalogo_incentivo_id = i.catalogo_incentivo_id)
-        INNER JOIN prorrateo_periodo pp ON (pp.prorrateo_periodo_id = i.prorrateo_periodo_id) 
+        INNER JOIN prorrateo_periodo pp ON (pp.prorrateo_periodo_id = i.prorrateo_periodo_id)
         WHERE i.colaborador_id = "$idColaborador" AND i.prorrateo_periodo_id = "$idPeriodo"
 sql;
         return $mysqli->queryAll($query);
@@ -304,9 +489,9 @@ sql;
     public static function getIncentivosColaboradorResumen($idColaborador,$idPeriodo){
         $mysqli = Database::getInstance();
         $query=<<<sql
-        SELECT ia.incentivos_asignados_id, ia.colaborador_id, ia.prorrateo_periodo_id, ia.cantidad, ci.nombre, ci.tipo, ci.fijo, ci.repetitivo,  ci.descripcion, ci.catalogo_incentivo_id, ia.asignado 
-        FROM incentivos_asignados AS ia 
-        INNER JOIN catalogo_incentivo AS ci USING(catalogo_incentivo_id) 
+        SELECT ia.incentivos_asignados_id, ia.colaborador_id, ia.prorrateo_periodo_id, ia.cantidad, ci.nombre, ci.tipo, ci.fijo, ci.repetitivo,  ci.descripcion, ci.catalogo_incentivo_id, ia.asignado
+        FROM incentivos_asignados AS ia
+        INNER JOIN catalogo_incentivo AS ci USING(catalogo_incentivo_id)
         WHERE ia.colaborador_id = "$idColaborador" AND ia.prorrateo_periodo_id = "$idPeriodo"
 sql;
         return $mysqli->queryAll($query);
@@ -315,9 +500,9 @@ sql;
     public static function getIncentivosColaboradorResumenTest($idColaborador,$idPeriodo){
         $mysqli = Database::getInstance();
         $query=<<<sql
-        SELECT * 
-        FROM incentivos_asignados AS ia 
-        INNER JOIN catalogo_incentivo AS ci USING(catalogo_incentivo_id) 
+        SELECT *
+        FROM incentivos_asignados AS ia
+        INNER JOIN catalogo_incentivo AS ci USING(catalogo_incentivo_id)
         WHERE ia.colaborador_id = "$idColaborador" AND ia.prorrateo_periodo_id = "$idPeriodo"
 sql;
         return $mysqli->queryAll($query);
@@ -329,9 +514,9 @@ sql;
     public static function getIncentivoColaborador($idColaborador){
         $mysqli = Database::getInstance();
         $query=<<<sql
-SELECT * FROM incentivo_colaborador ic 
-INNER JOIN catalogo_incentivo ci USING (catalogo_incentivo_id) 
-WHERE ic.catalogo_colaboradores_id = "$idColaborador" AND ic.catalogo_incentivo_id != 47 AND ic.catalogo_incentivo_id != 48 
+SELECT * FROM incentivo_colaborador ic
+INNER JOIN catalogo_incentivo ci USING (catalogo_incentivo_id)
+WHERE ic.catalogo_colaboradores_id = "$idColaborador" AND ic.catalogo_incentivo_id != 47 AND ic.catalogo_incentivo_id != 48
 sql;
         return $mysqli->queryAll($query);
     }
@@ -350,7 +535,7 @@ sql;
     public static function getSumaIncentivosAsginados($idColaborador, $prorrateo_periodo_id){
         $mysqli = Database::getInstance();
         $query=<<<sql
-            SELECT SUM(cantidad) AS cantidad_incentivos_asignados FROM incentivos_asignados WHERE prorrateo_periodo_id = "$prorrateo_periodo_id" AND colaborador_id = "$idColaborador" 
+            SELECT SUM(cantidad) AS cantidad_incentivos_asignados FROM incentivos_asignados WHERE prorrateo_periodo_id = "$prorrateo_periodo_id" AND colaborador_id = "$idColaborador"
 sql;
         return $mysqli->queryOne($query);
     }
@@ -524,7 +709,7 @@ sql;
         $query = <<<sql
         DELETE FROM {$tabla} WHERE catalogo_colaboradores_id = "$idColaborador" AND prorrateo_periodo_id = "$idPeriodo"
 sql;
-        return $mysqli->update($query);   
+        return $mysqli->update($query);
     }
 
     public static function reInsert($tabla, $campo, $idPeriodo, $idColaborador, $cantidad){
@@ -532,7 +717,7 @@ sql;
         $query = <<<sql
         INSERT INTO {$tabla} (catalogo_colaboradores_id, prorrateo_periodo_id, {$campo} VALUES ('$idColaborador', '$idColaborador', '$cantidad')
 sql;
-        return $mysqli->insert($query);   
+        return $mysqli->insert($query);
     }
 
     public static function getIncentivoById($idColaborador, $idPeriodo, $idIncentivo){
@@ -546,7 +731,7 @@ sql;
     public static function getSalarioDiario($clave){
         $mysqli = Database::getInstance();
         $query = <<<sql
-        SELECT * FROM operacion_noi WHERE clave = :clave 
+        SELECT * FROM operacion_noi WHERE clave = :clave
 sql;
         return $mysqli->queryOne($query, array(':clave'=>$clave));
     }
@@ -554,7 +739,7 @@ sql;
     public static function getIncentivoBotes($catalogo_colaboradores_id){
         $mysqli = Database::getInstance();
         $query = <<<sql
-SELECT * FROM incentivo_colaborador AS ic INNER JOIN catalogo_incentivo AS ci ON (ic.catalogo_incentivo_id = ci.catalogo_incentivo_id) WHERE ic.catalogo_incentivo_id = "47" AND ic.catalogo_colaboradores_id = "$catalogo_colaboradores_id"  
+SELECT * FROM incentivo_colaborador AS ic INNER JOIN catalogo_incentivo AS ci ON (ic.catalogo_incentivo_id = ci.catalogo_incentivo_id) WHERE ic.catalogo_incentivo_id = "47" AND ic.catalogo_colaboradores_id = "$catalogo_colaboradores_id"
 sql;
         return $mysqli->queryOne($query);
     }
@@ -562,7 +747,7 @@ sql;
     public static function getIncentivoBotesMeta($catalogo_colaboradores_id){
         $mysqli = Database::getInstance();
         $query = <<<sql
-SELECT * FROM incentivo_colaborador AS ic INNER JOIN catalogo_incentivo AS ci ON (ic.catalogo_incentivo_id = ci.catalogo_incentivo_id) WHERE ic.catalogo_incentivo_id = "48" AND ic.catalogo_colaboradores_id = "$catalogo_colaboradores_id"  
+SELECT * FROM incentivo_colaborador AS ic INNER JOIN catalogo_incentivo AS ci ON (ic.catalogo_incentivo_id = ci.catalogo_incentivo_id) WHERE ic.catalogo_incentivo_id = "48" AND ic.catalogo_colaboradores_id = "$catalogo_colaboradores_id"
 sql;
         return $mysqli->queryOne($query);
     }
@@ -586,7 +771,7 @@ sql;
     public static function getBusquedaIncentivoBotes($data){
         $mysqli = Database::getInstance();
         $query = <<<sql
-SELECT * FROM incentivos_asignados WHERE colaborador_id = $data->_colaborador_id AND prorrateo_periodo_id = $data->_prorrateo_periodo_id AND catalogo_incentivo_id = $data->_catalogo_incentivo_id 
+SELECT * FROM incentivos_asignados WHERE colaborador_id = $data->_colaborador_id AND prorrateo_periodo_id = $data->_prorrateo_periodo_id AND catalogo_incentivo_id = $data->_catalogo_incentivo_id
 sql;
         return $mysqli->queryOne($query);
     }
@@ -616,7 +801,7 @@ sql;
     public static function getAllBotesPeriodo(){
         $mysqli = Database::getInstance();
         $query = <<<sql
-SELECT * FROM botes ORDER BY prorrateo_periodo_id DESC 
+SELECT * FROM botes ORDER BY prorrateo_periodo_id DESC
 sql;
         return $mysqli->queryAll($query);
     }
@@ -685,11 +870,28 @@ sql;
 sql;
         return $mysqli->queryAll($query);
     }
-    
+
     public static function insertBotesNuevos($data){
         $mysqli = Database::getInstance();
         $query = <<<sql
-INSERT INTO incentivos_asignados (colaborador_id, prorrateo_periodo_id, catalogo_incentivo_id, cantidad, asignado, valido) VALUES (:colaborador_id, :prorrateo_periodo_id, :catalogo_incentivo_id, :cantidad, :asignado, '0');
+          INSERT INTO incentivos_asignados (
+            incentivos_asignados_id,
+            colaborador_id,
+            prorrateo_periodo_id,
+            catalogo_incentivo_id,
+            cantidad,
+            asignado,
+            valido
+          )
+          VALUES (
+            NULL,
+            :colaborador_id,
+            :prorrateo_periodo_id,
+            :catalogo_incentivo_id,
+            :cantidad,
+            :asignado,
+            '0'
+          );
 sql;
         $params = array(
             ':colaborador_id'=>$data->_colaborador_id,
@@ -698,14 +900,16 @@ sql;
             ':cantidad'=>$data->_cantidad,
             ':asignado'=>$data->_precio_bote
         );
-
-        return $mysqli->insert($query, $params);
+        $mysqli->insert($query, $params);
+        // print_r($mysqli->insert($query, $params));
+        return $mysqli;
+        // return $mysqli->insert($query, $params);
     }
 
     public static function busquedaBotesNuevos($data){
         $mysqli = Database::getInstance();
         $query = <<<sql
-SELECT * FROM incentivos_asignados WHERE colaborador_id = :colaborador_id AND prorrateo_periodo_id = :prorrateo_periodo_id AND catalogo_incentivo_id = :catalogo_incentivo_id AND cantidad = :cantidad 
+SELECT * FROM incentivos_asignados WHERE colaborador_id = :colaborador_id AND prorrateo_periodo_id = :prorrateo_periodo_id AND catalogo_incentivo_id = :catalogo_incentivo_id AND cantidad = :cantidad
 sql;
         $params = array(
             ':colaborador_id'=>$data->_colaborador_id,
@@ -720,7 +924,7 @@ sql;
     public static function busquedaBotesNuevos1($data){
         $mysqli = Database::getInstance();
         $query = <<<sql
-SELECT * FROM incentivos_asignados WHERE colaborador_id = :colaborador_id AND prorrateo_periodo_id = :prorrateo_periodo_id AND catalogo_incentivo_id = :catalogo_incentivo_id 
+SELECT * FROM incentivos_asignados WHERE colaborador_id = :colaborador_id AND prorrateo_periodo_id = :prorrateo_periodo_id AND catalogo_incentivo_id = :catalogo_incentivo_id
 sql;
         $params = array(
             ':colaborador_id'=>$data->_colaborador_id,
@@ -759,7 +963,7 @@ sql;
     public static function updateIncentivoBotesAsignados($cantidad, $asignado, $incentivos_asignados_id){
         $mysqli = Database::getInstance();
         $query = <<<sql
-UPDATE incentivos_asignados SET cantidad = $cantidad, asignado = "$asignado" WHERE incentivos_asignados_id = "$incentivos_asignados_id"; 
+UPDATE incentivos_asignados SET cantidad = $cantidad, asignado = "$asignado" WHERE incentivos_asignados_id = "$incentivos_asignados_id";
 sql;
         return $mysqli->update($query);
     }
@@ -767,7 +971,7 @@ sql;
     public static function getMetaBotes($idPeriodo){
         $mysqli = Database::getInstance();
         $query = <<<sql
-SELECT * FROM botes WHERE prorrateo_periodo_id = "$idPeriodo" 
+SELECT * FROM botes WHERE prorrateo_periodo_id = "$idPeriodo"
 sql;
         return $mysqli->queryAll($query);
     }
@@ -775,7 +979,7 @@ sql;
     public static function getPrecioCompletoBotes(){
         $mysqli = Database::getInstance();
         $query = <<<sql
-SELECT * FROM pago_botes WHERE pago_botes_id = 1 
+SELECT * FROM pago_botes WHERE pago_botes_id = 1
 sql;
         return $mysqli->queryOne($query);
     }
@@ -783,7 +987,7 @@ sql;
     public static function getPrecioNoCompletoBotes(){
         $mysqli = Database::getInstance();
         $query = <<<sql
-SELECT * FROM pago_botes WHERE pago_botes_id = 2 
+SELECT * FROM pago_botes WHERE pago_botes_id = 2
 sql;
         return $mysqli->queryOne($query);
     }
@@ -791,7 +995,7 @@ sql;
     public static function updatePrecioBotes($data){
         $mysqli = Database::getInstance();
         $query = <<<sql
-UPDATE pago_botes SET clara = :clara, yema = :yema, huevo_liquido = :huevo_liquido, mtime = NOW() WHERE pago_botes_id = :pago_botes_id 
+UPDATE pago_botes SET clara = :clara, yema = :yema, huevo_liquido = :huevo_liquido, mtime = NOW() WHERE pago_botes_id = :pago_botes_id
 sql;
         $params = array(
             ':clara'=>$data->_clara,
@@ -810,5 +1014,5 @@ sql;
         return $mysqli->update($query);
     }
 
-    
+
 }

@@ -8,6 +8,7 @@
         <div class="page-title">
           <div class="title_left">
             <h1>Prorrateo <b><?php echo $tipoPeriodo; ?></b></h1>
+            <!--<?php echo $prorrateo_periodo_id;?>-->
           </div>
         </div>
 
@@ -52,9 +53,8 @@
                             <th style="text-align:center; vertical-align:top;">Salario Diario</th>
                             <th style="text-align:center; vertical-align:top;">S.D.I</th>
                             <th style="text-align:center; vertical-align:top;">Horas Extra</th>
-                            <th style="text-align:center; vertical-align:top;">Incentivos</th>
                             <th style="text-align:center; vertical-align:top;">$ Horas Extra</th>
-                            <th style="text-align:center; vertical-align:top;">Otras</th>
+                            <th style="text-align:center; vertical-align:top;">Incentivos</th>
                             <th style="text-align:center; vertical-align:top;">TOTAL</th>
                             <th style="text-align:center; vertical-align:top;">Limite H. Extra</th>
                             <th style="text-align:center; vertical-align:top; background: #fbf6b6;">Premio de Asistencia</th>
@@ -66,7 +66,7 @@
                             <th style="text-align:center; vertical-align:top; background: #fbf6b6;">Incentivo</th>
                             <th style="text-align:center; vertical-align:top;">Total Prorrateo</th>
                             <th style="text-align:center; vertical-align:top;">Validacion</th>
-                            <th style="text-align:center; vertical-align:top; background: #fbf6b6;">Prima Dominical</th>
+                            <th style="text-align:center; vertical-align:top;">Prima Dominical</th>
                             <th style="text-align:center; vertical-align:top; background: #fbf6b6;">Domingo Trabajado</th>
                             <th style="text-align:center; vertical-align:top; background: #fbf6b6; <?php echo $displayDiaFestivo; ?>">Festivo</th>
                             <th style="text-align:center; vertical-align:top;">Total Percepciones</th>

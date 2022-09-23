@@ -98,7 +98,7 @@ sql;
     public static function getPeriodos($status){
       $mysqli = Database::getInstance();
       $query=<<<sql
-      SELECT * FROM prorrateo_periodo WHERE status = "$status" ORDER BY fecha_inicio ASC 
+      SELECT * FROM prorrateo_periodo WHERE status = "$status" ORDER BY fecha_inicio ASC
 sql;
       return $mysqli->queryAll($query);
     }
@@ -114,7 +114,7 @@ sql;
     public static function getPeriodo($idPeriodo){
       $mysqli = Database::getInstance();
       $query=<<<sql
-      SELECT * FROM prorrateo_periodo WHERE prorrateo_periodo_id = "$idPeriodo" 
+      SELECT * FROM prorrateo_periodo WHERE prorrateo_periodo_id = "$idPeriodo"
 sql;
       return $mysqli->queryOne($query);
     }
@@ -122,8 +122,22 @@ sql;
     public static function getPeriodoAbierto($tipo){
       $mysqli = Database::getInstance();
       $query=<<<sql
-      SELECT * FROM `prorrateo_periodo` WHERE tipo = "$tipo" AND status = 0 OR status = 2 
+      SELECT * FROM `prorrateo_periodo` WHERE tipo = "$tipo" AND status = 0 OR status = 2
 sql;
+      return $mysqli->queryOne($query);
+    }
+//MRR
+    public static function ultimoPeriodo($tipo){
+      $mysqli = Database::getInstance();
+      $query=<<<sql
+      SELECT
+        MAX(prorrateo_periodo_id) AS 'ppi'
+      FROM `prorrateo_periodo`
+      WHERE
+        tipo = '$tipo' AND
+        status = 0 OR status = 2
+sql;
+    // print_r($query);
       return $mysqli->queryOne($query);
     }
 
@@ -133,7 +147,7 @@ sql;
       SELECT * FROM `prorrateo_periodo` WHERE fecha_inicio = "$data->_fecha_inicio" AND fecha_fin = "$data->_fecha_fin" AND tipo LIKE "%$data->_tipo%"
 sql;
       $id =  $mysqli->queryOne($query);
-      
+
       $var = 0;
       if($id['status'] == -1){
         $var = '';
@@ -149,6 +163,68 @@ sql;
 
       return $var;
       //
+    }
+
+    public static function colaboradores(){
+      $mysqli = Database::getInstance();
+      $query =<<<sql
+      SELECT
+      	c.catalogo_colaboradores_id as cci,
+	      cp.numero_incentivos as ni,
+        c.catalogo_puesto_id as cpi
+      FROM catalogo_colaboradores c
+      INNER JOIN catalogo_puesto AS cp USING (catalogo_puesto_id)
+      WHERE
+        c.pago = 'SEMANAL' AND
+        c.identificador_noi IN ('GATSA','UNIDESH') AND
+        c.catalogo_puesto_id != 21
+sql;
+  // print_r($query);
+      return $mysqli->queryAll($query);
+    }
+
+    public static function incentivoColaborador($cci){
+      $mysqli = Database::getInstance();
+      $query =<<<sql
+      SELECT
+      	*
+      FROM incentivo_colaborador
+      WHERE catalogo_colaboradores_id = $cci
+sql;
+  // print_r($query);
+      return $mysqli->queryAll($query);
+    }
+
+    public static function insertIncentivos($data){
+      $mysqli = Database::getInstance();
+      $query=<<<sql
+        INSERT INTO incentivos_asignados (
+          colaborador_id,
+          prorrateo_periodo_id,
+          catalogo_incentivo_id,
+          cantidad,
+          asignado,
+          valido
+        )
+        VALUES (
+          :colaborador_id,
+          :prorrateo_periodo_id,
+          :catalogo_incentivo_id,
+          :cantidad,
+          :asignado,
+          :valido
+        );
+sql;
+      $params = array(
+          ':colaborador_id'=>$data->_colaborador_id,
+          ':prorrateo_periodo_id'=>$data->_prorrateo_periodo_id,
+          ':catalogo_incentivo_id'=>$data->_catalogo_incentivo_id,
+          ':cantidad'=>$data->_cantidad,
+          ':asignado'=>$data->_asignado,
+          ':valido'=>$data->_valido
+      );
+
+      return $mysqli->insert($query,$params);
     }
 
     public static function updatePeriodo($idPeriodo, $status){
@@ -179,7 +255,7 @@ sql;
     }
 
     /*
-      MODIFICACION MIERCOLES 18 de Abril 2018 
+      MODIFICACION MIERCOLES 18 de Abril 2018
       Cambiar toda la funcion anterior con el mismo nombre ---
     */
     public static function getPeriodoFechas($data){
@@ -194,7 +270,7 @@ sql;
       );
 
       $id =  $mysqli->queryAll($query, $params);
-      
+
       $var = 0;
       if($id['status'] == -1)
         $var = '';

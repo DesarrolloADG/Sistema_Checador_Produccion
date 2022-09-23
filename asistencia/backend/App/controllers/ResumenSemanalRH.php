@@ -73,7 +73,6 @@ class ResumenSemanalRH extends Controller{
 
             $("#btnGuardar").click(function(){
 
-
               $.ajax({
                 url: '/ResumenSemanalRH/guardarPeriodo',
                 type: 'POST',

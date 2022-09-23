@@ -67,7 +67,7 @@ class Contenedor extends Controller{
         $permisoRH = Controller::getPermisoRecursosHumanos($usuario);
 
         $admin = GeneralDao::getDatosUsuarioLogeado($usuario);
-      
+
      $header =<<<html
         <!DOCTYPE html>
         <html lang="en">
@@ -75,6 +75,10 @@ class Contenedor extends Controller{
             <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
             <!-- Meta, title, CSS, favicons, etc. -->
             <meta charset="utf-8">
+            <meta http-equiv="Expires" content="0">
+            <meta http-equiv="Last-Modified" content="0">
+            <meta http-equiv="Cache-Control" content="no-cache, mustrevalidate">
+            <meta http-equiv="Pragma" content="no-cache">
             <title>AG Alimentos de Granja</title>
             <link href="/css/nprogress.css" rel="stylesheet">
             <link rel="stylesheet" href="/css/tabla/sb-admin-2.css">
@@ -94,6 +98,7 @@ class Contenedor extends Controller{
 
             <link href="/librerias/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css" rel="stylesheet">
             <link rel="stylesheet" type="text/css" href="/librerias/vintage_flip_clock/jquery.flipcountdown.css" />
+            <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
         </head>
 html;
 $menu =<<<html
@@ -271,15 +276,15 @@ $RHSeccionUsuario = ($permisoRH == 2) ? "display:none;":"";
 $RH = ($permisoRH == 2) ? "":"display:none;";
 
 if($admin['perfil_id'] == 1){
-  $perfilShow = "";  
+  $perfilShow = "";
 }elseif($admin['perfil_id'] == 6 AND $admin['nombre_planta'] == "XOCHIMILCO"){
-  $perfilShow = "";  
+  $perfilShow = "";
 }else{
-  $perfilShow = "display:none;";  
+  $perfilShow = "display:none;";
 }
 
 // 123123
-$permisoRHColaboradoresPropios = ($admin['perfil_id'] == 6 || $admin['perfil_id'] == 1) ? "" : "display: none;"; 
+$permisoRHColaboradoresPropios = ($admin['perfil_id'] == 6 || $admin['perfil_id'] == 1) ? "" : "display: none;";
 if($admin['perfil_id'] == 6){
   $nombrePerfil = "RH";
 }elseif($admin['perfil_id'] == 1){
@@ -341,20 +346,23 @@ $menu.=<<<html
                     <li style="{$operacionasignarIncentivos}">
                       <a>Incentivos <span class="fa fa-chevron-down"></span></a>
                       <ul class="nav child_menu">
+                      <!--MRR-->
+                        <li><a href="/Puesto/incentivoPuesto/">Puestos</a></li>
                         <li><a>Botes<span class="fa fa-chevron-down"></span></a>
                           <ul class="nav child_menu">
+                            <li><a href="/Incentivo/ingresoBotes/">Ingresar botes</a></li>
                             <li><a>Meta botes<span class="fa fa-chevron-down"></span></a>
                               <ul class="nav child_menu">
                                 <li><a href="/Incentivo/botes/">Muestra</a></li>
                                 <li><a href="/Incentivo/botesAdd/">Crear</a></li>
-                              </ul>   
+                              </ul>
                             </li>
                             <li><a>Pago botes<span class="fa fa-chevron-down"></span></a>
                               <ul class="nav child_menu">
                                 <li><a href="/Incentivo/pagoBotes/">Configuracion</a></li>
-                              </ul>   
+                              </ul>
                             </li>
-                            
+
                           </ul>
                         </li>
                         <li style="{$permisoRHColaboradoresPropios}"><a>{$nombrePerfil} Propios<span class="fa fa-chevron-down"></span></a>

@@ -12,7 +12,7 @@ class Principal extends Controller{
     private $_contenedor;
 
     function __construct(){
-        parent::__construct();
+        parent::__construct(); //llama al constructor del archivo controller.php(indica si existe user y pass, inicializa SESSION)
         $this->_contenedor = new Contenedor;
         View::set('header',$this->_contenedor->header());
         View::set('footer',$this->_contenedor->footer());

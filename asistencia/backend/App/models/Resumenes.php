@@ -21,9 +21,9 @@ sql;
     public static function getHorariosColaborador($id){
         $mysqli = Database::getInstance();
         $query=<<<sql
-SELECT * FROM colaboradores_horario 
-INNER JOIN catalogo_horario USING (catalogo_horario_id) 
-WHERE catalogo_colaboradores_id = $id ORDER BY catalogo_colaboradores_id ASC 
+SELECT * FROM colaboradores_horario
+INNER JOIN catalogo_horario USING (catalogo_horario_id)
+WHERE catalogo_colaboradores_id = $id ORDER BY catalogo_colaboradores_id ASC
 sql;
         return $mysqli->queryAll($query);
     }
@@ -31,9 +31,9 @@ sql;
     public static function getDiasLaboralesColaborador($colaboradorId, $catalogoHorario){
         $mysqli = Database::getInstance();
         $query = <<<sql
-SELECT dl.nombre FROM horario_dias_laborales cdl 
-INNER JOIN colaboradores_horario ch ON (ch.catalogo_horario_id = cdl.catalogo_horario_id) 
-INNER JOIN dias_laborales dl ON (dl.dias_laborales_id = cdl.dias_laborales_id) 
+SELECT dl.nombre FROM horario_dias_laborales cdl
+INNER JOIN colaboradores_horario ch ON (ch.catalogo_horario_id = cdl.catalogo_horario_id)
+INNER JOIN dias_laborales dl ON (dl.dias_laborales_id = cdl.dias_laborales_id)
 WHERE cdl.catalogo_horario_id = "$catalogoHorario" AND ch.catalogo_colaboradores_id = "$colaboradorId"
 sql;
         return $mysqli->queryAll($query);
@@ -62,24 +62,33 @@ sql;
     }
 
     /*
-        Busqueda de incentivo 
+        Busqueda de incentivo
         @params
         @tipo: SEMANAL O QUINCENAL
         @statis: 1 es Cerrado y 0 es Cerrado
     */
     public static function searchPeriodos($tipo, $status){
-        $where = ($status == 0)? " AND status = $status" : " AND status != 0";
+        //$where = ($status == 0)? " AND status = $status" : " AND status != 0";
+        if($status == 0 || $status == 1 || $status == 2 || $status == 3){
+            $where = " AND status in (0,3) ";
+        }
+        else{
+            $where = " AND status != 0";
+        }
         $mysqli = Database::getInstance();
         $query=<<<sql
-SELECT * FROM prorrateo_periodo 
-WHERE tipo = '$tipo' $where
-ORDER BY prorrateo_periodo.fecha_inicio DESC
+        SELECT * FROM prorrateo_periodo
+        WHERE tipo = '$tipo' $where
+        ORDER BY prorrateo_periodo.fecha_inicio DESC
 sql;
+        //print_r($query);
+        //echo '<br/>';
+        //print_r($where);
         return $mysqli->queryAll($query);
     }
 
     /*
-        Busqueda de incentivo 
+        Busqueda de incentivo
         @params
         @tipo: SEMANAL O QUINCENAL
         @statis: 1 es Cerrado y 0 es Cerrado
@@ -87,7 +96,7 @@ sql;
     public static function searchPeriodoProcesado($tipo, $idPeriodo){
         $mysqli = Database::getInstance();
         $query=<<<sql
-SELECT * FROM prorrateo_periodo 
+SELECT * FROM prorrateo_periodo
 WHERE tipo = "$tipo" AND prorrateo_periodo_id = "$idPeriodo"
 sql;
         return $mysqli->queryAll($query);
@@ -100,21 +109,21 @@ sql;
     public static function getUltimoPeriodoHistorico($tipo){
         $mysqli = Database::getInstance();
         $query=<<<sql
-SELECT * FROM prorrateo_periodo 
+SELECT * FROM prorrateo_periodo
 WHERE tipo = "$tipo" AND status != 0
-ORDER BY prorrateo_periodo.prorrateo_periodo_id DESC  
+ORDER BY prorrateo_periodo.prorrateo_periodo_id DESC
 sql;
         return $mysqli->queryOne($query);
     }
 
     /*
-        Obtiene el periodo 
+        Obtiene el periodo
         @tipoPeriodo: SEMANAL O QUINCENAL
     */
     public static function getTipoPeriodo($tipoPeriodo){
         $mysqli = Database::getInstance();
         $query=<<<sql
-SELECT * FROM prorrateo_periodo  
+SELECT * FROM prorrateo_periodo
 WHERE tipo = "$tipoPeriodo" AND status = 1
 ORDER BY prorrateo_periodo.fecha_inicio  DESC
 sql;
@@ -138,24 +147,24 @@ sql;
 
         $mysqli = Database::getInstance();
         $query=<<<sql
-        SELECT 
+        SELECT
             DISTINCT
-            c.catalogo_colaboradores_id, 
-            c.numero_identificador AS numero_empleado, 
-            c.nombre, 
-            c.apellido_paterno, 
-            c.apellido_materno, 
-            c.horario_tipo, 
-            c.identificador_noi, 
+            c.catalogo_colaboradores_id,
+            c.numero_identificador AS numero_empleado,
+            c.nombre,
+            c.apellido_paterno,
+            c.apellido_materno,
+            c.horario_tipo,
+            c.identificador_noi,
             d.nombre AS nombre_departamento,
             l.nombre AS nombre_planta,
 	    c.catalogo_lector_secundario_id
         FROM catalogo_colaboradores AS c
-        INNER JOIN catalogo_departamento AS d 
-        ON (c.catalogo_departamento_id = d.catalogo_departamento_id)   
-        JOIN utilerias_administradores_departamentos uad 
+        INNER JOIN catalogo_departamento AS d
+        ON (c.catalogo_departamento_id = d.catalogo_departamento_id)
+        JOIN utilerias_administradores_departamentos uad
         ON uad.catalogo_departamento_id = c.catalogo_departamento_id
-        JOIN catalogo_lector l 
+        JOIN catalogo_lector l
         ON l.catalogo_lector_id = c.catalogo_lector_id
         WHERE c.pago = '$pago' $whereDep
 sql;
@@ -164,49 +173,55 @@ sql;
         return $mysqli->queryAll($query);
     }
 
-    public static function getAllColaboradores($perfil_id, $tipoPeriodo, $catalogo_planta_id, $catalogo_departamento_id, $catalodo_planta_nombre, $accion, $where){
+    //MRR
+    public static function getAllColaboradores($perfil_id, $tipoPeriodo, $catalogo_planta_id, $catalogo_departamento_id, $catalodo_planta_nombre, $accion, $where, $not){
+      // if($not == ''){
+      //
+      // }
         $mysqli = Database::getInstance();
 
         //echo "<pre>";print_r($perfil_id);echo "<br>";print_r($accion);echo "</pre>";
         $query=<<<sql
-        SELECT 
-            DISTINCT 
-            c.catalogo_colaboradores_id, 
-            c.numero_identificador AS numero_empleado, 
-            c.nombre, 
-            c.apellido_paterno, 
-            c.apellido_materno, 
+        SELECT
+            DISTINCT
+            c.catalogo_colaboradores_id,
+            c.numero_identificador AS numero_empleado,
+            c.nombre,
+            c.apellido_paterno,
+            c.apellido_materno,
             c.clave_noi,
-            c.horario_tipo, 
-            c.identificador_noi, 
+            c.horario_tipo,
+            c.identificador_noi,
             d.nombre AS nombre_departamento,
-            l.nombre AS nombre_planta, 
+            l.nombre AS nombre_planta,
             l.identificador,
             c.privilegiado,
             c.pago,
-	    c.catalogo_lector_secundario_id 
-        FROM catalogo_colaboradores AS c 
-        INNER JOIN catalogo_departamento AS d ON (c.catalogo_departamento_id = d.catalogo_departamento_id) 
-        JOIN catalogo_lector l ON (l.catalogo_lector_id = c.catalogo_lector_id) 
+	    c.catalogo_lector_secundario_id
+        FROM catalogo_colaboradores AS c
+        INNER JOIN catalogo_departamento AS d ON (c.catalogo_departamento_id = d.catalogo_departamento_id)
+        JOIN catalogo_lector l ON (l.catalogo_lector_id = c.catalogo_lector_id)
+        WHERE c.identificador_noi NOT IN ($not) AND c.numero_identificador NOT IN ('1010','2024')
 sql;
         //JOIN utilerias_administradores_departamentos uad ON (uad.catalogo_departamento_id = c.catalogo_departamento_id)
         if($perfil_id == 1 || $perfil_id == 2){
-            
+
             if($accion == 1){
                 $query .=<<<sql
-            WHERE c.fecha_baja != '0000-00-00' AND c.pago = "$tipoPeriodo" AND c.status = 1 AND c.catalogo_departamento_id = "$catalogo_departamento_id" AND c.catalogo_ubicacion_id = "$catalogo_planta_id" AND l.identificador = "$catalodo_planta_nombre"
+            AND c.fecha_baja != '0000-00-00' AND c.pago = "$tipoPeriodo" AND c.status = 1 AND c.catalogo_departamento_id = "$catalogo_departamento_id" AND c.catalogo_ubicacion_id = "$catalogo_planta_id" AND l.identificador = "$catalodo_planta_nombre"
 sql;
             }
-
+            //MRR
             if($accion == 2){
                 $query .=<<<sql
-            WHERE c.pago = "$tipoPeriodo" AND c.status = 1 
+            AND c.pago = "$tipoPeriodo" AND c.status = 1
+
 sql;
             }
 
             if($accion == 3){
                 $query .=<<<sql
-            WHERE c.pago = "$tipoPeriodo" AND c.status = 1 AND c.catalogo_departamento_id = "$catalogo_departamento_id" 
+            AND c.pago = "$tipoPeriodo" AND c.status = 1 AND c.catalogo_departamento_id = "$catalogo_departamento_id"
 sql;
             }
         }//fin perfil_id = 1
@@ -216,33 +231,33 @@ sql;
             //WHERE c.pago = "$tipoPeriodo" AND c.status = 1 AND c.catalogo_departamento_id = "$catalogo_departamento_id" AND c.catalogo_ubicacion_id = "$catalogo_planta_id" AND c.identificador_noi = "$catalodo_planta_nombre"
             if($accion == 1){
             $query .=<<<sql
-            WHERE c.pago = "$tipoPeriodo" AND c.status = 1 AND c.catalogo_departamento_id = "$catalogo_departamento_id" AND l.nombre = "$catalodo_planta_nombre"
+            AND c.pago = "$tipoPeriodo" AND c.status = 1 AND c.catalogo_departamento_id = "$catalogo_departamento_id" AND l.nombre = "$catalodo_planta_nombre"
 sql;
             }
 
             if($accion == 2){
             $query .=<<<sql
-            WHERE c.pago = "$tipoPeriodo" AND c.status = 1 
+            AND c.pago = "$tipoPeriodo" AND c.status = 1
 sql;
             }
 
             if($accion == 3){
             $query .=<<<sql
-            WHERE c.pago = "$tipoPeriodo" AND c.status = 1 AND c.catalogo_ubicacion_id = "$catalogo_planta_id"
+            AND c.pago = "$tipoPeriodo" AND c.status = 1 AND c.catalogo_ubicacion_id = "$catalogo_planta_id"
 sql;
             }
 
             if($accion == 4){
             $query .=<<<sql
-            WHERE c.pago = "$tipoPeriodo" AND c.status = 1 AND c.catalogo_lector_id = "$catalogo_planta_id" 
+            AND c.pago = "$tipoPeriodo" AND c.status = 1 AND c.catalogo_lector_id = "$catalogo_planta_id"
 sql;
             }
-            
-            
+
+
         }
 
         if($perfil_id == 5 || $perfil_id == 4){
-// WHERE c.pago = "$tipoPeriodo" AND c.status = 1 AND c.catalogo_departamento_id = "$catalogo_departamento_id" AND c.catalogo_ubicacion_id = "$catalogo_planta_id" AND c.identificador_noi = "$catalodo_planta_nombre"            
+// WHERE c.pago = "$tipoPeriodo" AND c.status = 1 AND c.catalogo_departamento_id = "$catalogo_departamento_id" AND c.catalogo_ubicacion_id = "$catalogo_planta_id" AND c.identificador_noi = "$catalodo_planta_nombre"
             $query .=<<<sql
             JOIN utilerias_administradores_departamentos uad ON (uad.catalogo_departamento_id = c.catalogo_departamento_id)
             WHERE c.pago = "$tipoPeriodo" AND c.status = 1 AND c.catalogo_departamento_id = "$catalogo_departamento_id" AND c.catalogo_ubicacion_id = "$catalogo_planta_id" AND l.nombre = "$catalodo_planta_nombre"
@@ -250,23 +265,24 @@ sql;
         }
         $query .= ' '.$where;
             $queryTest .= <<<sql
-  GROUP BY c.apellido_paterno ASC 
+            GROUP BY c.apellido_paterno ASC
 sql;
 
 //AND c.catalogo_colaboradores_id = 22
 //JUAN CAMBIO
-        
+
         //echo $query.'<br><br>
             $query .=<<<sql
-		 
+
 sql;
+        // print_r($query);
         return $mysqli->queryAll($query);
     }
 
         public static function getAllColaboradorById($id){
         $mysqli = Database::getInstance();
         $query=<<<sql
-SELECT DISTINCT c.catalogo_colaboradores_id, c.numero_identificador AS numero_empleado, c.nombre, c.apellido_paterno, c.apellido_materno, c.horario_tipo, c.identificador_noi, d.nombre AS nombre_departamento, l.nombre AS nombre_planta, l.identificador, c.privilegiado, c.pago, c.catalogo_lector_secundario_id FROM catalogo_colaboradores AS c INNER JOIN catalogo_departamento AS d ON (c.catalogo_departamento_id = d.catalogo_departamento_id) JOIN catalogo_lector l ON (l.catalogo_lector_id = c.catalogo_lector_id) WHERE c.catalogo_colaboradores_id = $id 
+SELECT DISTINCT c.catalogo_colaboradores_id, c.numero_identificador AS numero_empleado, c.nombre, c.apellido_paterno, c.apellido_materno, c.horario_tipo, c.identificador_noi, d.nombre AS nombre_departamento, l.nombre AS nombre_planta, l.identificador, c.privilegiado, c.pago, c.catalogo_lector_secundario_id FROM catalogo_colaboradores AS c INNER JOIN catalogo_departamento AS d ON (c.catalogo_departamento_id = d.catalogo_departamento_id) JOIN catalogo_lector l ON (l.catalogo_lector_id = c.catalogo_lector_id) WHERE c.catalogo_colaboradores_id = $id
 sql;
 
         return $mysqli->queryAll($query);
@@ -275,7 +291,7 @@ sql;
     public static function getIncidencia($datos){
 		$mysqli = Database::getInstance();
 		$query =<<<sql
-SELECT ci.* 
+SELECT ci.*
 FROM catalogo_incidencia ci
 JOIN prorrateo_colaboradores_incidencia pci	ON pci.catalogo_incidencia_id = ci.catalogo_incidencia_id
 WHERE pci.catalogo_colaboradores_id = $datos->_catalogo_colaboradores_id AND pci.fecha_incidencia = '$datos->_fecha'
@@ -316,7 +332,7 @@ sql;
         $mysqli = Database::getInstance();
         $query =<<<sql
 SELECT *
-FROM prorrateo_colaborador_horario 
+FROM prorrateo_colaborador_horario
 WHERE catalogo_colaboradores_id = '$catalogo_colaboradores_id'
 ORDER BY prorrateo_colaborador_horario_id DESC
 sql;
@@ -346,9 +362,9 @@ sql;
     public static function getRegistro($datos){
         $mysqli = Database::getInstance();
         $query=<<<sql
-        SELECT 
-            *  
-        FROM prorrateo_periodo_colaboradores 
+        SELECT
+            *
+        FROM prorrateo_periodo_colaboradores
         WHERE prorrateo_periodo_id = $datos->periodo_id
         AND catalogo_colaboradores_id = $datos->catalogo_colaboradores_id
 sql;
@@ -375,7 +391,7 @@ sql;
     public static function getValoresNoHorasExtra($data){
         $mysqli = Database::getInstance();
         $query=<<<sql
-        SELECT horas_extra FROM prorrateo_horas_extra WHERE catalogo_colaboradores_id = :catalogo_colaboradores_id AND prorrateo_periodo_id = :prorrateo_periodo_id 
+        SELECT horas_extra FROM prorrateo_horas_extra WHERE catalogo_colaboradores_id = :catalogo_colaboradores_id AND prorrateo_periodo_id = :prorrateo_periodo_id
 sql;
         return $mysqli->queryOne($query, array(":catalogo_colaboradores_id"=>$data->_catalogo_colaboradores_id, ":prorrateo_periodo_id"=>$data->_prorrateo_periodo_id));
     }
@@ -386,7 +402,7 @@ sql;
         SELECT * FROM prorrateo_domigo_procesos WHERE catalogo_colaboradores_id = $data->_catalogo_colaboradores_id AND prorrateo_periodo_id = $data->_prorrateo_periodo_id
 sql;
         $query2=<<<sql
-        SELECT * FROM prorrateo_domigo_laborado WHERE catalogo_colaboradores_id = $data->_catalogo_colaboradores_id AND prorrateo_periodo_id = $data->_prorrateo_periodo_id 
+        SELECT * FROM prorrateo_domigo_laborado WHERE catalogo_colaboradores_id = $data->_catalogo_colaboradores_id AND prorrateo_periodo_id = $data->_prorrateo_periodo_id
 sql;
         $result1 = $mysqli->queryOne($query1);
         $result2 = $mysqli->queryOne($query2);
@@ -400,8 +416,8 @@ sql;
     public static function getIncentivosBotes($data){
         $mysqli = Database::getInstance();
         $query = <<<sql
-SELECT * FROM incentivos_asignados 
-WHERE colaborador_id = :colaborador_id AND prorrateo_periodo_id = :prorrateo_periodo_id AND catalogo_incentivo_id = 47 
+SELECT * FROM incentivos_asignados
+WHERE colaborador_id = :colaborador_id AND prorrateo_periodo_id = :prorrateo_periodo_id AND catalogo_incentivo_id = 47
 sql;
         $params = array(
             ':colaborador_id'=>$data->_colaborador_id,
@@ -409,5 +425,5 @@ sql;
         );
         return $mysqli->queryOne($query, $params);
     }
-    
+
 }

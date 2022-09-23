@@ -16,7 +16,7 @@ class Incidencia implements Crud{
     public static function delete($id){}
 
     /*
-        Busqueda de incentivo 
+        Busqueda de incentivo
         @params
         @tipo: SEMANAL O QUINCENAL
         @statis: 1 es Cerrado y 0 es Cerrado
@@ -24,15 +24,15 @@ class Incidencia implements Crud{
     public static function searchPeriodos($tipo, $status){
         $mysqli = Database::getInstance();
         $query=<<<sql
-SELECT * FROM prorrateo_periodo 
-WHERE tipo = "$tipo" AND status = "$status" 
+SELECT * FROM prorrateo_periodo
+WHERE tipo = "$tipo" AND status = "$status"
 ORDER BY prorrateo_periodo.fecha_inicio DESC
 sql;
         return $mysqli->queryAll($query);
     }
 
     /*
-        Busqueda de incentivo 
+        Busqueda de incentivo
         @params
         @tipo: SEMANAL O QUINCENAL
         @statis: 1 es Cerrado y 0 es Cerrado
@@ -40,14 +40,14 @@ sql;
     public static function searchPeriodoProcesado($tipo, $idPeriodo){
         $mysqli = Database::getInstance();
         $query=<<<sql
-SELECT * FROM prorrateo_periodo 
+SELECT * FROM prorrateo_periodo
 WHERE tipo = "$tipo" AND prorrateo_periodo_id = "$idPeriodo"
 sql;
         return $mysqli->queryAll($query);
     }
 
     /*
-        Busqueda de incentivo 
+        Busqueda de incentivo
         @params
         @tipo: SEMANAL O QUINCENAL
         @statis: 1 es Cerrado y 0 es Cerrado
@@ -55,14 +55,14 @@ sql;
     public static function searchPeriodoById($idPeriodo){
         $mysqli = Database::getInstance();
         $query=<<<sql
-SELECT * FROM prorrateo_periodo 
+SELECT * FROM prorrateo_periodo
 WHERE prorrateo_periodo_id = "$idPeriodo"
 sql;
         return $mysqli->queryOne($query);
     }
 
     /*
-        Buscar los colaboradores 
+        Buscar los colaboradores
         @tipo: SEMANAL o QUINCENAL
     */
     public static function getColaboradores($tipo, $perfilUsuario, $catalogoDepartamentoId, $catalogoPlantaId, $estatusRH){
@@ -71,10 +71,10 @@ sql;
         // PERIL PARA EL USUARIO ROOT
         if($perfilUsuario == 1){
             $query=<<<sql
-SELECT 
+SELECT
 cc.catalogo_colaboradores_id, cc.identificador_noi, cc.nombre, cc.apellido_paterno, cc.apellido_materno, cc.numero_identificador, cc.catalogo_departamento_id,
 cc.pago, cc.foto, cd.nombre AS nombre_departamento, cp.nombre AS nombre_puesto, cu.nombre nombre_ubicacion, cc.catalogo_ubicacion_id, ce.nombre AS nombre_empresa, cc.numero_empleado
-FROM catalogo_colaboradores cc 
+FROM catalogo_colaboradores cc
 INNER JOIN catalogo_departamento cd USING (catalogo_departamento_id)
 INNER JOIN catalogo_puesto cp USING (catalogo_puesto_id)
 INNER JOIN catalogo_ubicacion cu USING (catalogo_ubicacion_id)
@@ -86,10 +86,10 @@ sql;
         // PERFIL PARA 4 "Administrador" y 5 "Personalizado"
         if($perfilUsuario == 4 || $perfilUsuario == 5){
             $query =<<<sql
-SELECT 
+SELECT
 cc.catalogo_colaboradores_id, cc.identificador_noi, cc.nombre, cc.apellido_paterno, cc.apellido_materno, cc.numero_identificador, cc.catalogo_departamento_id,
 cc.pago, cc.foto, cd.nombre AS nombre_departamento, cp.nombre AS nombre_puesto, cu.nombre nombre_ubicacion, cc.catalogo_ubicacion_id, ce.nombre AS nombre_empresa, cc.numero_empleado
-FROM catalogo_colaboradores cc 
+FROM catalogo_colaboradores cc
 INNER JOIN catalogo_departamento cd USING (catalogo_departamento_id)
 INNER JOIN catalogo_puesto cp USING (catalogo_puesto_id)
 INNER JOIN catalogo_ubicacion cu USING (catalogo_ubicacion_id)
@@ -100,15 +100,15 @@ sql;
         }
 
         if($perfilUsuario == 6){
-            
+
             $query=<<<sql
-SELECT 
+SELECT
 cc.catalogo_colaboradores_id, cc.identificador_noi, cc.nombre, cc.apellido_paterno, cc.apellido_materno, cc.numero_identificador, cc.catalogo_departamento_id,
 cc.pago, cc.foto, cd.nombre AS nombre_departamento, cp.nombre AS nombre_puesto, cu.nombre nombre_ubicacion, cc.catalogo_ubicacion_id, ce.nombre AS nombre_empresa, cc.numero_empleado
-FROM catalogo_colaboradores cc 
+FROM catalogo_colaboradores cc
 INNER JOIN catalogo_departamento cd USING (catalogo_departamento_id)
 INNER JOIN catalogo_puesto cp USING (catalogo_puesto_id)
-INNER JOIN catalogo_ubicacion cu USING (catalogo_ubicacion_id) 
+INNER JOIN catalogo_ubicacion cu USING (catalogo_ubicacion_id)
 INNER JOIN catalogo_empresa ce USING (catalogo_empresa_id)
 sql;
             if($estatusRH == 1){
@@ -134,22 +134,22 @@ sql;
     public static function getUltimoPeriodoHistorico($tipo){
         $mysqli = Database::getInstance();
         $query=<<<sql
-SELECT * FROM prorrateo_periodo 
+SELECT * FROM prorrateo_periodo
 WHERE tipo = "$tipo" AND status != 0
-ORDER BY prorrateo_periodo.fecha_inicio DESC LIMIT 1 
+ORDER BY prorrateo_periodo.fecha_inicio DESC LIMIT 1
 sql;
         return $mysqli->queryOne($query);
     }
 
     /*
-        Obtiene el periodo 
+        Obtiene el periodo
         @tipoPeriodo: SEMANAL O QUINCENAL
     */
     public static function getTipoPeriodo($tipoPeriodo, $status){
         $where = ($status == 0)? ' AND status = 0 ': 'AND status != 0';
         $mysqli = Database::getInstance();
         $query=<<<sql
-SELECT * FROM prorrateo_periodo  
+SELECT * FROM prorrateo_periodo
 WHERE tipo = "$tipoPeriodo" $where
 ORDER BY prorrateo_periodo.fecha_inicio  DESC
 sql;
@@ -167,6 +167,7 @@ FROM catalogo_colaboradores c
 JOIN catalogo_status s ON c.status = s.catalogo_status_id
 WHERE c.catalogo_colaboradores_id = $id
 sql;
+// print_r($query);
       return $mysqli->queryOne($query);
     }
 
@@ -176,9 +177,9 @@ sql;
     public static function getPeriodoFechas($periodo){
         $mysqli = Database::getInstance();
         $query=<<<sql
-SELECT * FROM prorrateo_periodo 
-WHERE tipo = "$periodo" AND status = 1 
-ORDER BY `prorrateo_periodo`.`fecha_inicio` DESC 
+SELECT * FROM prorrateo_periodo
+WHERE tipo = "$periodo" AND status = 1
+ORDER BY `prorrateo_periodo`.`fecha_inicio` DESC
 sql;
         return $mysqli->queryAll($query);
     }
@@ -189,9 +190,9 @@ sql;
     public static function getPeriodoFechasProceso($periodo){
         $mysqli = Database::getInstance();
         $query=<<<sql
-SELECT * FROM prorrateo_periodo 
-WHERE tipo = "$periodo" AND status = 1 
-ORDER BY `prorrateo_periodo`.`fecha_inicio` DESC 
+SELECT * FROM prorrateo_periodo
+WHERE tipo = "$periodo" AND status = 1
+ORDER BY `prorrateo_periodo`.`fecha_inicio` DESC
 sql;
         return $mysqli->queryAll($query);
     }
@@ -201,6 +202,7 @@ sql;
         $query=<<<sql
 SELECT * FROM prorrateo_periodo WHERE prorrateo_periodo_id = "$id"
 sql;
+// print_r($query);
         return $mysqli->queryOne($query);
     }
 
@@ -213,8 +215,7 @@ JOIN catalogo_incidencia i USING (catalogo_incidencia_id)
 WHERE catalogo_colaboradores_id = $colaborador_id
 ORDER BY prorrateo_colaboradores_incidencia_id DESC
 sql;
-
-
+// print_r($query);
         return $mysqli->queryAll($query);
     }
 
@@ -222,13 +223,13 @@ sql;
     public static function getHorarioLaboral($datos){
         $mysqli = Database::getInstance();
         $query=<<<sql
-        SELECT 
+        SELECT
             ch.catalogo_horario_id,
-            ch.hora_entrada, 
-            ch.hora_salida, 
-            ch.tolerancia_entrada, 
-            ch.numero_retardos, 
-            dl.nombre AS dia_semana, 
+            ch.hora_entrada,
+            ch.hora_salida,
+            ch.tolerancia_entrada,
+            ch.numero_retardos,
+            dl.nombre AS dia_semana,
             ch.nombre horario
         FROM catalogo_horario ch JOIN horario_dias_laborales hdl
         ON hdl.catalogo_horario_id = ch.catalogo_horario_id JOIN dias_laborales dl
@@ -244,13 +245,13 @@ sql;
         $mysqli = Database::getInstance();
         $where = ($datos->catalogo_horario_id != '')? " AND ch.catalogo_horario_id = $datos->catalogo_horario_id ": "";
         $query=<<<sql
-        SELECT 
+        SELECT
             ch.catalogo_horario_id,
-            ch.hora_entrada, 
-            ch.hora_salida, 
-            ch.tolerancia_entrada, 
-            ch.numero_retardos, 
-            dl.nombre AS dia_semana, 
+            ch.hora_entrada,
+            ch.hora_salida,
+            ch.tolerancia_entrada,
+            ch.numero_retardos,
+            dl.nombre AS dia_semana,
             ch.nombre horario
         FROM catalogo_horario ch JOIN horario_dias_laborales hdl
         ON hdl.catalogo_horario_id = ch.catalogo_horario_id JOIN dias_laborales dl
@@ -267,25 +268,27 @@ sql;
     public static function getUltimoHorario($datos){
         $mysqli = Database::getInstance();
         $query =<<<sql
-        SELECT 
+        SELECT
             *
         FROM prorrateo_colaborador_horario
         WHERE catalogo_colaboradores_id = $datos->catalogo_colaboradores_id
         ORDER BY fecha DESC
 sql;
+// print_r($query);
         return $mysqli->queryOne($query);
     }
 
     public static function getHorariosById($datos){
         $mysqli = Database::getInstance();
         $query =<<<sql
-        SELECT 
+        SELECT
             DISTINCT
             *
         FROM colaboradores_horario
         JOIN catalogo_horario USING(catalogo_horario_id)
         WHERE catalogo_colaboradores_id = $datos->catalogo_colaboradores_id
 sql;
+// print_r($query);
         return $mysqli->queryAll($query);
     }
 
@@ -297,7 +300,7 @@ sql;
         JOIN catalogo_lector cl ON (cl.identificador = oc.identificador AND cl.catalogo_lector_id = $datos->catalogo_lector_id)
         WHERE oc.date_check >= '$datos->fecha_inicio'
         AND  oc.date_check <= '$datos->fecha_fin'
-        AND numero_empleado = $datos->numero_empleado 
+        AND numero_empleado = $datos->numero_empleado
         ORDER BY oc.date_check ASC
 sql;
         //echo $query.'<br>';
@@ -351,7 +354,7 @@ sql;
     public static function getDiaFestivo($fecha){
         $mysqli = Database::getInstance();
         $query =<<<sql
-SELECT * FROM catalogo_dia_festivo WHERE fecha = '$fecha' 
+SELECT * FROM catalogo_dia_festivo WHERE fecha = '$fecha'
 sql;
         return $mysqli->queryOne($query);
     }

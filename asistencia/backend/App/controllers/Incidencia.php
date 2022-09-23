@@ -78,7 +78,7 @@ html;
 
 	public function semanales(){
 	    $user = GeneralDao::getDatosUsuario($this->__usuario);
-	    
+
 	    if($user['perfil_id'] == 6){
 			$val = ($user['catalogo_planta_id'] == 1) ? 1 : 5;
 	        $tituloVista = "Incidencia propias <b>" . strtoupper($user['nombre_planta']) . "</b> - depto. <b>" . strtoupper($user['nombre']) . "</b>";
@@ -112,7 +112,7 @@ html;
 		View::set('idUbicacion',$this->getUbicacion());
 		View::set('idDepartamento',$this->getDepartamentos());
 		// TERMINO DE FILTROS DE LA TABLA
-    
+
 
 		$idPeriodo = $this->getIdPeriodo("SEMANAL", 0);
 		View::set('msjPeriodo',$this->getPeriodo("SEMANAL", 0));
@@ -127,7 +127,7 @@ html;
 
 	public function quincenales(){
     	$user = GeneralDao::getDatosUsuario($this->__usuario);
-    	
+
 		if($user['perfil_id'] == 6){
         	$val = ($user['catalogo_planta_id'] == 1) ? 1 : 5;
         	$tituloVista = "Incidencias propios <b>" . strtoupper($user['nombre_planta']) . "</b> - depto. <b>" . strtoupper($user['nombre']) . "</b>";
@@ -161,7 +161,7 @@ html;
 		View::set('idUbicacion',$this->getUbicacion());
 		View::set('idDepartamento',$this->getDepartamentos());
 		// TERMINO DE FILTROS DE LA TABLA
-		
+
 		$idPeriodo = $this->getIdPeriodo("QUINCENAL", 0);
 		View::set('msjPeriodo',$this->getPeriodo("QUINCENAL", 0));
 		View::set('tipoPeriodo',$tituloVista); // Identificacion del periodo
@@ -216,8 +216,8 @@ html;
 		View::set('idUbicacion',$this->getUbicacion());
 		View::set('idDepartamento',$this->getDepartamentos());
 		// TERMINO DE FILTROS DE LA TABLA
-      	
-      	View::set('tipo_periodo',$idPeriodo); 
+
+      	View::set('tipo_periodo',$idPeriodo);
 	    View::set('tipoPeriodo',$tituloVista); // Identificacion del periodo
 	    View::set('tituloIncentivos',"Semanales");
 	    View::set('option',$this->getPeriodosHistoricos("SEMANAL",$idPeriodo)); // Optiene todos los periodos procesados(historicos) semanales
@@ -273,7 +273,7 @@ html;
 		View::set('idDepartamento',$this->getDepartamentos());
 		// TERMINO DE FILTROS DE LA TABLA
 
-		View::set('tipo_periodo',$idPeriodo); 
+		View::set('tipo_periodo',$idPeriodo);
 		View::set('tipoPeriodo',$tituloVista); // Identificacion del periodo
 		View::set('tituloIncentivos',"Quincenales");
 		View::set('option',$this->getPeriodosHistoricos("QUINCENAL")); // Optiene todos los periodos procesados(historicos) semanales
@@ -314,7 +314,7 @@ html;
 		View::set('idDepartamento',$this->getDepartamentos());
 		// TERMINO DE FILTROS DE LA TABLA
 
-        View::set('tipo_periodo',$idPeriodo); 
+        View::set('tipo_periodo',$idPeriodo);
 		View::set('tipoPeriodo',$tituloVista); // Identificacion del periodo
 		View::set('tituloIncentivos',"Semanales");
 		View::set('option',$this->getPeriodosHistoricos("SEMANAL",$idPeriodo)); // Optiene todos los periodos procesados(historicos) semanales
@@ -354,7 +354,7 @@ html;
 		View::set('idDepartamento',$this->getDepartamentos());
 		// TERMINO DE FILTROS DE LA TABLA
 
-		View::set('tipo_periodo',$idPeriodo); 
+		View::set('tipo_periodo',$idPeriodo);
 		View::set('tipoPeriodo',$tituloVista); // Identificacion del periodo
 		View::set('tituloIncentivos',"Quincenal");
 		View::set('option',$this->getPeriodosHistoricos("QUINCENAL",$idPeriodo)); // Optiene todos los periodos procesados(historicos) semanales
@@ -388,7 +388,7 @@ html;
 		View::set('idUbicacion',$this->getUbicacion());
 		View::set('idDepartamento',$this->getDepartamentos());
 		// TERMINO DE FILTROS DE LA TABLA
-	    
+
 		$idPeriodo = $this->getIdPeriodo("SEMANAL", 0);
 		View::set('msjPeriodo',$this->getPeriodo("SEMANAL", 0));
 		View::set('tituloIncentivos',"Semanales");
@@ -401,7 +401,7 @@ html;
   	}
 
 	public function propiosQuincenales(){
-		
+
 		$user = GeneralDao::getDatosUsuario($this->__usuario);
 
 		if($user['perfil_id'] == 6){ // Si el usuario es de RH
@@ -455,7 +455,7 @@ html;
 			$htmlPeriodo = <<<html
 			<b>( {$fechaIni} al {$fechaFin} )</b> <label class="label label-{$label}"> periodo {$status}</label>
 html;
-    	}	
+    	}
     	return $htmlPeriodo;
     }
 
@@ -560,7 +560,7 @@ html;
 		$incidencias_colaborador = IncidenciaDao::getProrrateoColaboradorIncidenciaById($colaborador['catalogo_colaboradores_id']);
 		$datos = new \stdClass();
 		$datos->numero_empleado = $colaborador['numero_identificador'];
-		$datos->catalogo_colaboradores_id = $colaborador['catalogo_colaboradores_id'];		
+		$datos->catalogo_colaboradores_id = $colaborador['catalogo_colaboradores_id'];
 		$datos->catalogo_lector_id = $colaborador['catalogo_lector_id'];
 
 		$tabla =<<<html
@@ -573,6 +573,7 @@ html;
 						<th>Salida</th>
 						<th>Entrada Registrada</th>
 						<th>Salida Registrada</th>
+            <th>Horas Extra</th>
 						<th>Comentario</th>
 						<th>Incidencia</th>
 						<th>Acción</th>
@@ -586,7 +587,7 @@ html;
       	$horarios = IncidenciaDao::getHorariosById($datos);
 	    $num_semana = 0;
       while($fecha_inicio <= $fecha_final){
-      	
+
         $value = '';
 
         /******************************************************************************************************************************************************/
@@ -599,7 +600,7 @@ html;
                 $catalogo_horario_id_anterior = $catalogo_horario_id;
                 for($llave=0; $llave<count($horarios); $llave++) {
                     $valor = $horarios[$llave];
-                    
+
                     if(count($ultimo_horario) > 0){
                         if($valor['catalogo_horario_id'] == $ultimo_horario['catalogo_horario_id']){
                           if( ($llave+1) >= count($horarios) ){
@@ -629,7 +630,7 @@ html;
                     if($catalogo_horario_id != $catalogo_horario_id_anterior){break;}
                 }
             }
-            
+
         }
         $datos->catalogo_horario_id = $catalogo_horario_id;
         /******************************************************************************************************************************************************/
@@ -656,13 +657,13 @@ html;
                   $nueva_fecha->modify('-2 hours');
                   //$fecha_inicio->modify('+0 minute');
                   //$fecha_inicio->modify('-0 second');
-                  $datos->fecha_inicio = $nueva_fecha->format('Y-m-d H:i:s'); 
+                  $datos->fecha_inicio = $nueva_fecha->format('Y-m-d H:i:s');
                   $fecha_aux = new \DateTime($fecha_inicio->format('Y-m-d'));
 
 
                     $fecha_aux->add(new \DateInterval('P1D'));
                     $nueva_fecha= $fecha_aux->format('Y-m-d').' '.$value['hora_salida'];
-                    $fecha_aux = new \DateTime($nueva_fecha);      
+                    $fecha_aux = new \DateTime($nueva_fecha);
                     $fecha_aux->add(new \DateInterval('PT4H0S'));
 
                     $datos->fecha_fin = $fecha_aux->format('Y-m-d H:i:s');
@@ -671,27 +672,27 @@ html;
                   }else{
                   	$datos->fecha_inicio = $fecha_inicio->format('Y-m-d').' 00:00';
 					$datos->fecha_fin = $fecha_inicio->format('Y-m-d').' 23:59';
-					$registro_entrada_array = IncidenciaDao::getAsistenciaModificada($datos);			
+					$registro_entrada_array = IncidenciaDao::getAsistenciaModificada($datos);
                   }
 
-			
+
 		}else{
 			$nueva_fecha = new \DateTime($fecha_inicio->format('Y-m-d').' '.$value['hora_entrada']);
 		    $nueva_fecha->modify('-2 hours');
 		    //$fecha_inicio->modify('+0 minute');
 		    //$fecha_inicio->modify('-0 second');
 
-	    	$datos->fecha_inicio = $nueva_fecha->format('Y-m-d H:i:s');	
+	    	$datos->fecha_inicio = $nueva_fecha->format('Y-m-d H:i:s');
 		    $fecha_aux = new \DateTime($fecha_inicio->format('Y-m-d'));
-		    
+
 		    if(preg_match("/nocturno/", strtolower($value['horario']))){
 		      $fecha_aux->add(new \DateInterval('P1D'));
 		      $nueva_fecha= $fecha_aux->format('Y-m-d').' '.$value['hora_salida'];
-		      $fecha_aux = new \DateTime($nueva_fecha);      
+		      $fecha_aux = new \DateTime($nueva_fecha);
 		      $fecha_aux->add(new \DateInterval('PT4H0S'));
 		    }else{
 		      $nueva_fecha= $fecha_inicio->format('Y-m-d').' '.$value['hora_salida'];
-		      $fecha_aux = new \DateTime($nueva_fecha);      
+		      $fecha_aux = new \DateTime($nueva_fecha);
 		      $fecha_aux->add(new \DateInterval('PT4H0S'));
 		      //$fecha_aux->add(new \DateInterval('P0Y0M0DT2H0M0'));
 		    }
@@ -728,7 +729,7 @@ html;
         $colaborador_id = MasterDom::getData('catalogo_colaboradores_id');
 
         $incidencia = '';
-        
+
         foreach ($incidencias_colaborador as $llave => $valor) {
 			if( $fecha_inicio->format('Y-m-d') === $valor['fecha_incidencia']){
 				$incidencia = $valor['nombre'];
@@ -754,17 +755,88 @@ html;
 		if($x_hora_entrada == "No Laboral" && $x_hora_salida == "No Laboral" && $x_registro_salida == "Sin registro"){
 			$x_registro_salida = "";
 		}
+    //MRR
+    // horas extras
+    if(($registro_entrada == 'Sin registro' || $registro_salida == 'Sin registro') || (empty($registro_entrada) || empty($registro_salida))){
+      $he = 'Sin horas extras';
+    }
+    else {
+      $time1 = date('H:i:s',strtotime(substr($x_registro_entrada, -8)));
+      $time2 = substr($x_registro_salida, -8);
 
+      if (strtotime($time1) <= strtotime('06:10:00')) {
+        $turno = (48*60)/6;
 
-		$tabla .=<<<html
-			<tr>
-				<td style="background:{$colorDiaFestivo} ;">{$dias[$fecha_inicio->format('l')]}</td>
-				<td style="background:{$colorDiaFestivo} ;">{$fecha_inicio->format('Y-m-d')}</td>
-				<td style="background:{$colorDiaFestivo} ;">{$x_hora_entrada}</td>
-				<td style="background:{$colorDiaFestivo} ;">{$x_hora_salida}</td>
-				<td style="background:{$colorDiaFestivo} ;">{$x_registro_entrada}</td>
-				<td style="background:{$colorDiaFestivo} ;">{$x_registro_salida}</td>
-				<td style="background:{$colorDiaFestivo} ;">
+        $h1 = substr($x_registro_entrada, -8,2);
+        $m1 = substr($x_registro_entrada, -5,2);
+        $s1 = substr($x_registro_entrada, -2,2);
+        $t1 = date('H:i:s',strtotime('-'.$h1.'hours',strtotime($time2)));
+        $t1 = date('H:i:s',strtotime('-'.$m1.'minute',strtotime($t1)));
+        $tl = date('H:i:s',strtotime('-'.$s1.'second',strtotime($t1)));
+
+        $tlm = substr($tl, -8,2)*60 + substr($tl, -5,2);
+
+        if($tlm < $turno){
+          $he = 'Sin horas extras';
+        }
+        else {
+          $hex = $tlm - $turno;
+          $he = explode(".",$hex/60);
+          $he = $he[0];
+        }
+      }
+      else if (strtotime($time1) <= strtotime('13:10:00')){
+        $turno = (47*60)/6;
+
+        $h1 = substr($x_registro_entrada, -8,2);
+        $m1 = substr($x_registro_entrada, -5,2);
+        $s1 = substr($x_registro_entrada, -2,2);
+        $t1 = date('H:i:s',strtotime('-'.$h1.'hours',strtotime($time2)));
+        $t1 = date('H:i:s',strtotime('-'.$m1.'minute',strtotime($t1)));
+        $tl = date('H:i:s',strtotime('-'.$s1.'second',strtotime($t1)));
+
+        $tlm = substr($tl, -8,2)*60 + substr($tl, -5,2);
+        if($tlm < $turno){
+          $he = 'Sin horas extras';
+        }
+        else {
+          $hex = $tlm - $turno;
+          $he = explode(".",$hex/60);
+          $he = $he[0];
+        }
+      }
+      else if (strtotime($time1) <= strtotime('22:10:00')){
+        $turno = (45*60)/6;
+
+        $h1 = substr($x_registro_entrada, -8,2);
+        $m1 = substr($x_registro_entrada, -5,2);
+        $s1 = substr($x_registro_entrada, -2,2);
+        $t1 = date('H:i:s',strtotime('-'.$h1.'hours',strtotime($time2)));
+        $t1 = date('H:i:s',strtotime('-'.$m1.'minute',strtotime($t1)));
+        $tl = date('H:i:s',strtotime('-'.$s1.'second',strtotime($t1)));
+
+        $tlm = substr($tl, -8,2)*60 + substr($tl, -5,2);
+        if($tlm < $turno){
+          $he = 'Sin horas extras';
+        }
+        else {
+          $hex = $tlm - $turno;
+          $he = explode(".",$hex/60);
+          $he = $he[0];
+        }
+      }
+    }
+
+    $tabla .=<<<html
+      <tr>
+        <td style="background:{$colorDiaFestivo} ;">{$dias[$fecha_inicio->format('l')]}</td>
+        <td style="background:{$colorDiaFestivo} ;">{$fecha_inicio->format('Y-m-d')}</td>
+        <td style="background:{$colorDiaFestivo} ;">{$x_hora_entrada}</td>
+        <td style="background:{$colorDiaFestivo} ;">{$x_hora_salida}</td>
+        <td style="background:{$colorDiaFestivo} ;">{$x_registro_entrada}</td>
+        <td style="background:{$colorDiaFestivo} ;">{$x_registro_salida}</td>
+        <td style="background:{$colorDiaFestivo} ;">{$he}</td>
+        <td style="background:{$colorDiaFestivo} ;">
 html;
 		foreach ($incidencias_colaborador as $llave => $valor) {
 			if( $fecha_inicio->format('Y-m-d') === $valor['fecha_incidencia']){
@@ -772,7 +844,7 @@ html;
 				break;
 			}
 		}
-        
+
 		$tabla.=<<<html
 			</td>
 				<td style="background:{$colorDiaFestivo} ">
@@ -781,7 +853,7 @@ html;
 			<td style="background:{$colorDiaFestivo} ;">
 html;
 
-		if($estatusPeriodo == 0){
+		if($estatusPeriodo == 0 || $estatusPeriodo == 3){
 			$tabla.=<<<html
 				<a class="btn btn-primary" href="/Incidencia/add/{$colaborador['catalogo_colaboradores_id']}/{$fecha_inicio->format('Y-m-d')}/$vista/{$idPeriodo}">
 					<i class="fa fa-plus-square" aria-hidden="true"></i>
@@ -792,10 +864,10 @@ html;
 				<a class="btn btn-default" ><i class="fa fa-plus-square" aria-hidden="true"></i></a>
 html;
 		}
-		
+
 		$datos->fecha = $fecha_inicio->format('Y-m-d');
 		if(count(IncidenciaDao::getFechaIncidenciaById($datos)) > 0) {
-              if($estatusPeriodo == 0){
+              if($estatusPeriodo == 0 || $estatusPeriodo == 3){
                 $tabla .= <<<html
                   <a  href="/Incidencia/deleteIncidecia?id={$colaborador['catalogo_colaboradores_id']}&fecha={$fecha_inicio->format('Y-m-d')}&vista={$vista}&idColaborador={$idColaborador}&idPeriodo={$idPeriodo}&vista={$vista}" class="btn btn-danger eliminar">
                     <i class="fa fa-trash-o" aria-hidden="true"> </i>
@@ -810,7 +882,7 @@ html;
               }
         }else{
               $tabla .= <<<html
-                        
+
 html;
             }
               $tabla .=<<<html
@@ -818,11 +890,11 @@ html;
           </td>
         </tr>
 html;
-            
+
 
         $fecha_inicio->add(new \DateInterval('P1D'));
       }//fin del while rango de fechas
-      
+
       $tabla .=<<<html
       </tbody>
     </table>
@@ -830,7 +902,7 @@ html;
 
     	$colaborador = IncidenciaDao::getById($idColaborador);
     	$tipoPeriodo = ($vista == "semanales") ? "SEMANAL" : "QUINCENAL";
-    	
+
 
 		if($vista == "semanales"){
 			$vista = "/Incidencia/semanales/&action=semanales";
@@ -885,7 +957,7 @@ html;
               var options = {};
               $('#config-demo').daterangepicker(
                 options,
-                function(start, end, label) { 
+                function(start, end, label) {
                   console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')'
                 );
               }
@@ -895,7 +967,7 @@ html;
 
         <script>
           $(document).ready(function(){
-            
+
             var checkAll = 0;
             $("#checkAll").click(function () {
               if(checkAll==0){
@@ -907,7 +979,7 @@ html;
               }
             });
 
-            
+
 
             //$("#btnAdd").click(
             function accionar(){
@@ -1021,7 +1093,7 @@ html;
 		$colaborador = IncidenciaDao::getById(MasterDom::getData('colaborador_id'));
 		$periodo = IncidenciaDao::getPeriodoById(MasterDom::getData('periodo'));
 		$colaborador_id = MasterDom::getData('colaborador_id');
-		
+
 		$estatusPeriodo = $periodo['status'];
 		$fecha_inicio = new \DateTime($periodo['fecha_inicio']);
 		$fecha_final = new \DateTime($periodo['fecha_fin']);
@@ -1075,7 +1147,7 @@ html;
 		$datos->fecha_inicio = $fecha_inicio->format('Y-m-d').' '.Incidencia::restarMinutos($value['hora_entrada'],60);
 		$datos->fecha_fin = $fecha_inicio->format('Y-m-d').' '.Incidencia::sumarMinutos($value['hora_entrada'],intval($value['tolerancia_entrada']));
 		$registro_entrada_array = IncidenciaDao::getAsistenciaModificada($datos);
-	
+
 		if(count($registro_entrada_array) >= 1){
 			$registro_entrada = array_shift($registro_entrada_array);
 			if($registro_entrada['date_check'] != ''){
@@ -1102,7 +1174,7 @@ html;
         $colaborador_id = MasterDom::getData('catalogo_colaboradores_id');
 
         $incidencia = '';
-        
+
         foreach ($incidencias_colaborador as $llave => $valor) {
 			if( $fecha_inicio->format('Y-m-d') === $valor['fecha_incidencia']){
 				$incidencia = $valor['nombre'];
@@ -1127,7 +1199,7 @@ html;
 				break;
 			}
 		}
-        
+
 		$tabla.=<<<html
 			</td>
 				<td>
@@ -1147,7 +1219,7 @@ html;
 				<a class="btn btn-default" ><i class="fa fa-plus-square" aria-hidden="true"></i></a>
 html;
 		}
-		
+
 		$datos->fecha = $fecha_inicio->format('Y-m-d');
 	if(count(IncidenciaDao::getFechaIncidenciaById($datos)) > 0) {
               if($estatusPeriodo == 0){
@@ -1165,7 +1237,7 @@ html;
               }
             }else{
               $tabla .= <<<html
-                        
+
 html;
             }
               $tabla .=<<<html
@@ -1173,7 +1245,7 @@ html;
           </td>
         </tr>
 html;
-            
+
 
         $fecha_inicio->add(new \DateInterval('P1D'));
       }//fin del while rango de fechas
@@ -1194,7 +1266,7 @@ html;
 		$idColaborador = MasterDom::getData('idColaborador');
 		$idPeriodo = MasterDom::getData('idPeriodo');
 		$vista = MasterDom::getData('vista');
-      
+
 
     	if($id>0){
     		View::set('class',"success");
@@ -1206,7 +1278,7 @@ html;
 			View::set('regreso',"/Incidencia/checadorFechas/{$idColaborador}/{$idPeriodo}/{$vista}/");
 			View::set('mensaje',"Ha ocurrido un problema al agregar la incidencia.");
 		}
-		
+
 		View::set('header',$this->_contenedor->header($extraHeader));
 		View::set('footer',$this->_contenedor->footer($extraFooter));
 		View::render("alerta");
@@ -1258,8 +1330,8 @@ html;
 			});
 		</script>
 html;
-      
-		$sIncidencia = '';  
+
+		$sIncidencia = '';
 		foreach(IncidenciaDao::getIncidencias() as $key => $value){
 			$sIncidencia .=<<<html
 				<option value="{$value['catalogo_incidencia_id']}">{$value['nombre']}</option>
@@ -1268,7 +1340,7 @@ html;
 
 		if($vista == "semanales")
 			$direccionamiento = "/Incidencia/checadorFechas/{$colaborador_id}/{$idPeriodo}/semanales/abierto";
-		
+
 		if($vista == "quincenales")
 			$direccionamiento = "/Incidencia/checadorFechas/{$colaborador_id}/{$idPeriodo}/quincenales/abierto";
 
@@ -1355,7 +1427,7 @@ html;
 			View::set('regreso',"/Incidencia/checadorFechas/{$colaborador_id}/{$periodo_id}/{$vista}/");
 			View::set('mensaje',"Ha ocurrido un problema al agregar la incidencia.");
 		}
-		
+
 		View::set('header',$this->_contenedor->header($extraHeader));
 		View::set('footer',$this->_contenedor->footer($extraFooter));
 		View::render("alerta");
@@ -1442,7 +1514,7 @@ html;
         $nomina .=<<<html
         <option value="vacio">SIN NOMINA NOI</option>
 html;
-      } 
+      }
     }
     return $nomina;
   }
@@ -1456,7 +1528,7 @@ html;
     			<link href="/js/tables/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
     			<link href="/js/tables/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
 html;
-		return $extraHeader;	
+		return $extraHeader;
     }
 
     /*

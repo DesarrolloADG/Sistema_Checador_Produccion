@@ -269,27 +269,30 @@
             </div>
 
 	         <br />
-            <div class="form-group">
-              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="opcion">&nbsp;</label>
-              <div class="col-md-6 col-sm-6 col-xs-12">
-                <p>Para eliminar incentivos puedes darle click en la "X" o quitar la opcion del checkbox</p>
-              </div>
-            </div>
+           <span id = "inc">
+             <!-- MRR -->
+             <div class="form-group">
+               <label class="control-label col-md-3 col-sm-3 col-xs-12" for="opcion">&nbsp;</label>
+               <div class="col-md-6 col-sm-6 col-xs-12">
+                 <p>Para eliminar incentivos puedes darle click en la "X" o quitar la opcion del checkbox</p>
+               </div>
+             </div>
 
-            <div class="form-group">
-              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="incentivos">Incentivos<span class="required">*</span></label>
-              <div class="col-md-6 col-sm-6 col-xs-12">
-                <div class="col-md-9 col-sm-9 col-xs-9">
-                  <select class="form-control" name="incentivos" id="incentivos">
-                    <option value="" hidden>Selecciona un Incentivo</option>
-                    <?php echo $idIncentivo; ?>
-                  </select>
-                </div>
-                <div class="col-md-3 col-sm-3 col-xs-3">
-                  <input type="button" class="btn btn-success" id="btnIncentivoAdd" value="Agregar">
-                </div>
-              </div>
-            </div>
+             <div class="form-group">
+               <label class="control-label col-md-3 col-sm-3 col-xs-12" for="incentivos">Incentivos<span class="required">*</span></label>
+               <div class="col-md-6 col-sm-6 col-xs-12">
+                 <div class="col-md-9 col-sm-9 col-xs-9">
+                   <select class="form-control" name="incentivos" id="incentivos">
+                     <option value="" hidden>Selecciona un Incentivo</option>
+                     <?php echo $idIncentivo; ?>
+                   </select>
+                 </div>
+                 <div class="col-md-3 col-sm-3 col-xs-3">
+                   <input type="button" class="btn btn-success" id="btnIncentivoAdd" value="Agregar">
+                 </div>
+               </div>
+             </div>
+           </span>
 
             <div class="form-group">
               <label class="control-label col-md-3 col-sm-3 col-xs-12" for="incentivo">Incentivos Asignados</label>

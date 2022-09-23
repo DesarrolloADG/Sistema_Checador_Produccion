@@ -129,12 +129,33 @@ sql;
 sql;
       return $mysqli->queryOne($query);
     }
-
-    public static function getLastPeriodoProcesado(){
+    //MRR
+    public static function getLastPeriodoProcesado($identificador){
       $mysqli = Database::getInstance();
       $query=<<<sql
-      SELECT * FROM prorrateo_periodo WHERE tipo = "SEMANAL" AND status > 1
+      #SELECT * FROM prorrateo_periodo WHERE tipo = "SEMANAL" AND status > 1
+      SELECT
+        t1.prorrateo_periodo_id,
+        t1.fecha_inicio,
+        t1.fecha_fin,
+        t1.tipo,
+        t1.status,
+        t3.identificador_noi
+
+      FROM prorrateo_periodo t1
+      INNER JOIN prorrateo_periodo_colaboradores t2 ON t1.prorrateo_periodo_id = t2.prorrateo_periodo_id
+      INNER JOIN catalogo_colaboradores t3 ON t2.catalogo_colaboradores_id = t3.catalogo_colaboradores_id
+      WHERE tipo = "SEMANAL" AND t1.status IN ('3','2') and t3.identificador_noi = '$identificador'
+
+      GROUP BY
+          t1.prorrateo_periodo_id,
+          t1.fecha_inicio,
+          t1.fecha_fin,
+          t1.tipo,
+          t1.status,
+          t3.identificador_noi
 sql;
+      //print_r($query);
       return $mysqli->queryOne($query);
     }
 
@@ -264,10 +285,11 @@ sql;
     public static function searchPeriodos($tipo, $status){
         $mysqli = Database::getInstance();
         $query=<<<sql
-SELECT * FROM prorrateo_periodo 
-WHERE tipo = "$tipo" AND status = "$status" 
-ORDER BY prorrateo_periodo.fecha_inicio DESC
+        SELECT * FROM prorrateo_periodo 
+        WHERE tipo = "$tipo" AND status = "$status" 
+        ORDER BY prorrateo_periodo.fecha_inicio DESC
 sql;
+        //print_r($query);
         return $mysqli->queryAll($query);
     }
 
@@ -412,6 +434,24 @@ sql;
       return $mysqli->insert($query,$params);
     }
 
+    //MRR
+      public static function consultanomnoi($periodo){
+        $mysqli = Database::getInstance();
+        $query =<<<sql
+        SELECT
+          t2.identificador_noi
+        FROM prorrateo_periodo_resumenes t1
+        LEFT JOIN catalogo_colaboradores t2 ON t1.catalogo_colaboradores_id = t2.catalogo_colaboradores_id
+        WHERE
+          T1.prorrateo_periodo_id = '$periodo'
+        GROUP BY
+          t1.prorrateo_periodo_id,
+          t2.identificador_noi
+sql;
+        return $mysqli->queryAll($query);
+        
+      }
+
     public static function updatePeriodoProrrateo($id){
       $mysqli = Database::getInstance();
       $query=<<<sql
@@ -423,8 +463,9 @@ sql;
     public static function getRegistro($prorrateo_periodo_id, $idenficador){
       $mysqli = Database::getInstance();
       $query=<<<sql
-SELECT COUNT(*) AS contador  FROM `prorrateo_periodo_resumenes` WHERE `prorrateo_periodo_id` = $prorrateo_periodo_id AND `identificador` LIKE '$idenficador'
+      SELECT COUNT(*) AS contador  FROM `prorrateo_periodo_resumenes` WHERE `prorrateo_periodo_id` = $prorrateo_periodo_id AND `identificador` LIKE '$idenficador'
 sql;
+      //print_r($query);
       return $mysqli->queryOne($query);
     }
 
@@ -447,9 +488,17 @@ sql;
     public static function verificaAsistenciaFestiva($prorrateo_periodo_id, $catalogo_colaboradores_id, $fecha){
       $mysqli = Database::getInstance();
       $query = <<<sql
-SELECT count(*) AS asistencia FROM prorrateo_periodo_colaboradores WHERE prorrateo_periodo_id = $prorrateo_periodo_id AND catalogo_colaboradores_id = $catalogo_colaboradores_id AND fecha = "$fecha" 
+SELECT count(*) AS asistencia FROM prorrateo_periodo_colaboradores pc
+INNER JOIN catalogo_colaboradores cc ON cc.catalogo_colaboradores_id = pc.catalogo_colaboradores_id
+WHERE pc.prorrateo_periodo_id = $prorrateo_periodo_id 
+AND pc.catalogo_colaboradores_id = $catalogo_colaboradores_id AND pc.fecha = "$fecha" 
+AND cc.catalogo_puesto_id != 30
+AND cc.catalogo_puesto_id != 31
+AND cc.catalogo_horario_id != 10
+AND cc.catalogo_horario_id != 13
+AND cc.catalogo_horario_id != 19
+AND cc.catalogo_horario_id != 22 
 sql;
       return $mysqli->queryOne($query);
     }
-
 }

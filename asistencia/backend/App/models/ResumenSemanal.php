@@ -25,7 +25,7 @@ sql;
         return $mysqli->queryAll($query);
     }
 
-    public static function getAllColaboradoresPago($pago,$id_administrador,$usuario){        
+    public static function getAllColaboradoresPago($pago,$nomnoi,$id_administrador,$usuario){        
         //$distinct = ($id_administrador != '')? '' : ' DISTINCT ';
         $mysqli = Database::getInstance();
         $query=<<<sql
@@ -45,7 +45,7 @@ sql;
         FROM catalogo_colaboradores AS c 
         INNER JOIN catalogo_departamento AS d ON (c.catalogo_departamento_id = d.catalogo_departamento_id) 
         JOIN catalogo_lector l ON (l.catalogo_lector_id = c.catalogo_lector_id)
-        WHERE c.pago = '$pago'
+        WHERE c.pago = '$pago'AND identificador_noi LIKE '%$nomnoi%'
 sql;
         return $mysqli->queryAll($query);
     }
@@ -314,10 +314,34 @@ sql;
         UtileriasLog::addAccion($accion);
         return $id;
       }
+      //MRR
+      public static function consultacierresnomnoi($periodo){
+        $mysqli = Database::getInstance();
+        $query =<<<sql
+        SELECT
+          t2.identificador_noi,
+          t2.pago
+        FROM prorrateo_periodo_colaboradores t1
+        LEFT JOIN catalogo_colaboradores t2 ON t1.catalogo_colaboradores_id = t2.catalogo_colaboradores_id
+        WHERE
+          T1.prorrateo_periodo_id = '$periodo'
+        GROUP BY
+          t1.prorrateo_periodo_id,
+          t2.identificador_noi
+sql;
+        return $mysqli->queryAll($query);
+        
+      }
       
 
-      public static function updatePeriodo($prorrateo_periodo_id, $tipo_periodo){
-        $status = ($tipo_periodo == 'quincenal')? '1': '2';
+      public static function updatePeriodo($prorrateo_periodo_id, $tipo_periodo, $sup){
+        if(empty($sup)){
+          $status = ($tipo_periodo == 'quincenal')? '1': '2';
+        }
+        else{
+          $status = $sup;
+        }
+
       	$mysqli = Database::getInstance();
       	$query =<<<sql
       	update prorrateo_periodo SET status = $status WHERE prorrateo_periodo_id = $prorrateo_periodo_id

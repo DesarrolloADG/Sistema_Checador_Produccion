@@ -21,9 +21,9 @@ sql;
     public static function getPlantilla($id_catalogo_lector){
         $mysqli = Database::getInstance();
         $query=<<<sql
-        SELECT (SELECT plantilla_autorizada FROM catalogo_personal_autorizado WHERE catalogo_lector_id= '$id_catalogo_lector') AS plantilla_autorizada, 
-               (SELECT COUNT(*) AS Activos FROM catalogo_colaboradores AS A WHERE STATUS= 1 AND catalogo_lector_id = $id_catalogo_lector and PAGO = 'SEMANAL') AS activos, 
-               (SELECT plantilla_autorizada FROM catalogo_personal_autorizado WHERE catalogo_lector_id= '$id_catalogo_lector' and PAGO = 'SEMANAL') - 
+        SELECT (SELECT plantilla_autorizada FROM catalogo_personal_autorizado WHERE catalogo_lector_id= '$id_catalogo_lector') AS plantilla_autorizada,
+               (SELECT COUNT(*) AS Activos FROM catalogo_colaboradores AS A WHERE STATUS= 1 AND catalogo_lector_id = $id_catalogo_lector and PAGO = 'SEMANAL') AS activos,
+               (SELECT plantilla_autorizada FROM catalogo_personal_autorizado WHERE catalogo_lector_id= '$id_catalogo_lector' and PAGO = 'SEMANAL') -
                (SELECT COUNT(*) AS Activos FROM catalogo_colaboradores AS A WHERE STATUS= 1 AND catalogo_lector_id = $id_catalogo_lector and PAGO = 'SEMANAL')  AS faltantes
 sql;
         return $mysqli->queryAll($query);
@@ -32,15 +32,15 @@ sql;
     public static function getXochimilco(){
         $mysqli = Database::getInstance();
         $query=<<<sql
-        SELECT (SELECT plantilla_autorizada FROM catalogo_personal_autorizado WHERE unidad= 'Xochimilco') AS plantilla_autorizada, 
-               (SELECT COUNT(*) AS Activos FROM catalogo_colaboradores AS A WHERE STATUS= 1 AND PAGO = 'SEMANAL' AND identificador_noi = 'XOCHIMILCO') AS activos, 
-               (SELECT plantilla_autorizada FROM catalogo_personal_autorizado WHERE unidad= 'Xochimilco') - 
+        SELECT (SELECT plantilla_autorizada FROM catalogo_personal_autorizado WHERE unidad= 'Xochimilco') AS plantilla_autorizada,
+               (SELECT COUNT(*) AS Activos FROM catalogo_colaboradores AS A WHERE STATUS= 1 AND PAGO = 'SEMANAL' AND identificador_noi = 'XOCHIMILCO') AS activos,
+               (SELECT plantilla_autorizada FROM catalogo_personal_autorizado WHERE unidad= 'Xochimilco') -
                (SELECT COUNT(*) AS Activos FROM catalogo_colaboradores AS A WHERE STATUS= 1 AND PAGO = 'SEMANAL' AND identificador_noi = 'XOCHIMILCO')  AS faltantes,
-               
-                   IF((SELECT plantilla_autorizada FROM catalogo_personal_autorizado WHERE unidad= 'Xochimilco') < (SELECT COUNT(*) AS Activos FROM catalogo_colaboradores AS A WHERE STATUS= 1  AND PAGO = 'SEMANAL' AND identificador_noi = 'XOCHIMILCO'), 
-                      
+
+                   IF((SELECT plantilla_autorizada FROM catalogo_personal_autorizado WHERE unidad= 'Xochimilco') < (SELECT COUNT(*) AS Activos FROM catalogo_colaboradores AS A WHERE STATUS= 1  AND PAGO = 'SEMANAL' AND identificador_noi = 'XOCHIMILCO'),
+
                   IF((SELECT plantilla_autorizada FROM catalogo_personal_autorizado WHERE unidad= 'Xochimilco') > (SELECT COUNT(*) AS Activos FROM catalogo_colaboradores AS A WHERE STATUS= 1 AND  PAGO = 'SEMANAL' AND identificador_noi = 'XOCHIMILCO'), 'Incompleta','Sobrepasa'),
-                  
+
                       IF((SELECT plantilla_autorizada FROM catalogo_personal_autorizado WHERE unidad= 'Xochimilco') = (SELECT COUNT(*) AS Activos FROM catalogo_colaboradores AS A WHERE STATUS= 1  AND PAGO = 'SEMANAL' AND identificador_noi = 'XOCHIMILCO'),'Completa','Incompleta'))AS color
 sql;
         return $mysqli->queryAll($query);
@@ -49,15 +49,15 @@ sql;
     public static function getVallejo(){
         $mysqli = Database::getInstance();
         $query=<<<sql
-        SELECT (SELECT plantilla_autorizada FROM catalogo_personal_autorizado WHERE unidad= 'Vallejo') AS plantilla_autorizada, 
-               (SELECT COUNT(*) AS Activos FROM catalogo_colaboradores AS A WHERE STATUS= 1 AND CATALOGO_LECTOR_ID = 2 AND PAGO = 'SEMANAL' AND identificador_noi = 'VALLEJO') AS activos, 
-               (SELECT plantilla_autorizada FROM catalogo_personal_autorizado WHERE unidad= 'Vallejo') - 
+        SELECT (SELECT plantilla_autorizada FROM catalogo_personal_autorizado WHERE unidad= 'Vallejo') AS plantilla_autorizada,
+               (SELECT COUNT(*) AS Activos FROM catalogo_colaboradores AS A WHERE STATUS= 1 AND CATALOGO_LECTOR_ID = 2 AND PAGO = 'SEMANAL' AND identificador_noi = 'VALLEJO') AS activos,
+               (SELECT plantilla_autorizada FROM catalogo_personal_autorizado WHERE unidad= 'Vallejo') -
                (SELECT COUNT(*) AS Activos FROM catalogo_colaboradores AS A WHERE STATUS= 1 AND CATALOGO_LECTOR_ID = 2 AND PAGO = 'SEMANAL' AND identificador_noi = 'VALLEJO')  AS faltantes,
-               
-                   IF((SELECT plantilla_autorizada FROM catalogo_personal_autorizado WHERE unidad= 'Vallejo') < (SELECT COUNT(*) AS Activos FROM catalogo_colaboradores AS A WHERE STATUS= 1 AND CATALOGO_LECTOR_ID = 2 AND PAGO = 'SEMANAL' AND identificador_noi = 'VALLEJO'), 
-                      
+
+                   IF((SELECT plantilla_autorizada FROM catalogo_personal_autorizado WHERE unidad= 'Vallejo') < (SELECT COUNT(*) AS Activos FROM catalogo_colaboradores AS A WHERE STATUS= 1 AND CATALOGO_LECTOR_ID = 2 AND PAGO = 'SEMANAL' AND identificador_noi = 'VALLEJO'),
+
                   IF((SELECT plantilla_autorizada FROM catalogo_personal_autorizado WHERE unidad= 'Vallejo') > (SELECT COUNT(*) AS Activos FROM catalogo_colaboradores AS A WHERE STATUS= 1 AND CATALOGO_LECTOR_ID = 2 AND PAGO = 'SEMANAL' AND identificador_noi = 'VALLEJO'), 'Incompleta','Sobrepasa'),
-                  
+
                       IF((SELECT plantilla_autorizada FROM catalogo_personal_autorizado WHERE unidad= 'Vallejo') = (SELECT COUNT(*) AS Activos FROM catalogo_colaboradores AS A WHERE STATUS= 1 AND CATALOGO_LECTOR_ID = 2 AND PAGO = 'SEMANAL' AND identificador_noi = 'VALLEJO'),'Completa','Incompleta'))AS color
 sql;
         return $mysqli->queryAll($query);
@@ -66,15 +66,15 @@ sql;
     public static function getGATSA(){
         $mysqli = Database::getInstance();
         $query=<<<sql
-           SELECT (SELECT plantilla_autorizada FROM catalogo_personal_autorizado WHERE unidad= 'GATSA') AS plantilla_autorizada, 
-               (SELECT COUNT(*) AS Activos FROM catalogo_colaboradores AS A WHERE STATUS= 1 AND CATALOGO_LECTOR_ID = 3 AND PAGO = 'SEMANAL' AND identificador_noi = 'GATSA') AS activos, 
-               (SELECT plantilla_autorizada FROM catalogo_personal_autorizado WHERE unidad= 'GATSA') - 
+           SELECT (SELECT plantilla_autorizada FROM catalogo_personal_autorizado WHERE unidad= 'GATSA') AS plantilla_autorizada,
+               (SELECT COUNT(*) AS Activos FROM catalogo_colaboradores AS A WHERE STATUS= 1 AND CATALOGO_LECTOR_ID = 3 AND PAGO = 'SEMANAL' AND identificador_noi = 'GATSA') AS activos,
+               (SELECT plantilla_autorizada FROM catalogo_personal_autorizado WHERE unidad= 'GATSA') -
                (SELECT COUNT(*) AS Activos FROM catalogo_colaboradores AS A WHERE STATUS= 1 AND CATALOGO_LECTOR_ID = 3 AND PAGO = 'SEMANAL' AND identificador_noi = 'GATSA')  AS faltantes,
-               
-                   IF((SELECT plantilla_autorizada FROM catalogo_personal_autorizado WHERE unidad= 'GATSA') < (SELECT COUNT(*) AS Activos FROM catalogo_colaboradores AS A WHERE STATUS= 1 and CATALOGO_LECTOR_ID = 3 AND PAGO = 'SEMANAL' AND identificador_noi = 'GATSA'), 
-                      
+
+                   IF((SELECT plantilla_autorizada FROM catalogo_personal_autorizado WHERE unidad= 'GATSA') < (SELECT COUNT(*) AS Activos FROM catalogo_colaboradores AS A WHERE STATUS= 1 and CATALOGO_LECTOR_ID = 3 AND PAGO = 'SEMANAL' AND identificador_noi = 'GATSA'),
+
                   IF((SELECT plantilla_autorizada FROM catalogo_personal_autorizado WHERE unidad= 'GATSA') > (SELECT COUNT(*) AS Activos FROM catalogo_colaboradores AS A WHERE STATUS= 1 and CATALOGO_LECTOR_ID = 3 AND PAGO = 'SEMANAL' AND identificador_noi = 'GATSA'), 'Incompleta','Sobrepasa'),
-                  
+
                       IF((SELECT plantilla_autorizada FROM catalogo_personal_autorizado WHERE unidad= 'GATSA') = (SELECT COUNT(*) AS Activos FROM catalogo_colaboradores AS A WHERE STATUS= 1 and CATALOGO_LECTOR_ID = 3 AND PAGO = 'SEMANAL' AND identificador_noi = 'GATSA'),'Completa','Incompleta'))AS color
 sql;
         return $mysqli->queryAll($query);
@@ -83,15 +83,15 @@ sql;
     public static function getUNIDESH(){
         $mysqli = Database::getInstance();
         $query=<<<sql
-                SELECT (SELECT plantilla_autorizada FROM catalogo_personal_autorizado WHERE unidad= 'UNIDESH') AS plantilla_autorizada, 
-               (SELECT COUNT(*) AS Activos FROM catalogo_colaboradores AS A WHERE STATUS= 1 AND identificador_noi = 'UNIDESH') AS activos, 
-               (SELECT plantilla_autorizada FROM catalogo_personal_autorizado WHERE unidad= 'UNIDESH') - 
+                SELECT (SELECT plantilla_autorizada FROM catalogo_personal_autorizado WHERE unidad= 'UNIDESH') AS plantilla_autorizada,
+               (SELECT COUNT(*) AS Activos FROM catalogo_colaboradores AS A WHERE STATUS= 1 AND identificador_noi = 'UNIDESH') AS activos,
+               (SELECT plantilla_autorizada FROM catalogo_personal_autorizado WHERE unidad= 'UNIDESH') -
                (SELECT COUNT(*) AS Activos FROM catalogo_colaboradores AS A WHERE STATUS= 1 AND identificador_noi = 'UNIDESH')  AS faltantes,
-               
-                   IF((SELECT plantilla_autorizada FROM catalogo_personal_autorizado WHERE unidad= 'UNIDESH') < (SELECT COUNT(*) AS Activos FROM catalogo_colaboradores AS A WHERE STATUS= 1 AND identificador_noi = 'UNIDESH'), 
-                      
+
+                   IF((SELECT plantilla_autorizada FROM catalogo_personal_autorizado WHERE unidad= 'UNIDESH') < (SELECT COUNT(*) AS Activos FROM catalogo_colaboradores AS A WHERE STATUS= 1 AND identificador_noi = 'UNIDESH'),
+
                   IF((SELECT plantilla_autorizada FROM catalogo_personal_autorizado WHERE unidad= 'UNIDESH') > (SELECT COUNT(*) AS Activos FROM catalogo_colaboradores AS A WHERE STATUS= 1 AND identificador_noi = 'UNIDESH'), 'Incompleta','Sobrepasa'),
-                  
+
                       IF((SELECT plantilla_autorizada FROM catalogo_personal_autorizado WHERE unidad= 'UNIDESH') = (SELECT COUNT(*) AS Activos FROM catalogo_colaboradores AS A WHERE STATUS= 1 AND identificador_noi = 'UNIDESH'),'Completa','Incompleta'))AS color
 sql;
         return $mysqli->queryAll($query);
@@ -100,16 +100,16 @@ sql;
     public static function getProduccionXochimilco(){
         $mysqli = Database::getInstance();
         $query=<<<sql
-                  
- SELECT (SELECT plantilla_autorizada FROM catalogo_personal_autorizado WHERE unidad= 'Administrativos') AS plantilla_autorizada, 
-               (SELECT COUNT(*) AS Activos FROM catalogo_colaboradores AS A WHERE STATUS= 1 AND IDENTIFICADOR_NOI = '') AS activos, 
-               (SELECT plantilla_autorizada FROM catalogo_personal_autorizado WHERE unidad= 'Administrativos') - 
+
+ SELECT (SELECT plantilla_autorizada FROM catalogo_personal_autorizado WHERE unidad= 'Administrativos') AS plantilla_autorizada,
+               (SELECT COUNT(*) AS Activos FROM catalogo_colaboradores AS A WHERE STATUS= 1 AND IDENTIFICADOR_NOI = '') AS activos,
+               (SELECT plantilla_autorizada FROM catalogo_personal_autorizado WHERE unidad= 'Administrativos') -
                (SELECT COUNT(*) AS Activos FROM catalogo_colaboradores AS A WHERE STATUS= 1 AND IDENTIFICADOR_NOI = '')  AS faltantes,
-               
-                   IF((SELECT plantilla_autorizada FROM catalogo_personal_autorizado WHERE unidad= 'Administrativos') < (SELECT COUNT(*) AS Activos FROM catalogo_colaboradores AS A WHERE STATUS= 1 AND IDENTIFICADOR_NOI = ''), 
-                      
+
+                   IF((SELECT plantilla_autorizada FROM catalogo_personal_autorizado WHERE unidad= 'Administrativos') < (SELECT COUNT(*) AS Activos FROM catalogo_colaboradores AS A WHERE STATUS= 1 AND IDENTIFICADOR_NOI = ''),
+
                   IF((SELECT plantilla_autorizada FROM catalogo_personal_autorizado WHERE unidad= 'Administrativos') > (SELECT COUNT(*) AS Activos FROM catalogo_colaboradores AS A WHERE STATUS= 1 AND IDENTIFICADOR_NOI = ''), 'Incompleta','Sobrepasa'),
-                  
+
                       IF((SELECT plantilla_autorizada FROM catalogo_personal_autorizado WHERE unidad= 'Administrativos') = (SELECT COUNT(*) AS Activos FROM catalogo_colaboradores AS A WHERE STATUS= 1 AND IDENTIFICADOR_NOI = ''),'Completa','Incompleta'))AS color
 sql;
         return $mysqli->queryAll($query);
@@ -159,11 +159,11 @@ SELECT c.catalogo_colaboradores_id, c.nombre, c.apellido_paterno, c.apellido_mat
 FROM catalogo_colaboradores c
 JOIN catalogo_empresa e ON e.catalogo_empresa_id = c.catalogo_empresa_id
 JOIN catalogo_departamento d ON d.catalogo_departamento_id = c.catalogo_departamento_id
-JOIN catalogo_status s ON s.catalogo_status_id = c.status 
-JOIN catalogo_ubicacion u ON u.catalogo_ubicacion_id = c.catalogo_ubicacion_id 
-JOIN catalogo_puesto p ON p.catalogo_puesto_id = c.catalogo_puesto_id 
-JOIN catalogo_planta cp ON cp.catalogo_planta_id = c.catalogo_ubicacion_id 
-JOIN catalogo_horario h ON h.catalogo_horario_id = c.catalogo_horario_id 
+JOIN catalogo_status s ON s.catalogo_status_id = c.status
+JOIN catalogo_ubicacion u ON u.catalogo_ubicacion_id = c.catalogo_ubicacion_id
+JOIN catalogo_puesto p ON p.catalogo_puesto_id = c.catalogo_puesto_id
+JOIN catalogo_planta cp ON cp.catalogo_planta_id = c.catalogo_ubicacion_id
+JOIN catalogo_horario h ON h.catalogo_horario_id = c.catalogo_horario_id
 sql;
 
 
@@ -171,13 +171,13 @@ sql;
 
         if($accion == 1){
           $query .=<<<sql
-WHERE c.status = 1 AND c.catalogo_departamento_id = "$departamentoId" 
+WHERE c.status = 1 AND c.catalogo_departamento_id = "$departamentoId"
 sql;
         }
 
         if($accion == 2){
           $query .=<<<sql
-WHERE c.status = 1 
+WHERE c.status = 1
 sql;
         }
 
@@ -192,7 +192,7 @@ sql;
 
         if($accion == 2){
           $query .=<<<sql
-WHERE c.status = 1 
+WHERE c.status = 1
 sql;
         }
 
@@ -214,7 +214,7 @@ sql;
 
       if($perfilId == 5){
         $query .=<<<sql
-WHERE c.status = 1 AND c.catalogo_departamento_id = "$departamentoId" 
+WHERE c.status = 1 AND c.catalogo_departamento_id = "$departamentoId"
 sql;
       }
 
@@ -223,7 +223,7 @@ sql;
       }
 
         $query .=<<<sql
-$filtro ORDER BY c.apellido_paterno ASC 
+$filtro ORDER BY c.apellido_paterno ASC
 sql;
 
       return $mysqli->queryAll($query);
@@ -240,7 +240,7 @@ JOIN catalogo_ubicacion u ON u.catalogo_ubicacion_id = c.catalogo_ubicacion_id
 JOIN catalogo_departamento d ON d.catalogo_departamento_id = c.catalogo_departamento_id
 JOIN catalogo_puesto p ON p.catalogo_puesto_id = c.catalogo_puesto_id
 JOIN catalogo_horario h ON h.catalogo_horario_id = c.catalogo_horario_id
-JOIN catalogo_status s ON s.catalogo_status_id = c.status WHERE c.status !=2 $filtro 
+JOIN catalogo_status s ON s.catalogo_status_id = c.status WHERE c.status !=2 $filtro
 sql;
       //print_r($query);
       return $mysqli->queryAll($query);
@@ -395,7 +395,22 @@ sql;
         UtileriasLog::addAccion($accion);
         return $id;
     }
-
+    //MRR
+    public static function getBajaEmpleados(){
+      $mysqli = Database::getInstance();
+      $query = <<<sql
+        SELECT
+          CONCAT(t1.apellido_paterno,' ',t1.apellido_materno,' ',t1.nombre) AS 'nc',
+          t1.fecha_alta AS 'fa',
+          t1.fecha_baja AS 'fb',
+          t2.descripcion AS 'd'
+        FROM catalogo_colaboradores t1
+        INNER JOIN catalogo_motivo t2 ON t1.motivo = t2.id_catatalogo_motivo
+        WHERE
+          status = 3
+sql;
+      return $mysqli->queryAll($query);
+    }
     public static function updateNumeroEmpleado($id, $numero_identificador){
       $mysqli = Database::getInstance();
       $query=<<<sql
@@ -431,9 +446,9 @@ sql;
     public static function getDepartamentosRh(){
         $mysqli = Database::getInstance();
         $query=<<<sql
-        SELECT DISTINCT ad.catalogo_departamento_id, d.nombre AS nombre_departamento 
+        SELECT DISTINCT ad.catalogo_departamento_id, d.nombre AS nombre_departamento
         FROM utilerias_administradores_departamentos AS ad
-        INNER JOIN catalogo_departamento AS d 
+        INNER JOIN catalogo_departamento AS d
         ON (d.catalogo_departamento_id = ad.catalogo_departamento_id)
 sql;
         return $mysqli->queryAll($query);
@@ -442,8 +457,8 @@ sql;
     public static function getDatosUsuarioLogeado($user){
         $mysqli = Database::getInstance();
         $query=<<<sql
-        SELECT *, cp.nombre AS nombre_planta FROM 
-        utilerias_administradores AS a 
+        SELECT *, cp.nombre AS nombre_planta FROM
+        utilerias_administradores AS a
         INNER JOIN catalogo_planta AS cp USING (catalogo_planta_id)
         WHERE usuario LIKE '$user'
 sql;
@@ -650,6 +665,7 @@ sql;
       $query=<<<sql
       SELECT * FROM catalogo_incentivo WHERE status != 2
 sql;
+// print_r($query);
       return $mysqli->queryAll($query);
     }
 
@@ -659,6 +675,59 @@ sql;
       SELECT * FROM catalogo_motivo_baja WHERE status != 2
 sql;
       return $mysqli->queryAll($query);
+    }
+
+    public static function getIncentivos($puesto){
+      $mysqli = Database::getInstance();
+      $query=<<<sql
+      SELECT * FROM catalogo_puesto WHERE catalogo_puesto_id = $puesto
+sql;
+// print_r($query);
+      return $mysqli->queryOne($query);
+    }
+
+    public static function getIn($cci,$cii){
+      $mysqli = Database::getInstance();
+      $query = <<<sql
+      SELECT
+        catalogo_incentivo_id,
+      	cantidad
+      FROM incentivo_colaborador
+      WHERE
+        catalogo_colaboradores_id = $cci AND
+        catalogo_incentivo_id = $cii
+sql;
+    return $mysqli->queryOne($query);
+    }
+
+    public static function getpid(){
+      $mysqli = Database::getInstance();
+      $query = <<<sql
+      SELECT
+      	prorrateo_periodo_id AS 'ppi'
+      FROM prorrateo_periodo
+      WHERE
+      	tipo = 'SEMANAL' AND
+      	status = 0 OR status = 3
+sql;
+    return $mysqli->queryOne($query);
+    }
+
+    public static function insertIncentivos($data){
+        $mysqli = Database::getInstance();
+        $query=<<<sql
+        INSERT INTO incentivos_asignados (colaborador_id, prorrateo_periodo_id, catalogo_incentivo_id, cantidad, asignado, valido) VALUES (:colaborador_id, :prorrateo_periodo_id, :catalogo_incentivo_id, :cantidad, :asignado, :valido);
+sql;
+        $params = array(
+            ':colaborador_id'=>$data->_colaborador_id,
+            ':prorrateo_periodo_id'=>$data->_prorrateo_periodo_id,
+            ':catalogo_incentivo_id'=>$data->_catalogo_incentivo_id,
+            ':cantidad'=>$data->_cantidad,
+            ':asignado'=>$data->_asignado,
+            ':valido'=>$data->_valido
+        );
+
+        return $mysqli->insert($query,$params);
     }
 
     public static function insertIncentivo($incentivo){
@@ -685,6 +754,7 @@ sql;
       JOIN incentivo_colaborador c
       ON i.catalogo_incentivo_id = c.catalogo_incentivo_id  WHERE c.catalogo_colaboradores_id = $id
 sql;
+// print_r($query);
       return $mysqli->queryAll($query);
     }
 
@@ -700,7 +770,34 @@ sql;
       return $mysqli->update($query);
     }
 
+    //MRR
+    public static function getIa($id,$pid){//,$cii
+      $mysqli = Database::getInstance();
+      $query =<<<sql
+        SELECT
+          incentivos_asignados_id AS 'iai'
+        FROM incentivos_asignados
+        WHERE
+          colaborador_id = $id AND
+          prorrateo_periodo_id = $pid
+sql;
+    #AND
+    #catalogo_incentivo_id = $cii
+    // print_r($query);
+      return $mysqli->queryAll($query);
+    }
 
+    public static function delIa($getIa){
+      $mysqli = Database::getInstance();
+      $query =<<<sql
+        DELETE
+        FROM incentivos_asignados
+        WHERE
+        incentivos_asignados_id = $getIa
+sql;
+    // print_r($query);
+      return $mysqli->delete($query);
+    }
 
     public static function insertHorario($horario){
 	    $mysqli = Database::getInstance();
@@ -792,7 +889,23 @@ sql;
 sql;
         return $mysqli->queryOne($query);
       }
+      //MRR
+      public static function getNominaNoi($nominas){
 
+        $mysqli = Database::getInstance();
+        $query=<<<sql
+        SELECT identificador_noi FROM catalogo_colaboradores
+        WHERE identificador_noi NOT IN ($nominas)
+        GROUP BY identificador_noi
+sql;
+
+
+        /*echo '<br/>';
+        print_r($query);
+        echo '<br/>';*/
+        return $mysqli->queryAll($query);
+
+      }
       public static function getCatalogoDepartamento($id){
         $mysqli = Database::getInstance();
         $query=<<<sql
@@ -844,7 +957,7 @@ sql;
       public static function getNominaIdentificador(){
         $mysqli = Database::getInstance();
         $query=<<<sql
-        SELECT identificador_noi FROM catalogo_colaboradores GROUP BY identificador_noi 
+        SELECT identificador_noi FROM catalogo_colaboradores GROUP BY identificador_noi
 sql;
         return $mysqli->queryAll($query);
       }
@@ -856,7 +969,7 @@ sql;
 SELECT dl.nombre AS dia_laboral FROM catalogo_horario ch
 INNER JOIN horario_dias_laborales hdl ON (hdl.catalogo_horario_id = ch.catalogo_horario_id)
 INNER JOIN dias_laborales dl ON (dl.dias_laborales_id = hdl.dias_laborales_id)
-WHERE ch.catalogo_horario_id = $catalogo_horario_id 
+WHERE ch.catalogo_horario_id = $catalogo_horario_id
 sql;
         return $mysqli->queryAll($query);
       }

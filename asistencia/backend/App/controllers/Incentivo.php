@@ -26,8 +26,8 @@ class Incentivo extends Controller{
 
   public function seccion($nomina /*SEMANAL - QUINCENAL - SHISTORICOS - QHISTORICOS*/, $tipoBusqueda /* 0.ABIERTOS - 1.PROCESO - 2.CERRADOS */) {
     $user = GeneralDao::getDatosUsuarioLogeado($this->__usuario);
-    //$user = GeneralDao::getDatosUsuarioLogeado("lgarcia"); 
-    //echo "<pre>"; print_r($user); echo "</pre>"; 
+    //$user = GeneralDao::getDatosUsuarioLogeado("lgarcia");
+    //echo "<pre>"; print_r($user); echo "</pre>";
     $datos['c.pago'] = ucwords(strtolower($nomina));
     $filtros = $datos;
     View::set('mensaje',$this->getTituloPeriodo($nomina, $tipoBusqueda));
@@ -78,7 +78,7 @@ html;
     }elseif($perfil == 6){ // PERFIL RECURSOS HUMANOS
       if($planta == 1) $titulo .= "Administra a todos los usuarios";
       else $titulo .= "Recursos humanos {$identificador}, Administra a usuarios de {$identificador}";
-    }else{ // NO HAY PERFIL 
+    }else{ // NO HAY PERFIL
       $titulo .= " -> lo sentimos, no hay ningun perfil asignado para este usuario.";
     }
     return " " . $titulo;
@@ -105,8 +105,8 @@ html;
 html;
       View::set('msjPeriodo',$tituloPeriodo);
       View::set('hidden',"display:none");
-    }elseif($tipoBusqueda == 1){ /* CUANDO SE BUSCA POR SEMANALES O QUINCENALES HISTORICOS */ 
-      $periodo = GeneralDao::getPeriodo($data); 
+    }elseif($tipoBusqueda == 1){ /* CUANDO SE BUSCA POR SEMANALES O QUINCENALES HISTORICOS */
+      $periodo = GeneralDao::getPeriodo($data);
       $periodoshtml = "";
       foreach ($periodo as $key => $value) {
 
@@ -124,10 +124,10 @@ html;
       }
       View::set('hidden',"");
       View::set('periodos',$periodoshtml);
-    }elseif($tipoBusqueda == 3){ /* CUANDO SE BUSCA UN UNICO PERIODO */ 
+    }elseif($tipoBusqueda == 3){ /* CUANDO SE BUSCA UN UNICO PERIODO */
 
     }
-    
+
   }
 
   /* ***************************************************************************** */
@@ -191,7 +191,7 @@ html;
   public function quincenales(){
     $user = GeneralDao::getDatosUsuario($this->__usuario);
 
-    if($user['perfil_id'] == 6){  
+    if($user['perfil_id'] == 6){
       $val = ($user['catalogo_planta_id'] == 1) ? 1 : 5;
       $tituloVista = "Incentivos propios <b>" . strtoupper($user['nombre_planta']) . "</b> - depto. <b>" . strtoupper($user['nombre']) . "</b>";
     }else{
@@ -210,7 +210,7 @@ html;
         $val = 6;
       }
     }
-    
+
     $idPeriodo = $this->getIdPeriodo("QUINCENAL", 0);
     View::set('msjPeriodo',$this->getPeriodo("QUINCENAL", 0));
     View::set('tipoPeriodo',$tituloVista); // Identificacion del periodo
@@ -270,10 +270,10 @@ html;
     // TERMINO DE FILTROS DE LA TABLA
 
     View::set('periodo',$idPeriodo);
-	
+
 
     View::set('form',"/Incentivo/historicosSemanales/");
-        
+
     View::set('tipoPeriodo',$tituloVista); // Identificacion del periodo
     View::set('tituloIncentivos',"Semanales");
 
@@ -312,7 +312,7 @@ html;
       }
     }
 
-    
+
 
     View::set('tipoPeriodo',$tituloVista); // Identificacion del periodo
     View::set('tituloIncentivos',"Quincenales");
@@ -340,8 +340,8 @@ html;
 
     $getStatusPeriodo = GeneralDao::getLastPeriodo("SEMANAL");
 
-    
-    
+
+
     $idPeriodo = $this->getIdPeriodo("SEMANAL", $getStatusPeriodo['status']);
     View::set('msjPeriodo',$this->getPeriodo("SEMANAL", $getStatusPeriodo['status']));
     View::set('tituloIncentivos',"Semanales");
@@ -376,7 +376,7 @@ html;
     View::set('footer',$this->_contenedor->footer($this->getFooter()));
     View::render("incentivos_abiertos");
   }
-  
+
   public function propiosSemanalesHistoricos(){
     $user = GeneralDao::getDatosUsuario($this->__usuario);
 
@@ -443,7 +443,7 @@ html;
       $tituloVista = "TODOS los Incentivos de ROOT - Planta " . strtolower($user['nombre_planta']) . " - Depto. " . $user['nombre'];
       $val = 2; // TIENE INCENTIVOS PROPIOS
     }
-        
+
     View::set('tipoPeriodo',$tituloVista); // Identificacion del periodo
     View::set('tituloIncentivos',"Semanales");
     View::set('msjPeriodo',$msjPeriodofechas);
@@ -465,7 +465,7 @@ html;
       <link href="/js/tables/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
       <link href="/js/tables/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
 html;
-    return $extraHeader;  
+    return $extraHeader;
   }
 
   public function getFooter(){
@@ -486,7 +486,7 @@ html;
       <script src="/js/tables/vendors/jszip/dist/jszip.min.js"></script>
       <script src="/js/tables/vendors/pdfmake/build/pdfmake.min.js"></script>
       <script src="/js/tables/vendors/pdfmake/build/vfs_fonts.js"></script>
-      
+
       <script>
         $(document).ready(function(){
 
@@ -555,7 +555,7 @@ html;
         $filtros = $this->getFiltro($post);
 
       $tabla = "";
-      foreach (GeneralDao::getColaboradores($tipo, $perfilUsuario, $catalogDepartamentoId, $catalogoPlantaId, $estatusRH, $nombrePlanta, $filtros) as $key => $value) {  
+      foreach (GeneralDao::getColaboradores($tipo, $perfilUsuario, $catalogDepartamentoId, $catalogoPlantaId, $estatusRH, $nombrePlanta, $filtros) as $key => $value) {
         $value['apellido_materno'] = utf8_encode($value['apellido_materno']);
         $value['apellido_paterno'] = utf8_encode($value['apellido_paterno']);
         $value['nombre'] = utf8_encode($value['nombre']);
@@ -591,7 +591,7 @@ html;
       $htmlIncentivos = "";
       foreach (IncentivoDao::getIncentivosPorColabordor($idColaborador) as $key => $value) {
         $htmlIncentivos .=<<<html
-        <p> 
+        <p>
           <span class="fa fa-circle" style="color:{$value['color']}">
           </span> </a> {$value['nombre']}: <i>$ {$value['cantidad']}</i>
         </p>
@@ -631,7 +631,7 @@ html;
       $htmlPeriodo = <<<html
       <b>( {$fechaIni} al {$fechaFin} )</b> <label class="{$statusColor}">periodo {$texto}</label>
 html;
-      } 
+      }
       return $htmlPeriodo;
     }
 
@@ -731,7 +731,7 @@ html;
     }
 
     /*
-    Muestra el estatus del periodo y las fechas 
+    Muestra el estatus del periodo y las fechas
     */
     public function getTextoPeriodo($periodo, $regreso, $perfilUser){
       $fechaIni = MasterDom::getFecha($periodo['fecha_inicio']);
@@ -745,11 +745,11 @@ html;
       <div class="row">
         <div class="col-md-1 col-sm-1 col-xs-12">
           <div class="pane">
-            <a href="/Incentivo/{$regreso}/" style="color:white; text-align:center; "> 
+            <a href="/Incentivo/{$regreso}/" style="color:white; text-align:center; ">
               <div class="panel-body btn-primary" style="padding-top:25px; padding-bottom: 25px;" >
                 <span style="font-size: 30px;" class="glyphicon glyphicon-chevron-left"></span>
               </div>
-            </a> 
+            </a>
           </div>
         </div>
 
@@ -856,7 +856,7 @@ html;
       <script>
         $(document).ready(function(){
 
-            // $('#horas_extra').on('input', function () { 
+            // $('#horas_extra').on('input', function () {
             //   var pattern = /[^0-9\.]/g; // cualquier cosa que no sea numero y punto;
             //   this.value = this.value.replace(pattern, '');
             // });
@@ -867,7 +867,7 @@ html;
                 url: "/Incentivo/getValor/",
                 type: "post",
                 success: function(data){
-                  
+
                   var obj = jQuery.parseJSON(data);
                   if(obj.status == true){
                     alertify.confirm('Se guardara la siguiente cantidad de: ' + obj.cantidad, function(response){
@@ -885,7 +885,7 @@ html;
                 }
               });
             });
-            
+
 
             var checkAll = 0;
             $("#checkAll").click(function () {
@@ -945,15 +945,15 @@ html;
 html;
         for($i = 1; $i <= count(IncentivoDao::getIncentivoColaborador($idColaborador)); $i++){
           $extraFooter .=<<<html
-          var total{$i} = + $(".tp{$i}").val() || 0; $(".ta{$i}").keyup(function() { 
-            var vat{$i} = + $(this).val() || 0; 
+          var total{$i} = + $(".tp{$i}").val() || 0; $(".ta{$i}").keyup(function() {
+            var vat{$i} = + $(this).val() || 0;
             $(".tp{$i}").val(vat{$i} * total{$i});
           });
-          
-          $("#total{$i}").change(function() { 
-            $("#cantidadTotalIncentivo{$i}").val($("#total{$i}").val()); 
-          }); 
-          
+
+          $("#total{$i}").change(function() {
+            $("#cantidadTotalIncentivo{$i}").val($("#total{$i}").val());
+          });
+
           $("#klient_open_4_end").change(function(){
             if($(this).prop("checked")){
               $("#nightlife_open_7_end").prop("disabled",true);
@@ -965,13 +965,13 @@ html;
 
           $('input[name="uno{$i}"]').on('switchChange.bootstrapSwitch', function(event, state) {
             if(state){
-              $(".add{$i}").val("ok"); 
+              $(".add{$i}").val("ok");
               var cantidad{$i} = $(".ta{$i}").val();
-              if(cantidad{$i}<1){ 
-                $(".ta{$i}").val(1); 
+              if(cantidad{$i}<1){
+                $(".ta{$i}").val(1);
               }
             }else{
-              $(".add{$i}").val("none"); 
+              $(".add{$i}").val("none");
             }
           });
 html;
@@ -986,13 +986,13 @@ html;
 html;
 
     View::set('regreso',$regreso);
-    
+
     $user = GeneralDao::getDatosUsuario($this->__usuario);
     $colaborador = IncentivoDao::getColaborador($idColaborador); // Obtiene la informacion del colaborador a a buscar
 
     $periodo = IncentivoDao::getPeriodo($idPeriodo); // Busca los datos del periodo
-    $incentivoAsignado = IncentivoDao::getIncentivoColaborador($idColaborador); 
-    
+    $incentivoAsignado = IncentivoDao::getIncentivoColaborador($idColaborador);
+
     $tablaIncentivosParaAsignar = $this->getTablaIncentivosParaAsignar($incentivoAsignado, $idPeriodo);
     $tablaIncentivosResumen = $this->getTablaIncentivosResumen($idColaborador, $idPeriodo, $colaborador['catalogo_lector_id']);
     $tablaEliminarIncentivos = $this->getTablaIncentivosEliminar($idColaborador, $idPeriodo, $colaborador['catalogo_lector_id']);
@@ -1000,13 +1000,13 @@ html;
     $cantidad = IncentivoDao::getIncentivosColaboradorResumen($idColaborador, $idPeriodo);
 
     /*
-      MUESTRA SI EL COLABORADOR TIENE FALTAS Y PUEDE IR A AGREGAR INCIDENCIAS PARA NO TERNER FALTAS 
+      MUESTRA SI EL COLABORADOR TIENE FALTAS Y PUEDE IR A AGREGAR INCIDENCIAS PARA NO TERNER FALTAS
     */
     View::set('resumenes',$this->setTablaAsistencia($idColaborador,$idPeriodo));
 
     $faltasPorPeriodoColaborador = $this->getFaltasColaborador($idColaborador,$idPeriodo);
     View::set('faltasPeriodo', "" . $faltasPorPeriodoColaborador);
-    
+
     /*
       Creacion de seccion para los de PAM
     */
@@ -1021,28 +1021,28 @@ html;
       $extraFooter .=<<<html
         <script>
           $(document).ready(function(){
-            
+
             // INICIO DE CONDICIONES
             // cantidad_botes_yema
             // cantidad_botes_precio_yema
             // contidad_total_yema
 
-            $('#select_cantidad_botes_1').on('input', function () { 
+            $('#select_cantidad_botes_1').on('input', function () {
               var pattern = /[^0-9\.]/g; // cualquier cosa que no sea numero y punto;
               this.value = this.value.replace(pattern, '');
             });
 
-            $('#select_cantidad_botes_2').on('input', function () { 
+            $('#select_cantidad_botes_2').on('input', function () {
               var pattern = /[^0-9\.]/g; // cualquier cosa que no sea numero y punto;
               this.value = this.value.replace(pattern, '');
             });
 
-            $('#select_cantidad_botes_3').on('input', function () { 
+            $('#select_cantidad_botes_3').on('input', function () {
               var pattern = /[^0-9\.]/g; // cualquier cosa que no sea numero y punto;
               this.value = this.value.replace(pattern, '');
             });
 
-            
+
             // ESTE ES LA OPERACION PARA LA PRIMERA LINEA DE CLARA
               $('#input_cantidad_botes_precio_1').on('keyup keydown keypress change', function() {
                 if ($(this).val() == '') {
@@ -1218,13 +1218,13 @@ html;
       //echo "<pre>";print_r($colaborador['numero_identificador']);echo "</pre>";
       $calculoHorasExtra = $this->getCalculoHorasExtra($salarioDiario['sal_diario'], $hExtra);
       View::set('salMinimo',$salarioDiario['sal_diario']);
-      View::set('calculoHorasExtra',"$" . $calculoHorasExtra);      
+      View::set('calculoHorasExtra',"$" . $calculoHorasExtra);
       View::set('seleccionHorasExtra',$this->setHorasExtra($idColaborador, $idPeriodo,"MODIFICAR", $tipo, 1));
     }else{
       $salarioDiario = IncentivoDao::getSalarioDiario($colaborador['clave_noi']);
       //echo "<pre>";print_r($colaborador['numero_identificador']);echo "</pre>";
       View::set('salMinimo',$salarioDiario['sal_diario']);
-      View::set('calculoHorasExtra',"$ 0.00");      
+      View::set('calculoHorasExtra',"$ 0.00");
       View::set('seleccionHorasExtra',$this->setHorasExtra($idColaborador, $idPeriodo,"INSERTAR", $tipo, 0));
     }
 
@@ -1236,7 +1236,7 @@ html;
 
 
 
-    
+
 
     $domingoProcesos = IncentivoDao::getDomingoProcesos($idColaborador, $idPeriodo);
     $domingoLaborado = IncentivoDao::getDomingoLaborado($idColaborador, $idPeriodo);
@@ -1280,36 +1280,36 @@ html;
     }
 
     $extraFooter.=<<<html
-<script> 
-  $(document).ready(function(){ 
+<script>
+  $(document).ready(function(){
     $("#add").click(function() {
       $(".collapse-link-incentivos-asignados").click();
       $(".collapse-link-1-incentivos").click();
     });
-  }); 
+  });
 </script>
 html;
 
 
-    
+
 
     $showTextBtnActualizar = ( count($domingoProcesos)>0 || count($domingoLaborado)>0) ? "Actualizar datos" : "Agrear Valores";
     $accionesComplementarias = ( count($domingoProcesos)>0 || count($domingoLaborado)>0) ? "updateDomingos" : "addDomingos";
     $btnAccionesComplementarias = ( count($domingoProcesos)>0 || count($domingoLaborado)>0) ? "btn-info" : "btn-success";
     // Validar que estos datos ya existen en la base de datos
-    $checkeddomingoProcesos = (count($domingoProcesos)>0) ? "checked" : "";    
+    $checkeddomingoProcesos = (count($domingoProcesos)>0) ? "checked" : "";
     $checkeddomingoLaborado = (count($domingoLaborado)>0) ? "checked" : "";
     View::set('showTextBtnActualizar',$showTextBtnActualizar); // Texto del buton de agregar datos
     // Validar que estos datos ya existen en la base de datos
-    $checkeddomingoProcesos = (count($domingoProcesos)>0) ? "checked" : "";    
+    $checkeddomingoProcesos = (count($domingoProcesos)>0) ? "checked" : "";
     $checkeddomingoLaborado = (count($domingoLaborado)>0) ? "checked" : "";
     View::set('showTextBtnActualizar',$showTextBtnActualizar); // Texto del buton de agregar datos
     View::set('checkdomingoProcesos', $checkeddomingoProcesos); // value CHECKED del input checked
     View::set('checkdomingoLaborado', $checkeddomingoLaborado); // value CHECKED del input checked
-    // Valores del complementarios 
+    // Valores del complementarios
     View::set('domingoProcesos', $this->calculoDomingoProcesos(GeneralDao::getDatosColaborador($idColaborador))); // Muestra la cantidad que puede tener por domingos procesados
     View::set('domingoLaborado', $this->calculoDomingoLaborado(GeneralDao::getDatosColaborador($idColaborador))); // Muestra la cantidad que puede tener por domingo laborales
-    View::set('accionesComplementarias', $accionesComplementarias); // Envia el formulario si hay acciones complementarias o no 
+    View::set('accionesComplementarias', $accionesComplementarias); // Envia el formulario si hay acciones complementarias o no
     View::set('btnAccionesComplementarias',$btnAccionesComplementarias); // Muestra el color de la accion que se realizara
 
     View::set('btnAddIncentivos',($tipo=="historicosSemanales") ? "display:none;":"");
@@ -1329,13 +1329,13 @@ html;
     $this->muestraBotesPamLiquidos($cantidad,$idColaborador, $idPeriodo, $incentivoAsignado);
     $this->alertasPlataforma($he, $domingoProcesos['domigo_procesos'], $domingoLaborado['domingo_laborado'], count($incentivoAsignado), count($incentivosR), $cantidad, $colaborador['catalogo_lector_id']);
 
-    // SUMA DE PERCEPCIONES 
+    // SUMA DE PERCEPCIONES
     $opePercepciones = $calculoHorasExtra + $domingo + $cantidad['cantidad_incentivos_asignados'];
     $opeP = number_format($opePercepciones, 2, '.', '');
 
     View::set('sumaTotalPercepciones',"$ " .$opePercepciones); // HOLA123
 
-    // CANTIDAD DE HORAS EXTRA EN PESOS 
+    // CANTIDAD DE HORAS EXTRA EN PESOS
 
 
     View::set('cantidadIncentivos',"$ " . $nuevoResultado);
@@ -1358,7 +1358,7 @@ html;
       $htmlHorasExtra .= "<span class=\"glyphicon glyphicon-remove\"></span>";
       $colorhtmlHorasExtra .= "color:red";
     }
-    
+
 
     $htmlDomingo = "";
     $colorhtmlDomingo = "";
@@ -1372,7 +1372,7 @@ html;
       $htmlDomingo .= "<span class=\"glyphicon glyphicon-remove\"></span>";
       $colorhtmlDomingo .= "color:red";
     }
-    
+
 
     $htmlListaIncentivos = "";
     $colorHtmlListaIncentivos = "";
@@ -1383,7 +1383,7 @@ html;
       $htmlListaIncentivos .= "<span class=\"glyphicon glyphicon-remove\"></span>";
       $colorHtmlListaIncentivos .= "color:red";
     }
-    
+
 
     $htmlResumenIncentivosAsignados = "";
     $colorHtmlResumenIncentivosAsignados = "";
@@ -1394,7 +1394,7 @@ html;
       $htmlResumenIncentivosAsignados .= "<span class=\"glyphicon glyphicon-remove\"></span>";
       $colorHtmlResumenIncentivosAsignados .= "color:red";
     }
-    
+
 
     View::set('alertaHorasExtra',$htmlHorasExtra);
     View::set('colorhtmlHorasExtra',$colorhtmlHorasExtra);
@@ -1407,7 +1407,7 @@ html;
   }
 
   public function muestraBotesPamLiquidos($cantidad, $idColaborador, $idPeriodo, $incentivoAsignado){
-    
+
     // MUESTRA DE INCENTIVOS PARA LOS BOTES
     $resumenIncentivo = IncentivoDao::getIncentivosColaboradorResumen($idColaborador, $idPeriodo);
     $sum = "";
@@ -1425,7 +1425,7 @@ html;
 
       if($value['catalogo_incentivo_id'] == 47)
         array_push($incentivoDinero, $value['cantidad']);
-      
+
     }
 
     if(count($incentivoParaValidar) > 0){
@@ -1476,7 +1476,7 @@ html;
     }
 
     //if(count($incentivoAsignado) == count($resumenIncentivo) || count($incentivoAsignado) < count($resumenIncentivo)){
-      
+
     /*  $arrSuma = array();
       $arrData = array();
       $arrBotesExtra = array();
@@ -1495,8 +1495,8 @@ html;
       $display = "";
       $arrBotesExtra = (!empty($arrBotesExtra[0])) ? "$" . number_format($arrBotesExtra[0], 2, '.', '') : "0";
       $botesExtraIncentivo = " - Cantidad Extra botes <span class=\"label label-info\" style=\"color:white;\"> {$arrBotesExtra}</span>";
-      if(count($arrData) == 1){ // A 10 pesos 
-        // LO SIGUIENTE ES PARA MODIFICAR LOS BOTES JUNTO CON EL PRECIO QUE TIENEN CADA UNO 
+      if(count($arrData) == 1){ // A 10 pesos
+        // LO SIGUIENTE ES PARA MODIFICAR LOS BOTES JUNTO CON EL PRECIO QUE TIENEN CADA UNO
         $botesPrecio = IncentivoDao::getPrecioNoCompletoBotes();
         View::set('clara_valor',$botesPrecio['clara']);
         View::set('yema_valor',$botesPrecio['yema']);
@@ -1506,7 +1506,7 @@ html;
         View::set('display_huevo_liquido',($botesPrecio['huevo_liquido_activo'] == 'si') ? "" : "display:none;" );
         $sumMsj = "<b> No se va agregar la cantidad completa, ya que falto un incentivo - Cantidad:<span class=\"label label-warning\" style=\"color:white;\"> $ {$sum} </span></b> {$botesExtraIncentivo}";
       }elseif(count($arrData) == 2){ // PAGO A 15
-        // LO SIGUIENTE ES PARA MODIFICAR LOS BOTES JUNTO CON EL PRECIO QUE TIENEN CADA UNO 
+        // LO SIGUIENTE ES PARA MODIFICAR LOS BOTES JUNTO CON EL PRECIO QUE TIENEN CADA UNO
         $botesPrecio = IncentivoDao::getPrecioCompletoBotes();
         View::set('clara_valor',$botesPrecio['clara']);
         View::set('yema_valor',$botesPrecio['yema']);
@@ -1550,7 +1550,7 @@ html;
     $huevo  = (!empty(MasterDom::getData('huevo_liquido_valor'))) ? MasterDom::getData('huevo_liquido_valor') : 0;
     $selecionHuevo  = (!empty(MasterDom::getData('select_cantidad_botes_3'))) ? trim(MasterDom::getData('select_cantidad_botes_3')) : 0;
     $valorTotalHuevo  = (!empty(MasterDom::getData('input_contidad_total_3'))) ? MasterDom::getData('input_contidad_total_3') : 0;
-    
+
     $class = "";
     $texto = "";
     if($cantidad > 0){
@@ -1561,6 +1561,8 @@ html;
       $data->_cantidad  = MasterDom::getData('cantidad_asignar_botes');
       $data->_catalogo_incentivo_id  = MasterDom::getData('incentivo');
       $data->_precio_bote  = $clara."-".$selecionClara."-".$valorTotalClara.",".$yema."-".$selecionYema."-".$valorTotalYema.",".$huevo."-".$selecionHuevo."-".$valorTotalHuevo;//MasterDom::getData('precio_por_bote');
+      print_r($data);
+      exit;
       $busqueda = IncentivoDao::busquedaBotesNuevos($data);
       if($busqueda < 0){
         $class = "info";
@@ -1574,7 +1576,7 @@ html;
           $texto .= "Se ha agregado la cantidad de $ {$cantidad}, como un incentivo de botes extra - ";
         }else{
           $class = "danger";
-          $texto = "Ups! ha ocurrido un error.";  
+          $texto = "Ups! ha ocurrido un error.";
         }
       }
     }else{
@@ -1607,6 +1609,18 @@ html;
 
   public function getTablaIncentivosParaAsignar($incentivoAsignado, $idPeriodo){
     $tabla = "";
+    foreach (IncentivoDao::empleadosPAMReadonly($incentivoAsignado[0]['catalogo_colaboradores_id']) as $pam) {
+      $in = $pam['in'];
+      $cpi = $pam['cpi'];
+    }
+    
+    if ($cpi == 21) {
+      $readonly = 'readonly';
+    }
+    else {
+      $readonly = '';
+    }
+
     foreach ($incentivoAsignado as $key => $value) {
       $key = $key + 1;
       $dato = $this->getCantidad($value['fijo']);
@@ -1629,7 +1643,7 @@ html;
             <input class="tp{$key}" type="text" value="{$value['cantidad']}" disabled />
           </td>
           <td>
-            <input type="checkbox" class="switch" data-on-text="SI" data-off-text="NO" name="uno{$key}">
+            <input type="checkbox" class="switch" data-on-text="SI" data-off-text="NO" name="uno{$key}" {$readonly}>
             <input type="hidden" name="data-{$key}[]" value="{$value['repetitivo']}"  />
           </td>
         </tr>
@@ -1646,6 +1660,237 @@ html;
     View::set('header',$this->_contenedor->header());
     View::set('footer',$this->_contenedor->footer());
     View::render('pago_botes');
+  }
+
+//MRR
+  public function ingresoBotes(){
+    $extraFooter =<<<html
+      <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+      <script>
+        $(document).ready(function(){
+          $("#btnCancel").click(function(){
+            window.location.href = "/Principal/";
+          });
+          // $('#nombre').select2();
+
+          $("#existente").bootstrapSwitch();
+          $('input[name="existente"]').on('switchChange.bootstrapSwitch', function(event, state) {
+            if(state){
+              $("#identificador").show();
+              $("#tabla_muestra").show();
+            }
+            else{
+              $("#identificador").hide();
+              $("#tabla_muestra").hide();
+              $("input[type=radio]").attr('checked', false);
+            }
+          });
+
+          $("#muestra-cupones").tablesorter();
+          var oTable = $('#muestra-cupones').DataTable({
+            "columnDefs": [{
+              "orderable": false,
+              "targets": 0
+            }],
+            "order": false,
+            "language": {
+              "emptyTable": "No hay datos disponibles",
+              "infoEmpty": "Mostrando 0 a 0 de 0 registros",
+              "info": "Mostrar _START_ a _END_ de _TOTAL_ registros",
+              "infoFiltered":   "(Filtrado de _MAX_ total de registros)",
+              "lengthMenu": "Mostrar _MENU_ registros",
+              "zeroRecords":  "No se encontraron resultados",
+              "search": "Buscar:",
+              "processing": "Procesando...",
+              "paginate" : {
+                "next": "Siguiente",
+                "previous" : "Anterior"
+              }
+            }
+          });
+
+          $('#muestra-cupones input[type=search]').keyup( function () {
+            var table = $('#example').DataTable();
+            table.search(
+              jQuery.fn.DataTable.ext.type.search.html(this.value)
+            ).draw();
+          });
+
+          $(document).on("change","#identificador",function(e){ //"#identificador"
+            e.stopPropagation();//evita que se ejecute 2 veces el mismo evento
+            $.ajax({
+              url:'/Incentivo/ingresoBotes/',
+              type:'POST',
+              data:{"identificador": $(this).val()},
+              success:function(response){
+                $("#tabla_muestra").html(response);
+                $('#muestra-cupones').DataTable({
+                  "columnDefs": [{
+                    "orderable": false,
+                    "targets": 0
+                  }],
+                  "order": false,
+                  "language": {
+                    "emptyTable": "No hay datos disponibles",
+                    "infoEmpty": "Mostrando 0 a 0 de 0 registros",
+                    "info": "Mostrar _START_ a _END_ de _TOTAL_ registros",
+                    "infoFiltered":   "(Filtrado de _MAX_ total de registros)",
+                    "lengthMenu": "Mostrar _MENU_ registros",
+                    "zeroRecords":  "No se encontraron resultados",
+                    "search": "Buscar:",
+                    "processing": "Procesando...",
+                    "paginate" : {
+                        "next": "Siguiente",
+                        "previous" : "Anterior"
+                    }
+                  }
+                });//fin del dataTable
+              }
+            });//fin del ajax
+          });//fin del evento change de #identificador
+        });
+      </script>
+html;
+
+    if ($periodo = IncentivoDao::periodo()) {
+      $colab_bote = IncentivoDao::avanceBotes('',$periodo['prorrateo_periodo_id']);
+      $metac = 18 * 6;
+      $metay = 14.5 * 6;
+      $tabla = "";
+      foreach ($colab_bote as $key => $value) {
+        if ($value['sbc'] >= 108) {
+          $statusc = true;
+        }
+        else {
+          $statusc = false;
+        }
+        if ($value['sby'] >= 87) {
+          $statusy = true;
+        }
+        else {
+          $statusy = false;
+        }
+        if (($statusc == true) && ($statusy == true)) {
+          $status = 1;
+        }
+
+        $restc = $metac - $value['sbc'];
+        $resty = $metay - $value['sby'];
+        if ($status == 1) {
+          $status = 'Derecho a Incentivos';
+          $style = 'style="background-color: green; color: white"';
+        }
+        else {
+          $status = 'Sin Derecho a Incentivos';
+          $style = 'style="background-color: red; color: white"';
+        }
+        $value['nc'] = utf8_encode($value['nc']);
+        $value['sbc'];
+        $value['sby'];
+        $tabla .=<<<html
+        <tr>
+        <td>{$value['nc']}</td>
+        <td>{$value['sby']}</td>
+        <td>{$metay}</td>
+        <td>{$resty}</td>
+        <td>{$value['sbc']}</td>
+        <td>{$metac}</td>
+        <td>{$restc}</td>
+        <td {$style}>{$status}</td>
+        </tr>
+html;
+      }
+      $nombres = "";
+      foreach (IncentivoDao::empleadosPAM() as $key => $value) {
+        $nombre = utf8_encode($value['nc']);
+        $nombres .=<<<html
+        <option value="{$value['cci']}">{$nombre}</option>
+html;
+      }
+      $dias = '';
+      foreach (IncentivoDao::dias() as $key => $value) {
+        $dias .= <<<html
+        <option value="{$value['dli']}">{$value['dia']}</option>
+html;
+      }
+      View::set('nombres',$nombres);
+      View::set('dias',$dias);
+      View::set('tabla',$tabla);
+      View::set('header',$this->_contenedor->header());
+      View::set('footer',$this->_contenedor->footer($extraFooter));
+      View::render('ingreso_botes');
+    }
+    else {
+      View::set('error',"Error Periodo");
+      View::set('tituloError',"Al parecer no hay periodo Abierto");
+      $display = "style=\"display:none;\" ";
+      View::set('visualizar', $display);
+      View::set('mensajeError',"Debe existir un periodo Abierto, para agregar botes");
+      View::render("error");
+    }
+  }
+
+  public function agregarBotes(){
+    $periodo = IncentivoDao::periodo();
+    $id = MasterDom::getData('nombre');
+    $clara = MasterDom::getData('clara');
+    $yema = MasterDom::getData('yema');
+
+    $data = new \stdClass();
+    $data->_periodo = $periodo['prorrateo_periodo_id'];
+    $data->_nombre = MasterDom::getData('nombre');
+    $data->_dia = MasterDom::getData('dias');
+    $data->_clara = MasterDom::getData('clara');
+    $data->_yema = MasterDom::getData('yema');
+
+    $insert = IncentivoDao::inserBotesDias($data);
+
+    $colab_bote = IncentivoDao::avanceBotes($id,$periodo['prorrateo_periodo_id']);
+    if (($colab_bote['sby'] >= 87) && ($colab_bote['sbc'] >= 108)) {
+      $conince = IncentivoDao::derechoIncentivo($id,$periodo['prorrateo_periodo_id']);
+      if ($conince[0] == '') {
+        //insertar incentivos
+        $ince = new \stdClass();
+        $ince->_colaborador_id = $id;
+        $ince->_prorrateo_periodo_id = $periodo['prorrateo_periodo_id'];
+        foreach (IncentivoDao::incentivoColaborador($ince->_colaborador_id) as $k => $val){
+          $ince->_catalogo_incentivo_id = $val['catalogo_incentivo_id'];
+          $ince->_cantidad = $val['cantidad'];
+          $ince->_asignado = 0;
+          $ince->_valido = 0;
+          $reg = IncentivoDao::insertIncentivos2($ince);
+        }
+      }
+      //incentivo botes extra
+      $inceb = new \stdClass();
+      $inceb->_colaborador_id = $id;
+      $inceb->_prorrateo_periodo_id = $periodo['prorrateo_periodo_id'];
+      $inceb->_catalogo_incentivo_id = 47;
+
+      $botea = IncentivoDao::busquedaBotesNuevos1($inceb);
+      if ($botea != '') {
+        $delete= IncentivoDao::deleteIncentivoBotes47($botea['incentivos_asignados_id']);
+      }
+      $yemab = $colab_bote['sby'] - 87;
+      $clarab = $colab_bote['sbc'] - 108;
+      $iy = $yemab * 18;
+      $ic = $clarab * 1.50;
+
+      $ninceb = new \stdClass();
+      $ninceb->_colaborador_id = $id;
+      $ninceb->_prorrateo_periodo_id = $periodo['prorrateo_periodo_id'];
+      $ninceb->_catalogo_incentivo_id = 47;
+      $ninceb->_cantidad = $ic + $iy;
+      $ninceb->_precio_bote = "1.50-".$clarab."-".$ic.",18-".$yemab."-".$iy.",0-0-0";
+      $id = IncentivoDao::insertBotesNuevos($ninceb);
+    }
+
+    View::set('class','success');
+    View::set('regreso',"/Incentivo/ingresoBotes/");
+    View::set('mensaje',"Se ha guardado la informacion");
+    View::set('header',$this->_contenedor->header());
+    View::set('footer',$this->_contenedor->footer());
+    View::render("alerta");
   }
 
   public function modificarBotesPrecio($id){
@@ -1747,7 +1992,7 @@ html;
       }
 
       $tabla .= "</tr>";
-      
+
     }
     return $tabla;
   }
@@ -1764,14 +2009,14 @@ html;
           array_push($arrDataBPM, 1);
       }
 
-      $arrBotesAsisnados = array(); // SE GUARDARA EL VALOR DE BPM PARA CHECAR EL CALCULO DEL INCENTIVO - 
+      $arrBotesAsisnados = array(); // SE GUARDARA EL VALOR DE BPM PARA CHECAR EL CALCULO DEL INCENTIVO -
       $arrChecarBotesAsignados = array();
       $banderaSiTieneBotes = array();
       foreach ($incentivos as $key => $value) {
         if($value['catalogo_incentivo_id'] == 47) array_push($arrBotesAsisnados, array("incentivos_asignados_id"=>$value["incentivos_asignados_id"], "asignado"=>$value["asignado"]));
-        if($value['catalogo_incentivo_id'] == 47) array_push($banderaSiTieneBotes, 1); // CHECA SI SE TIENE EL INCENTIVO DE BOTES 
+        if($value['catalogo_incentivo_id'] == 47) array_push($banderaSiTieneBotes, 1); // CHECA SI SE TIENE EL INCENTIVO DE BOTES
         if($value['catalogo_incentivo_id'] == 27) array_push($arrChecarBotesAsignados, 1); // CHECA SI EL INCENTIVO DE BPM ESTA AGREGADO YA EN LOS INCENTIVOS
-        
+
       }
 
 
@@ -1810,7 +2055,7 @@ html;
       }
 
     }
-    
+
     $tabla = "";
     foreach ($incentivos as $key => $value) {
       $key = $key + 1;
@@ -1937,7 +2182,7 @@ html;
     $data->_botes_max = MasterDom::getData('botes_max');
 
     if(!empty($data->_botes_incentivo) || !empty($data->_botes_max)){
-      
+
       if(!empty($data->_botes_incentivo) AND empty($data->_botes_max)){
         $data->_colaborador_id = MasterDom::getData('colaborador_id');
         $data->_prorrateo_periodo_id = MasterDom::getData('prorrateo_periodo_id');
@@ -2091,7 +2336,7 @@ html;
         </tr>
 html;
     }
-   
+
 
 
     View::set('tabla',$tabla);
@@ -2139,19 +2384,19 @@ html;
         });//fin del document.ready
       </script>
 html;
-    
-    View::set('option',$this->getAllPeriodoSemanales(0, "add")); 
-      
+
+    View::set('option',$this->getAllPeriodoSemanales(0, "add"));
+
     View::set('btn',"Agregar");
     View::set('form',"/incentivo/addBotesCantidad/");
     View::set('class',"success");
     View::set('clara',$this->getBotes("501","clara"));
     View::set('yema',$this->getBotes("501","yema"));
     View::set('huevoliquido',$this->getBotes("501","huevo liquido"));
-    
+
     View::set('header',$this->_contenedor->header($extraHeader));
     View::set('footer',$this->_contenedor->footer($extraFooter));
-    View::render("botes_add"); 
+    View::render("botes_add");
   }
 
   public function botesEdit($periodo){
@@ -2196,18 +2441,18 @@ html;
     View::set('btn',"Actualizar");
     View::set('form',"/incentivo/editBotesCantidad/");
     View::set('class',"info");
-    View::set('option',$this->getAllPeriodoSemanales($id['prorrateo_periodo_id'],"edit")); 
+    View::set('option',$this->getAllPeriodoSemanales($id['prorrateo_periodo_id'],"edit"));
     View::set('clara',$this->getBotes($id['clara'],"clara"));
     View::set('yema',$this->getBotes($id['yema'],"yema"));
     View::set('huevoliquido',$this->getBotes($id['huevo_liquido'],"huevo liquido"));
     View::set('header',$this->_contenedor->header($extraHeader));
     View::set('footer',$this->_contenedor->footer($extraFooter));
-    View::render("botes_add"); 
+    View::render("botes_add");
   }
 
   public function getBotes($cantidad, $tipo){
     $html ="";
-    for ($i=0; $i <= 500 ; $i++) { 
+    for ($i=0; $i <= 500 ; $i++) {
       $selected = ($cantidad == $i) ? "selected":"";
       $html.=<<<html
         <option {$selected} value="{$i}">{$i} bote de {$tipo}</option>
@@ -2301,7 +2546,7 @@ html;
 
     $arr = array();
     $arr1 = array();
-    for ($i=1; $i <= $total ; $i++) { 
+    for ($i=1; $i <= $total ; $i++) {
       array_push($arr, "data-".$i);
       array_push($arr1, "uno".$i);
     }
@@ -2487,7 +2732,7 @@ html;
             $("tr.copia_"+fila+" .switch").bootstrapSwitch();
           });
 
-          $('#horas_extra_1').on('change',function(){ 
+          $('#horas_extra_1').on('change',function(){
             var value = $(this).val();
             if(value==1){
               $("#tabla_incentivos_para_asignar").show();
@@ -2516,7 +2761,7 @@ html;
 
       </script>
 html;
-    
+
     $user = GeneralDao::getDatosUsuario($this->__usuario);
 
     $colaborador = IncentivoDao::getColaborador($idColaborador); // Obtiene la informacion del colaborador a a buscar
@@ -2530,7 +2775,7 @@ html;
     echo $this->getIncentivosIniciales($idColaborador, $idPeriodo);
     echo $this->getIncentivosAsignadosPeriodo($idColaborador, $idPeriodo);
     echo $this->getIncentivosBorrar($idColaborador, $idPeriodo);
-    
+
     $countIncentivos = IncentivoDao::getIncentivosColaboradorAsignados($idColaborador,$idPeriodo);
     $accionSinIncentivos = (count($countIncentivos) == 0 ) ? "selected":"";
     $accionConIncentivos = (count($countIncentivos) > 0 ) ? "selected":"";
@@ -2548,15 +2793,15 @@ html;
 
 
     // Validar que estos datos ya existen en la base de datos
-    $checkeddomingoProcesos = (count($domingoProcesos)>0) ? "checked" : "";    
+    $checkeddomingoProcesos = (count($domingoProcesos)>0) ? "checked" : "";
     $checkeddomingoLaborado = (count($domingoLaborado)>0) ? "checked" : "";
     View::set('showTextBtnActualizar',$showTextBtnActualizar); // Texto del buton de agregar datos
     View::set('checkdomingoProcesos', $checkeddomingoProcesos); // value CHECKED del input checked
     View::set('checkdomingoLaborado', $checkeddomingoLaborado); // value CHECKED del input checked
-    // Valores del complementarios 
+    // Valores del complementarios
     View::set('domingoProcesos', $this->calculoDomingoProcesos(GeneralDao::getDatosColaborador($idColaborador))); // Muestra la cantidad que puede tener por domingos procesados
     View::set('domingoLaborado', $this->calculoDomingoLaborado(GeneralDao::getDatosColaborador($idColaborador))); // Muestra la cantidad que puede tener por domingo laborales
-    View::set('accionesComplementarias', $accionesComplementarias); // Envia el formulario si hay acciones complementarias o no 
+    View::set('accionesComplementarias', $accionesComplementarias); // Envia el formulario si hay acciones complementarias o no
     View::set('btnAccionesComplementarias',$btnAccionesComplementarias); // Muestra el color de la accion que se realizara
     View::set('accionSinIncentivos',$accionSinIncentivos);
     View::set('accionConIncentivos',$accionConIncentivos);
@@ -2601,7 +2846,7 @@ html;
     $sdtClass = new \stdClass();
     $sdtClass->_catalogo_colaboradores_id = $idColaborador;
     $sdtClass->_prorrateo_periodo_id = $idPeriodo;
-    
+
     $html = "<div>";
     $dp = IncentivoDao::getDomingoProcesos($idColaborador, $idPeriodo);
     $dl = IncentivoDao::getDomingoLaborado($idColaborador, $idPeriodo);
@@ -2611,7 +2856,7 @@ html;
       }else{
         if(count($dl)>0)
           IncentivoDao::redelete("prorrateo_domigo_laborado", $idColaborador, $idPeriodo);
-        
+
         $sdtClass->_domigo_procesos = $domingoProcesos;
         $insert = IncentivoDao::insertDomingoProcesos($sdtClass);
         $html .= $this->mensajeComplementos("El <b>DOMINGO DE PROCESOS</b> se ha agregado correctamente con un valor de <b> {$domingoProcesos} </b>","alert-success", $idColaborador, $idPeriodo, $regreso);
@@ -2634,10 +2879,10 @@ html;
 
       if(count($dl)>0)
         IncentivoDao::redelete("prorrateo_domigo_laborado", $idColaborador, $idPeriodo);
-      
+
       $html .= $this->mensajeComplementos("Ahora ya no tienes ningun valor monetario para domingo de procesos o domingo laborado", "alert-success", $idColaborador, $idPeriodo, $regreso);
     }
-    
+
     $html .= "</div>";
 
     //View::set('regreso',"/Incentivo/getIncentivosColaborador/{$idColaborador}/{$idPeriodo}/{$regreso}");
@@ -2670,7 +2915,7 @@ html;
     }else{
       $html .= $this->mensajeComplementos("No se inserto ning&uacute; valor, ya que no se selecciono alguno, favor de indicar cual se asignara", "alert-warning", $colaboradorId, $periodoId, $regreso);
     }
-    
+
     $html .= "</div>";
 
     //View::set('regreso',"/Incentivo/getIncentivosColaborador/{$colaboradorId}/{$periodoId}/{$regreso}");
@@ -2682,7 +2927,7 @@ html;
   }
 
   public function addComplementos(){
-    
+
     $periodoId = MasterDom::getData('prorrateo_periodo_id');
     $colaboradorId = MasterDom::getData('colaborador_id');
     $regreso = MasterDom::getData('regreso');
@@ -2690,7 +2935,7 @@ html;
     $inputDomingoDeProcesos = MasterDom::getData('domingo_de_procesos');
     $inputDomingoLaborado = MasterDom::getData('domingo_laborado');
     $inputIncentivoDeNoche = MasterDom::getData('incentivo_de_noche');
-    // VALORES DE INPUT 
+    // VALORES DE INPUT
     $valueDomingoDeProcesos = MasterDom::getData('value_domingo_de_procesos');
     $valueDomingoLaborado = MasterDom::getData('value_domigo_laborado');
     $valueIncentivoDeNoche = MasterDom::getData('value_incentivo_de_noche');
@@ -2758,13 +3003,13 @@ html;
     $domingoProcesos = IncentivoDao::getDomingoProcesos($idColaborador, $idPeriodo);
     $domingoLaborado = IncentivoDao::getDomingoLaborado($idColaborador, $idPeriodo);
     $incentivosNoche = IncentivoDao::getIncentivosNoche($idColaborador, $idPeriodo);
-    
+
 
     // PARAMETROS DEL CHECADOR
     $inputDomingoDeProcesos = MasterDom::getData('domingo_de_procesos');
     $inputDomingoLaborado = MasterDom::getData('domingo_laborado');
     $inputIncentivoDeNoche = MasterDom::getData('incentivo_de_noche');
-    // VALORES DE INPUT 
+    // VALORES DE INPUT
     $valueDomingoDeProcesos = MasterDom::getData('value_domingo_de_procesos');
     $valueDomingoLaborado = MasterDom::getData('value_domigo_laborado');
     $valueIncentivoDeNoche = MasterDom::getData('value_incentivo_de_noche');
@@ -2810,11 +3055,11 @@ html;
           $sdtClass->_prorrateo_periodo_id = $idPeriodo;
           $sdtClass->_incentivo_noche = $valueIncentivoDeNoche;
           $insert = IncentivoDao::insertIncentivoNoche($sdtClass);
-        } 
+        }
       }
     }
 
-    
+
 
     $html = "<div class=\"x_content\">";
     $html .= $this->mensajeComplementos("Se actualizaron todos los datos <b> correctamente</b>", "alert-success", $idColaborador, $idPeriodo, $regreso);
@@ -2877,7 +3122,7 @@ html;
   }
 
   /*
-    Obtener todos los incentivos que se podran asginar 
+    Obtener todos los incentivos que se podran asginar
   */
   public function getIncentivosIniciales($idColaborador, $idPeriodo){
     $tabla = "";
@@ -2916,7 +3161,7 @@ html;
         if($aplicaIncentivoSistema == 0){
           $tabla.=<<<html
             <input type="hidden" value="{$value['catalogo_colaboradores_id']}|{$idPeriodo}|{$value['catalogo_incentivo_id']}|{$value['cantidad']}|{$asignado}|{$tipo}" name="agregar[]" >
-            
+
             INFOINFO
 
             <input type="checkbox" class="switch" data-on-text="SI" data-off-text="NO" {$checked} value="{$value['catalogo_colaboradores_id']}|{$idPeriodo}|{$value['catalogo_incentivo_id']}|{$value['cantidad']}|{$asignado}|{$tipo}" >
@@ -2941,7 +3186,7 @@ html;
 html;
     }
 
-      
+
     //}
     $tabla .=<<<html
           </td>
@@ -3100,7 +3345,7 @@ html;
       while($fecha_inicio <= $fecha_fin){
         $dia_aux = '';
         $llegada = '';
-        
+
         foreach ($horario_laboral as $llave1 => $valor1) {
           if($dia_aux != $valor1['dia_semana']){
             $dia_aux = $valor1['dia_semana'];
@@ -3218,7 +3463,7 @@ html;
           $datos->_catalogo_colaboradores_id = $value['catalogo_colaboradores_id'];
           $datos->_fecha = $fecha_inicio->format('Y-m-d');
           $incidencia = ResumenSemanalDao::getIncidencia($datos);
-          
+
           if(count($incidencia) > 0){
             $llegada = $incidencia[0]['catalogo_incidencia_id']; //incidencia
             if($incidencia[0]['genera_falta'] == 1){
@@ -3287,12 +3532,10 @@ html;
 
         return $contadorFaltas;
       }
-      
+
     }
 
   public function updateHorasExtra(){
-
-
     $colaboradorId = MasterDom::getData('colaborador_id');
     $periodoId = MasterDom::getData('prorrateo_periodo_id');
     $regreso = MasterDom::getData('regreso');
@@ -3305,12 +3548,9 @@ html;
       $data->_prorrateo_periodo_id = MasterDom::getData('prorrateo_periodo_id');
       IncentivoDao::insertHorasExtraColaborador($data);
       $this->alerta(MasterDom::getData('colaborador_id'),"insertar-horas-extra",MasterDom::getData('prorrateo_periodo_id'),$regreso);
-
     }
 
-
     if(MasterDom::getData('status') == "MODIFICAR"){
-
       if(MasterDom::getData('horas_extra') == 0){
         $delete = IncentivoDao::deleteHorasExtra(MasterDom::getData('colaborador_id'), MasterDom::getData('prorrateo_periodo_id'));
 
@@ -3318,22 +3558,20 @@ html;
           $this->alerta(MasterDom::getData('colaborador_id'),"delete-horas-extra",MasterDom::getData('prorrateo_periodo_id'),$regreso);
         else
           $this->alerta(MasterDom::getData('colaborador_id'), "error", MasterDom::getData('prorrateo_periodo_id'), $regreso);
-        
-      }else{
-          
-          $id = IncentivoDao::updateHorasExtra(MasterDom::getData('horas_extra'), MasterDom::getData('colaborador_id'), MasterDom::getData('prorrateo_periodo_id'));
+      }
+      else {
+        $id = IncentivoDao::updateHorasExtra(MasterDom::getData('horas_extra'), MasterDom::getData('colaborador_id'), MasterDom::getData('prorrateo_periodo_id'));
 
-          if($id>0)
-            $this->alerta(MasterDom::getData('colaborador_id'),"update-horas-extra",MasterDom::getData('prorrateo_periodo_id'),$regreso);
-          else
-            $this->alerta(MasterDom::getData('colaborador_id'), "error", MasterDom::getData('prorrateo_periodo_id'), $regreso);
+        if($id>0)
+          $this->alerta(MasterDom::getData('colaborador_id'),"update-horas-extra",MasterDom::getData('prorrateo_periodo_id'),$regreso);
+        else
+          $this->alerta(MasterDom::getData('colaborador_id'), "error", MasterDom::getData('prorrateo_periodo_id'), $regreso);
       }
     }
-
-    }
+  }
 
     /*
-    Agregar Los incentivos que puede tener el colaborador 
+    Agregar Los incentivos que puede tener el colaborador
     */
   public function agregarIncentivos(){
     $colaboradorId = MasterDom::getData('colaborador_id');
@@ -3366,7 +3604,7 @@ html;
       $this->alerta(MasterDom::getData('colaborador_id'), "add", MasterDom::getData('prorrateo_periodo_id'), $regreso);
         else
       $this->alerta(MasterDom::getData('colaborador_id'), "error", MasterDom::getData('prorrateo_periodo_id'), $regreso);
-  
+
     }
     }
 
@@ -3379,7 +3617,7 @@ html;
     $periodoId = MasterDom::getData('prorrateo_periodo_id');
     $tipo = MasterDom::getData('regreso');
     $regreso = "/Incentivo/incentivos/{$colaboradorId}/{$periodoId}/{$tipo}";
-    
+
     $eliminarIncentivos = new \stdClass();
     $eliminarIncentivos->_colaborador_id = MasterDom::getData('colaborador_id');
     $eliminarIncentivos->_prorrateo_periodo_id = MasterDom::getData('prorrateo_periodo_id');
@@ -3426,7 +3664,7 @@ html;
       $this->alerta(MasterDom::getData('colaborador_id'), "delete", MasterDom::getData('prorrateo_periodo_id'), $regreso);
     else
       $this->alerta(MasterDom::getData('colaborador_id'), "error", MasterDom::getData('prorrateo_periodo_id'), $regreso);
-  
+
   }
 
   /*
@@ -3452,7 +3690,7 @@ html;
       $this->alerta(MasterDom::getData('colaborador_id'), "delete", MasterDom::getData('prorrateo_periodo_id'), $regreso);
     else
       $this->alerta(MasterDom::getData('colaborador_id'), "error", MasterDom::getData('prorrateo_periodo_id'), $regreso);
-  
+
   }
 
   /*
@@ -3513,7 +3751,7 @@ html;
         $nomina .=<<<html
         <option value="vacio">SIN NOMINA NOI</option>
 html;
-      } 
+      }
     }
     return $nomina;
   }
@@ -3595,7 +3833,7 @@ html;
     }
 
   public function setTablaAsistencia($idColaborador, $idPeriodo){
-    
+
 
     $dias_traductor = array('Monday' => 'Lunes','Tuesday' => 'Martes','Wednesday' => 'Miercoles','Thursday' => 'Jueves','Friday' => 'Viernes','Saturday' => 'Sabado','Sunday' => 'Domingo');
     $meses_traductor = array(1 => 'ENE',2 => 'FEB',3 => 'MAR',4 => 'ABR',5 => 'MAY',6 => 'JUN',7 => 'JUL',8 => 'AGO',9 => 'SEP', 10 => 'OCT', 11 => 'NOV', 12 => 'DIC');
@@ -3642,19 +3880,19 @@ html;
         $num_semana = 0;
 
         $existe = $this->buscarHorario($horarios, $ultimo_horario);
-          
+
         if((!$existe) && $catalogo_horario_id == 0){
           $datosBusqueda = new \stdClass();
           $datosBusqueda->catalogo_colaboradores_id = $value['catalogo_colaboradores_id'];
           $catalogo_horario_id = $this->obtenerHorarioByDay(IncidenciaDao::getHorarioLaboral($datosBusqueda), $nombre_dia_semana);
         }
 
-        while($fecha_inicio <= $fecha_fin){          
+        while($fecha_inicio <= $fecha_fin){
           $nombre_dia_semana = $dias_traductor[$fecha_inicio->format('l')];
           $dia_aux = '';
           $llegada = '';
           /******************************************************************************************************************************************************/
-          
+
           $valor1 = '';
           if($value['horario_tipo'] == 'semanal'){
             $nombre_dia_semana = $dias_traductor[$fecha_inicio->format('l')];
@@ -3699,7 +3937,7 @@ html;
         }
 
         $datos->catalogo_horario_id = $catalogo_horario_id;
-        
+
         /******************************************************************************************************************************************************/
         $horario_laboral = IncidenciaDao::getHorarioLaboralById($datos);
           foreach ($horario_laboral as $llave1 => $valor1) {
@@ -3722,7 +3960,7 @@ html;
                   }
                 }else{
                   if (strtolower($nombre_horario) == 'nocturno'){
-                    $datos->fecha_inicio = $fecha_inicio->format('Y-m-d').' 12:00:00';  
+                    $datos->fecha_inicio = $fecha_inicio->format('Y-m-d').' 12:00:00';
                   }else{
                     $datos->fecha_inicio = $fecha_inicio->format('Y-m-d').' 00:00:00';
                   }
@@ -3739,7 +3977,7 @@ html;
                   }else{
 
                     if (strtolower($nombre_horario) == 'nocturno'){
-                      $datos->fecha_inicio = $fecha_inicio->format('Y-m-d').' 12:00:00';  
+                      $datos->fecha_inicio = $fecha_inicio->format('Y-m-d').' 12:00:00';
                     }else{
                       $datos->fecha_inicio = $fecha_inicio->format('Y-m-d').' 00:00:00';
                     }
@@ -3803,7 +4041,7 @@ html;
             }else{
               $datos->fecha_inicio = $fecha_inicio->format('Y-m-d').' 00:00:00';
               if (strtolower($nombre_horario) == 'nocturno'){
-                  $datos->fecha_inicio = $fecha_inicio->format('Y-m-d').' 12:00:00';  
+                  $datos->fecha_inicio = $fecha_inicio->format('Y-m-d').' 12:00:00';
               }else{
                   $datos->fecha_inicio = $fecha_inicio->format('Y-m-d').' 00:00:00';
               }
@@ -3821,7 +4059,7 @@ html;
               }
 
               if($llegada == ''){
-                $llegada = 'D'; //descanso 
+                $llegada = 'D'; //descanso
               }
             }
           }else{
@@ -3850,14 +4088,14 @@ html;
           <td style="text-align: center; vertical-align: middle; font-size: 18px;" bgcolor="#f1f1f1"><span><label style="color: {$color};"> {$llegada}</label></span></td>
 html;
         }
-        
+
         if($j==0){
           $encabezado .=<<<html
             <td>{$fecha_inicio->format('d')}-{$meses_traductor[intval($fecha_inicio->format('m'))]} </td>
 html;
             }
             $fecha_inicio->add(new \DateInterval('P1D'));
-      
+
     }//fin del while del recorrido de fechas
         //Incidencia/checadorFechas/195/22/semanales/
         $tipoPagoColaborador = "";
@@ -3868,7 +4106,7 @@ html;
         }
         // $idColaborador, $idPeriodo
          $tabla .=<<<html
-          <td style="vertical-align: middle;"> 
+          <td style="vertical-align: middle;">
             <a href="/Incidencia/checadorFechas/{$idColaborador}/{$idPeriodo}/{$tipoPagoColaborador}/" target="_blank" class="btn btn-primary"> Incidencias </a>
           </td>
         </tr>
@@ -3908,7 +4146,7 @@ html;
 html;
     $j = 0;
     $colaboradores = ResumenesDao::getAllColaboradorById($idColaborador);
-    foreach($colaboradores as $key => $value){  
+    foreach($colaboradores as $key => $value){
 
 
       $nombre_planta = strtolower($value['identificador']);
@@ -3939,7 +4177,7 @@ html;
         $num_semana = 0;
 
         $existe = $this->buscarHorario($horarios, $ultimo_horario);
-          
+
         if((!$existe) && $catalogo_horario_id == 0){
           $datosBusqueda = new \stdClass();
           $datosBusqueda->catalogo_colaboradores_id = $value['catalogo_colaboradores_id'];
@@ -3948,12 +4186,12 @@ html;
 
         $arrayFaltas = array();
 
-        while($fecha_inicio <= $fecha_fin){          
+        while($fecha_inicio <= $fecha_fin){
           $nombre_dia_semana = $dias_traductor[$fecha_inicio->format('l')];
           $dia_aux = '';
           $llegada = '';
           /******************************************************************************************************************************************************/
-          
+
           $valor1 = '';
           if($value['horario_tipo'] == 'semanal'){
             $nombre_dia_semana = $dias_traductor[$fecha_inicio->format('l')];
@@ -3998,7 +4236,7 @@ html;
         }
 
         $datos->catalogo_horario_id = $catalogo_horario_id;
-        
+
         /******************************************************************************************************************************************************/
         $horario_laboral = IncidenciaDao::getHorarioLaboralById($datos);
           foreach ($horario_laboral as $llave1 => $valor1) {
@@ -4021,7 +4259,7 @@ html;
                   }
                 }else{
                   if (strtolower($nombre_horario) == 'nocturno'){
-                    $datos->fecha_inicio = $fecha_inicio->format('Y-m-d').' 12:00:00';  
+                    $datos->fecha_inicio = $fecha_inicio->format('Y-m-d').' 12:00:00';
                   }else{
                     $datos->fecha_inicio = $fecha_inicio->format('Y-m-d').' 00:00:00';
                   }
@@ -4038,7 +4276,7 @@ html;
                   }else{
 
                     if (strtolower($nombre_horario) == 'nocturno'){
-                      $datos->fecha_inicio = $fecha_inicio->format('Y-m-d').' 12:00:00';  
+                      $datos->fecha_inicio = $fecha_inicio->format('Y-m-d').' 12:00:00';
                     }else{
                       $datos->fecha_inicio = $fecha_inicio->format('Y-m-d').' 00:00:00';
                     }
@@ -4102,7 +4340,7 @@ html;
             }else{
               $datos->fecha_inicio = $fecha_inicio->format('Y-m-d').' 00:00:00';
               if (strtolower($nombre_horario) == 'nocturno'){
-                  $datos->fecha_inicio = $fecha_inicio->format('Y-m-d').' 12:00:00';  
+                  $datos->fecha_inicio = $fecha_inicio->format('Y-m-d').' 12:00:00';
               }else{
                   $datos->fecha_inicio = $fecha_inicio->format('Y-m-d').' 00:00:00';
               }
@@ -4120,7 +4358,7 @@ html;
               }
 
               if($llegada == ''){
-                $llegada = 'D'; //descanso 
+                $llegada = 'D'; //descanso
               }
             }
           }else{
@@ -4149,17 +4387,17 @@ html;
           <td style="text-align: center; vertical-align: middle; font-size: 18px;" bgcolor="#f1f1f1"><span><label style="color: {$color};"> {$llegada}</label></span></td>
 html;
         }
-        
+
         if($j==0){
           $encabezado .=<<<html
             <td>{$fecha_inicio->format('d')}-{$meses_traductor[intval($fecha_inicio->format('m'))]} </td>
 html;
             }
             $fecha_inicio->add(new \DateInterval('P1D'));
-    
+
     if($llegada == 'FF')
           array_push($arrayFaltas, 1);
-        
+
     }
       $j++;
     }
@@ -4186,5 +4424,5 @@ html;
 
     return 'NULL';
   }
-    
+
 }

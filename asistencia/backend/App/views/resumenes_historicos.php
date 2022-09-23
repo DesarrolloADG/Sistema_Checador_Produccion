@@ -8,7 +8,7 @@
       <div class="">
         <div class="page-title">
           <div class="title_left">
-            <h1>Historio <b><?php echo $tipoPeriodo; ?></b></h1>
+            <h1>Historico <b><?php echo $tipoPeriodo; ?></b></h1>
           </div>
         </div>
 
@@ -42,14 +42,14 @@
         </div>
 
         <div class="row">
-          
+
           <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
               <div class="x_title">
                 <h1>Colaboradores </h1>
               </div>
               <div class="x_content">
-                
+
                 <form name="all" id="all" action="/Incentivo/" method="POST">
 
                   <div class="panel-body">
